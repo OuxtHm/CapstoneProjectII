@@ -10,6 +10,6 @@ public class RedSlime : Enemy
         enemy_MaxHP = 30;
         enemy_CurHP = 30;
         enemy_Power = 10;
-        enemy_Speed = 1;
+        enemy_Speed = 2;
     }
 }
