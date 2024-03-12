@@ -14,12 +14,9 @@ public abstract class Enemy : MonoBehaviour
     //Player player;
 
     int DirX;   //몬스터가 바라보는 방향값
-    public float detectionRange = 5f;  //몬스터의 타겟 인식 범위
+    public float detectionRange = 4f;  //몬스터의 타겟 인식 범위
     float distanceToTarget; // 몬스터와 타겟 사이의 거리
-    bool isChasing = false; // 추적중인지 확인
-    int originalSpeed;    // 원래 speed값 저장
-    float target_X;
-    float enemy_X;
+    bool istracking = false;    // 추적 가능 여부
 
     [Header("일반 몬스터 능력치")]
     public int enemy_MaxHP; //일반 몬스터 최대체력
@@ -43,76 +40,86 @@ public abstract class Enemy : MonoBehaviour
 
     public virtual void Short_Monster(Transform target)
     {
-        TargetSenser(target);
+        TargetSensor(target, rayHit);
         Sensor();
     }
 
-    void TargetSenser(Transform target)  // 플레이어 추적
+    void TargetSensor(Transform target, RaycastHit2D rayHit)  // 플레이어 추적
     {
         rigid = this.GetComponent<Rigidbody2D>();
         spriteRenderer = this.GetComponentInChildren<SpriteRenderer>();
-        target_X = target.position.x;
         distanceToTarget = Vector3.Distance(this.transform.position, target.position); // 몬스터와 타겟 사이의 거리 계산
+        Vector2 direction = (target.position - transform.position).normalized;
+        direction.y = transform.position.y; // y값 위치 고정을 위해 추가
+        direction.Normalize();
 
-        if (distanceToTarget <= detectionRange && !isChasing) // 타겟이 범위 안에 있을 때 수행
+        if (target.position.y > direction.y + 1)
+            istracking = true;
+
+        if (distanceToTarget <= detectionRange) // 타겟이 범위 안에 있을 때 수행
         {
-            /*if (!isChasing)
+            if(rayHit.collider != null && !istracking)
             {
-                originalSpeed = enemy_Speed; // 추적 시작 시 원래 속도 저장
-                enemy_Speed += 2; // 추적 중인 경우 속도 증가
-            }*/
-            anim.SetBool("Move", true);
-            Vector2 direction = (target.position - transform.position).normalized;
-            if (target_X < 0)
-                spriteRenderer.flipX = true;
-            else
-                spriteRenderer.flipX = false;
-            direction.y = transform.position.y;
-            direction.Normalize();
-            transform.Translate(direction * Time.deltaTime * enemy_Speed);
-            
-            Debug.Log("타겟을 감지했습니다!");
+                Debug.Log("null이 아님");
+                if (direction.x >= 0)   // 타겟이 오른쪽에 있을 때
+                {
+                    DirX = 1;
+                    spriteRenderer.flipX = false;
+                }
+                else
+                {
+                    DirX = -1;
+                    spriteRenderer.flipX = true;
+                }
+                anim.SetBool("Move", true);
+                transform.Translate(direction * Time.deltaTime * enemy_Speed);
+
+
+            }
+            else if(rayHit.collider == null)
+            {
+                //Debug.Log("null임");
+                istracking = true;
+                anim.SetBool("Move", false);
+            }
+            else //추적중에 바닥이 없으면 타겟 인식 범위까지 반대방향으로 이동함
+            {
+                Move();
+            }
         }
         else // 타겟이 범위 밖에 있을 때 수행
         {
-            /*if (isChasing)
-            {
-                enemy_Speed = originalSpeed; // 추적 종료 시 원래 속도로 복원
-                isChasing = false;
-            }*/
-            isChasing = false;
+            istracking = false;
             Move();
-            Debug.Log("타겟이 감지 범위 밖에 있습니다.");
         }
     }
 
+
     public void Move()
     {
-        if(DirX != 0)
+        if (DirX != 0)
         {
             anim.SetBool("Move", true);
             transform.Translate(new Vector2(DirX, transform.position.y).normalized * Time.deltaTime * enemy_Speed);
+
+            if (DirX == -1)
+            {
+                spriteRenderer.flipX = true;
+            }
+            else if (DirX == 1)
+            {
+                spriteRenderer.flipX = false;
+            }
         }
         else
         {
             anim.SetBool("Move", false);
-        }
-            
-
-        if (DirX == -1)
-        {
-            spriteRenderer.flipX = true;
-        }
-        else if (DirX == 1)
-        {
-            spriteRenderer.flipX = false;
         }
     }
 
     IEnumerator NextMove()  // 몬스터가 다음 실행할 이동 방향
     {
         DirX = Random.Range(-1, 2);
-        Debug.Log(DirX);
         float NextMoveTime = Random.Range(3f, 5f);
         yield return new WaitForSeconds(NextMoveTime);
         StartCoroutine(NextMove());
@@ -122,31 +129,34 @@ public abstract class Enemy : MonoBehaviour
     {
         rigid = this.GetComponent<Rigidbody2D>();
 
-        // Enemy의 한 칸 앞의 값을 얻기 위해 자기 자신의 위치 값에 (x)에 + nextDirX값을 더하고 1.2f를 곱한다.
+        // Enemy의 한 칸 앞의 값을 얻기 위해 자기 자신의 위치 값에 (x)에 + DirX값을 더하고 1.2f를 곱한다.
         Vector2 frontVec = new Vector2(rigid.position.x + DirX * 1.2f, rigid.position.y);
 
+        // 레이저를 씬창에서 눈으로 확인할 수 있게 그려줌
         Debug.DrawRay(frontVec, Vector3.down * 2.5f, new Color(0, 1, 0));
-
-        // 레이저를 아래로 쏘아서 실질적인 레이저 생성(물리기반), LayMask.GetMask("")는 해당하는 레이어만 스캔함
+        
+        // 물리 기반으로 레이저를 아래로 쏘아서 실질적인 레이저 생성, LayMask.GetMask("")는 해당하는 레이어만 스캔함
         rayHit = Physics2D.Raycast(frontVec, Vector3.down, 2.5f, LayerMask.GetMask("Tilemap", "UI"));
         if (rayHit.collider == null && enemy_CurHP >= 0)
         {
-            Debug.Log("rayHit null임");
-            isChasing = true;
             Turn();
         }
-
     }
 
     void Turn() // 이미지를 반대로 바꾸는 함수
     {
         spriteRenderer = this.GetComponentInChildren<SpriteRenderer>();
-        DirX *= -1;   // nextDirX에 -1을 곱해 방향전환
+        DirX *= -1;   // nextDirX에 -1을 곱해 방향 전환
         if (DirX == 1 && distanceToTarget > detectionRange)  // distanceToTarget > detectionRange를 추가하지 않으면 플레이어가 사거리 내에 있고 rayHit=null이라면 제자리 돌기함
         {
-            spriteRenderer.flipX = true; // DirX 값이 1이면 x축을 flip함
+            spriteRenderer.flipX = false; // DirX 값이 1이면 x축을 flip함
+        }
+        else
+        {
+            spriteRenderer.flipX = true; // DirX 값이 1이 아니면 x축 flip을 해제함
         }
     }
+
 
     private void OnDrawGizmos()
     {
