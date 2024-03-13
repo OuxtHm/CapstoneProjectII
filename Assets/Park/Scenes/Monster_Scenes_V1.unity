@@ -194,6 +194,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 8048524908834707888, guid: 61814c4fdfb419346bc7048fcc1010a3, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 61814c4fdfb419346bc7048fcc1010a3, type: 3}
 --- !u!1 &451770929
@@ -899,7 +903,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8068589428734277748, guid: 27bf31f6833d5b742a6b7841e983dd6b, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8484781343696250983, guid: 27bf31f6833d5b742a6b7841e983dd6b, type: 3}
       propertyPath: detectionRange
@@ -1093,7 +1097,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5359986053371475134, guid: 975098d9995c22e48b0386ca43415bfa, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.09
+      value: -2.36
       objectReference: {fileID: 0}
     - target: {fileID: 5359986053371475134, guid: 975098d9995c22e48b0386ca43415bfa, type: 3}
       propertyPath: m_LocalPosition.z

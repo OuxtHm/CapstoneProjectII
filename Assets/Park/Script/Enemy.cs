@@ -17,6 +17,7 @@ public abstract class Enemy : MonoBehaviour
     public float detectionRange = 4f;  //몬스터의 타겟 인식 범위
     float distanceToTarget; // 몬스터와 타겟 사이의 거리
     bool istracking = false;    // 추적 가능 여부
+    int enemy_OriginSpeed;
 
     [Header("일반 몬스터 능력치")]
     public int enemy_MaxHP; //일반 몬스터 최대체력
@@ -157,6 +158,54 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.collider.tag == "Player")
+        {
+            StartCoroutine(Hurt(collision.transform));
+        }
+    }
+
+    IEnumerator Hurt(Transform target)  //플레이어에게 피격 받았을 때 실행
+    {
+        if(enemy_CurHP > 0)
+        {
+            enemy_CurHP = enemy_CurHP - 1;
+            anim.SetTrigger("Hurt");
+            anim.SetBool("Move", false);
+            enemy_OriginSpeed = enemy_Speed;
+            enemy_Speed = 0;
+
+            StartCoroutine(Knockback(target));
+
+            if (enemy_CurHP <= 0)
+            {
+                StartCoroutine(Die());
+            }
+        }
+
+        yield return new WaitForSeconds(1f);
+        enemy_Speed = enemy_OriginSpeed;
+    }
+
+    IEnumerator Die()  //몬스터가 죽었을 실행
+    {
+        istracking = true;
+        DirX = 0;
+        anim.SetBool("Move", false);
+        anim.SetTrigger("Die");
+        yield return new WaitForSeconds(1f);
+        gameObject.SetActive(false);
+        //Destroy(gameObject); 삭제할거면 이 방법을 사용
+    }
+
+    IEnumerator Knockback(Transform target)
+    {
+        Vector3 knockbackDirection = transform.position - target.position;  //피격된 위치를 저장
+        knockbackDirection.Normalize();
+        rigid.AddForce(knockbackDirection * 1.5f, ForceMode2D.Impulse); // 피격된 위치 * 원하는 힘의 크기만큼 넉백. ForceMode2D.Impulse를 사용하면 순간적인 강한 힘을 줄 수 있음 
+        yield return new WaitForSeconds(0.2f);
+    }
 
     private void OnDrawGizmos()
     {
