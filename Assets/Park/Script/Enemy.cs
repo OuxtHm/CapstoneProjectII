@@ -137,7 +137,7 @@ public abstract class Enemy : MonoBehaviour
         Debug.DrawRay(frontVec, Vector3.down * 2.5f, new Color(0, 1, 0));
         
         // 물리 기반으로 레이저를 아래로 쏘아서 실질적인 레이저 생성, LayMask.GetMask("")는 해당하는 레이어만 스캔함
-        rayHit = Physics2D.Raycast(frontVec, Vector3.down, 2.5f, LayerMask.GetMask("Tilemap", "UI"));
+        rayHit = Physics2D.Raycast(frontVec, Vector3.down, 2.5f, LayerMask.GetMask("Tilemap", "UI"));   //레이어는 맵 레이어가 정해지면 수정해야함
         if (rayHit.collider == null && enemy_CurHP >= 0)
         {
             Turn();
@@ -171,19 +171,20 @@ public abstract class Enemy : MonoBehaviour
         if(enemy_CurHP > 0)
         {
             enemy_CurHP = enemy_CurHP - 1;
-            anim.SetTrigger("Hurt");
             anim.SetBool("Move", false);
+            anim.SetTrigger("Hurt");
             enemy_OriginSpeed = enemy_Speed;
             enemy_Speed = 0;
 
+            StartCoroutine(Blink());
             StartCoroutine(Knockback(target));
+            
 
             if (enemy_CurHP <= 0)
             {
                 StartCoroutine(Die());
             }
         }
-
         yield return new WaitForSeconds(1f);
         enemy_Speed = enemy_OriginSpeed;
     }
@@ -203,8 +204,16 @@ public abstract class Enemy : MonoBehaviour
     {
         Vector3 knockbackDirection = transform.position - target.position;  //피격된 위치를 저장
         knockbackDirection.Normalize();
-        rigid.AddForce(knockbackDirection * 1.5f, ForceMode2D.Impulse); // 피격된 위치 * 원하는 힘의 크기만큼 넉백. ForceMode2D.Impulse를 사용하면 순간적인 강한 힘을 줄 수 있음 
-        yield return new WaitForSeconds(0.2f);
+        rigid.AddForce(knockbackDirection * 3f, ForceMode2D.Impulse); // 피격된 위치 * 원하는 힘의 크기만큼 넉백. ForceMode2D.Impulse를 사용하면 순간적인 강한 힘을 줄 수 있음 
+        yield return new WaitForSeconds(1f);
+    }
+
+    IEnumerator Blink() // 피격 효과
+    {
+        Color originalColor = spriteRenderer.color;
+        spriteRenderer.color = new Color(1, 1, 1, 0.5f);
+        yield return new WaitForSeconds(1f);
+        spriteRenderer.color = originalColor;
     }
 
     private void OnDrawGizmos()
