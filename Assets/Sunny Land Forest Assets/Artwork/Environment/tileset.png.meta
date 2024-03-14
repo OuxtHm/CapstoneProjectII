@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 2eeb0d4e8888f48459040781a511455e
+guid: f9ce8b8b145fe6d4ab59dbdaf5f2855b
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -452,6 +452,30 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 512
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: Windows Store Apps
+    maxTextureSize: 512
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -459,8 +483,8 @@ TextureImporter:
       name: tileset_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 170
+        x: 16
+        y: 176
         width: 16
         height: 16
       alignment: 0
