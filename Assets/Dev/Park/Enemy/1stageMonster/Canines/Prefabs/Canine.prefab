@@ -15,9 +15,9 @@ GameObject:
   - component: {fileID: 4711522208458757048}
   - component: {fileID: 4820613447032350274}
   - component: {fileID: 4581926214919448801}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Canine
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -178,4 +178,3 @@ MonoBehaviour:
   enemy_CurHP: 0
   enemy_Power: 0
   enemy_Speed: 0
-  ActionPattern: 0

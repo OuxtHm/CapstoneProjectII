@@ -15,9 +15,9 @@ GameObject:
   - component: {fileID: 2931975295546216085}
   - component: {fileID: 2931975295546216084}
   - component: {fileID: 2931975295546216083}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Goblin
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -123,8 +123,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.15}
-  m_Size: {x: 1.8333334, y: 2}
+  m_Offset: {x: 0, y: -0.45}
+  m_Size: {x: 1.8333334, y: 0.0001}
   m_Direction: 0
 --- !u!114 &2931975295546216085
 MonoBehaviour:
@@ -157,7 +157,6 @@ MonoBehaviour:
   enemy_CurHP: 0
   enemy_Power: 0
   enemy_Speed: 0
-  ActionPattern: 0
 --- !u!95 &2931975295546216083
 Animator:
   serializedVersion: 5

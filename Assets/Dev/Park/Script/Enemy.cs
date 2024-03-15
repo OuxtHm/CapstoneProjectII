@@ -11,13 +11,14 @@ public abstract class Enemy : MonoBehaviour
     Rigidbody2D rigid;
     Transform target;
     RaycastHit2D rayHit;
-    //Player player;
 
     int DirX;   //몬스터가 바라보는 방향값
     public float detectionRange = 4f;  //몬스터의 타겟 인식 범위
     float distanceToTarget; // 몬스터와 타겟 사이의 거리
     bool istracking = false;    // 추적 가능 여부
-    int enemy_OriginSpeed;
+    int enemy_OriginSpeed;  //몬스터의 원래 속도
+    bool isdie = false;
+    bool ishurt = false;
 
     [Header("일반 몬스터 능력치")]
     public int enemy_MaxHP; //일반 몬스터 최대체력
@@ -53,15 +54,11 @@ public abstract class Enemy : MonoBehaviour
         Vector2 direction = (target.position - transform.position).normalized;
         direction.y = transform.position.y; // y값 위치 고정을 위해 추가
         direction.Normalize();
-
-        if (target.position.y > direction.y + 1)
-            istracking = true;
-
-        if (distanceToTarget <= detectionRange) // 타겟이 범위 안에 있을 때 수행
+            
+        if (distanceToTarget <= detectionRange && !ishurt && !isdie) // 타겟이 범위 안에 있을 때 수행
         {
             if(rayHit.collider != null && !istracking)
             {
-                Debug.Log("null이 아님");
                 if (direction.x >= 0)   // 타겟이 오른쪽에 있을 때
                 {
                     DirX = 1;
@@ -74,12 +71,11 @@ public abstract class Enemy : MonoBehaviour
                 }
                 anim.SetBool("Move", true);
                 transform.Translate(direction * Time.deltaTime * enemy_Speed);
-
+                Debug.Log("추적중");
 
             }
             else if(rayHit.collider == null)
             {
-                //Debug.Log("null임");
                 istracking = true;
                 anim.SetBool("Move", false);
             }
@@ -98,7 +94,7 @@ public abstract class Enemy : MonoBehaviour
 
     public void Move()
     {
-        if (DirX != 0)
+        if (DirX != 0 && !isdie && !ishurt)
         {
             anim.SetBool("Move", true);
             transform.Translate(new Vector2(DirX, transform.position.y).normalized * Time.deltaTime * enemy_Speed);
@@ -160,7 +156,7 @@ public abstract class Enemy : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.collider.tag == "Player")
+        if(collision.collider.tag == "Player" && !isdie)
         {
             StartCoroutine(Hurt(collision.transform));
         }
@@ -168,8 +164,10 @@ public abstract class Enemy : MonoBehaviour
 
     IEnumerator Hurt(Transform target)  //플레이어에게 피격 받았을 때 실행
     {
-        if(enemy_CurHP > 0)
+        if(enemy_CurHP > 0 && !isdie)
         {
+            ishurt = true;
+            Debug.Log(istracking);
             enemy_CurHP = enemy_CurHP - 1;
             anim.SetBool("Move", false);
             anim.SetTrigger("Hurt");
@@ -178,15 +176,21 @@ public abstract class Enemy : MonoBehaviour
 
             StartCoroutine(Blink());
             StartCoroutine(Knockback(target));
-            
 
             if (enemy_CurHP <= 0)
             {
+                isdie = true;
+                StopAllCoroutines();
                 StartCoroutine(Die());
+                Debug.Log("죽었음");
             }
         }
+
+        
+
         yield return new WaitForSeconds(1f);
         enemy_Speed = enemy_OriginSpeed;
+        ishurt = false;
     }
 
     IEnumerator Die()  //몬스터가 죽었을 실행
@@ -195,8 +199,10 @@ public abstract class Enemy : MonoBehaviour
         DirX = 0;
         anim.SetBool("Move", false);
         anim.SetTrigger("Die");
-        yield return new WaitForSeconds(1f);
-        gameObject.SetActive(false);
+        yield return new WaitForSeconds(2f);
+        Destroy(gameObject);
+        //StopAllCoroutines();
+        //gameObject.SetActive(false);
         //Destroy(gameObject); 삭제할거면 이 방법을 사용
     }
 
@@ -204,15 +210,15 @@ public abstract class Enemy : MonoBehaviour
     {
         Vector3 knockbackDirection = transform.position - target.position;  //피격된 위치를 저장
         knockbackDirection.Normalize();
-        rigid.AddForce(knockbackDirection * 3f, ForceMode2D.Impulse); // 피격된 위치 * 원하는 힘의 크기만큼 넉백. ForceMode2D.Impulse를 사용하면 순간적인 강한 힘을 줄 수 있음 
-        yield return new WaitForSeconds(1f);
+        rigid.AddForce(knockbackDirection * 5f, ForceMode2D.Impulse); // 피격된 위치 * 원하는 힘의 크기만큼 넉백. ForceMode2D.Impulse를 사용하면 순간적인 강한 힘을 줄 수 있음 
+        yield return new WaitForSeconds(0.1f);
     }
 
     IEnumerator Blink() // 피격 효과
     {
         Color originalColor = spriteRenderer.color;
         spriteRenderer.color = new Color(1, 1, 1, 0.5f);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         spriteRenderer.color = originalColor;
     }
 

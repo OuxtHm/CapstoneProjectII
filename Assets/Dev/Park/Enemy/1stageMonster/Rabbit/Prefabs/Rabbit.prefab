@@ -15,9 +15,9 @@ GameObject:
   - component: {fileID: 6813629938081157871}
   - component: {fileID: 2683930032851221712}
   - component: {fileID: 4268482843952304933}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Rabbit
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -178,4 +178,3 @@ MonoBehaviour:
   enemy_CurHP: 0
   enemy_Power: 0
   enemy_Speed: 0
-  ActionPattern: 0
