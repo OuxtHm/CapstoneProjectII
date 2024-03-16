@@ -1,25 +1,7 @@
 fileFormatVersion: 2
-guid: e0c1a29924711c74192dc20e86a48553
+guid: b683fb37c8920c1479c78889c6c4cf4c
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: 338925204363467817
-    second: Sprite Sheet - Blue Jump Land_0
-  - first:
-      213: 3925259120093280991
-    second: Sprite Sheet - Blue Jump Land_1
-  - first:
-      213: 5393584417025584328
-    second: Sprite Sheet - Blue Jump Land_2
-  - first:
-      213: -1995427631654221939
-    second: Sprite Sheet - Blue Jump Land_3
-  - first:
-      213: 364018901862485122
-    second: Sprite Sheet - Blue Jump Land_4
-  - first:
-      213: 2045135016631717607
-    second: Sprite Sheet - Blue Jump Land_5
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 12
   mipmaps:
@@ -65,7 +47,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 32
+  spritePixelsToUnits: 20
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -81,7 +63,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
-  cookieLightType: 1
+  cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -100,7 +82,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -112,7 +94,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -124,31 +106,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: iPhone
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: Windows Store Apps
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -159,127 +117,85 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Sprite Sheet - Blue Jump Land_0
+      name: Bat_Attack_FX_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 96
-        height: 32
+        width: 64
+        height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 55ffd38cc7eaad542855012196982612
-      internalID: 307945126
+      spriteID: d8cb34311c2a87e49829d713c0534a72
+      internalID: -65391807
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Sprite Sheet - Blue Jump Land_1
+      name: Bat_Attack_FX_1
       rect:
         serializedVersion: 2
-        x: 96
+        x: 64
         y: 0
-        width: 96
-        height: 32
-      alignment: 9
-      pivot: {x: 96, y: 32}
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fc99d32c30cb65743baef3481d89ce21
-      internalID: -709372602
+      spriteID: 5b6dbabba68ca6c44a3a7a911509977d
+      internalID: -1787888338
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Sprite Sheet - Blue Jump Land_2
+      name: Bat_Attack_FX_2
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67e9537d735f3d540ab01e586b963395
+      internalID: -1458916825
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bat_Attack_FX_3
       rect:
         serializedVersion: 2
         x: 192
         y: 0
-        width: 96
-        height: 32
-      alignment: 9
-      pivot: {x: 96, y: 32}
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6a01c292c73afe64f82489fee4a0bacd
-      internalID: -1663132177
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Sprite Sheet - Blue Jump Land_3
-      rect:
-        serializedVersion: 2
-        x: 288
-        y: 0
-        width: 96
-        height: 32
-      alignment: 9
-      pivot: {x: 96, y: 32}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2a8507077f0d04e4b9ae09e5e12a6bfd
-      internalID: 624846036
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Sprite Sheet - Blue Jump Land_4
-      rect:
-        serializedVersion: 2
-        x: 384
-        y: 0
-        width: 96
-        height: 32
-      alignment: 9
-      pivot: {x: 96, y: 32}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 42868073a79a50544b35c8d87d60af14
-      internalID: -389289683
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Sprite Sheet - Blue Jump Land_5
-      rect:
-        serializedVersion: 2
-        x: 480
-        y: 0
-        width: 96
-        height: 32
-      alignment: 9
-      pivot: {x: 96, y: 32}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3b28dd035fcac8c4b80b7a9b284d7cfb
-      internalID: 968372671
+      spriteID: 6d1dbc7089a745d40aab6f645c538461
+      internalID: -1235716461
       vertices: []
       indices: 
       edges: []
@@ -295,12 +211,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Sprite Sheet - Blue Jump Land_0: 307945126
-      Sprite Sheet - Blue Jump Land_1: -709372602
-      Sprite Sheet - Blue Jump Land_2: -1663132177
-      Sprite Sheet - Blue Jump Land_3: 624846036
-      Sprite Sheet - Blue Jump Land_4: -389289683
-      Sprite Sheet - Blue Jump Land_5: 968372671
+      Bat_Attack_FX_0: -65391807
+      Bat_Attack_FX_1: -1787888338
+      Bat_Attack_FX_2: -1458916825
+      Bat_Attack_FX_3: -1235716461
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

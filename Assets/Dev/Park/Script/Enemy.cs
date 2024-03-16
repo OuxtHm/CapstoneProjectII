@@ -17,6 +17,7 @@ public abstract class Enemy : MonoBehaviour
     float distanceToTarget; // 몬스터와 타겟 사이의 거리
     bool istracking = false;    // 추적 가능 여부
     int enemy_OriginSpeed;  //몬스터의 원래 속도
+    protected int enemy_Type; // 몬스터 종류에 따른 분류 번호 1: 일반 지상 몬스터, 2: 일반 공중 몬스터
     bool isdie = false;
     bool ishurt = false;
 
@@ -52,13 +53,15 @@ public abstract class Enemy : MonoBehaviour
         spriteRenderer = this.GetComponentInChildren<SpriteRenderer>();
         distanceToTarget = Vector3.Distance(this.transform.position, target.position); // 몬스터와 타겟 사이의 거리 계산
         Vector2 direction = (target.position - transform.position).normalized;
-        direction.y = transform.position.y; // y값 위치 고정을 위해 추가
-        direction.Normalize();
+        
             
         if (distanceToTarget <= detectionRange && !ishurt && !isdie) // 타겟이 범위 안에 있을 때 수행
         {
-            if(rayHit.collider != null && !istracking)
+            if(rayHit.collider != null && !istracking && enemy_Type == 1) // 지상 몬스터 일때
             {
+                direction.y = transform.position.y; // y값 위치 고정을 위해 추가
+                direction.Normalize();
+
                 if (direction.x >= 0)   // 타겟이 오른쪽에 있을 때
                 {
                     DirX = 1;
@@ -71,7 +74,7 @@ public abstract class Enemy : MonoBehaviour
                 }
                 anim.SetBool("Move", true);
                 transform.Translate(direction * Time.deltaTime * enemy_Speed);
-                Debug.Log("추적중");
+                Debug.Log("지상 추적중");
 
             }
             else if(rayHit.collider == null)
@@ -83,6 +86,13 @@ public abstract class Enemy : MonoBehaviour
             {
                 Move();
             }
+
+            if(!istracking && enemy_Type == 2)  // 공중 몬스터 일때
+            {
+                anim.SetBool("Move", true);
+                Debug.Log("공중 추적중");
+                transform.Translate(direction * Time.deltaTime * enemy_Speed);
+            } 
         }
         else // 타겟이 범위 밖에 있을 때 수행
         {
@@ -134,7 +144,7 @@ public abstract class Enemy : MonoBehaviour
         
         // 물리 기반으로 레이저를 아래로 쏘아서 실질적인 레이저 생성, LayMask.GetMask("")는 해당하는 레이어만 스캔함
         rayHit = Physics2D.Raycast(frontVec, Vector3.down, 2.5f, LayerMask.GetMask("Tilemap", "UI"));   //레이어는 맵 레이어가 정해지면 수정해야함
-        if (rayHit.collider == null && enemy_CurHP >= 0)
+        if (rayHit.collider == null && enemy_CurHP >= 0 && enemy_Type != 2)
         {
             Turn();
         }
