@@ -14,17 +14,25 @@ public class Shop : MonoBehaviour
     public GameObject enhanceTabPage;       // 강화 구매 화면
     public Button[] btn = new Button[4];        // 동료 구매 버튼
     public Button[] btnEnhance = new Button[2]; // 동료 강화 버튼
+    public GameObject checkingObj;
+
+    public int testPrice;
 
     private void Awake()
     {
         colleagueTabPage = transform.GetChild(0).GetChild(0).GetChild(2).gameObject;
         enhanceTabPage = transform.GetChild(0).GetChild(0).GetChild(3).gameObject;
-        money_txt = transform.GetChild(0).GetChild(1).GetComponentInChildren<TextMeshProUGUI>();
+        money_txt = transform.GetChild(0).GetChild(0).GetChild(4).GetChild(0).GetComponentInChildren<TextMeshProUGUI>();
         colleagueTabBtn = transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Button>();
         enhanceTabBtn = transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Button>();
+        checkingObj = transform.GetChild(1).gameObject;
         for (int i = 0; i < btn.Length; i++)
         {
             btn[i] = transform.GetChild(0).GetChild(0).GetChild(2).GetChild(0).GetChild(i).GetComponentInChildren<Button>();
+            btn[i].onClick.AddListener(() =>
+            {
+                checkingObj.SetActive(true);
+            });
         }
         
         for(int i = 0; i < btnEnhance.Length; i++)
@@ -54,8 +62,16 @@ public class Shop : MonoBehaviour
         money_txt.text = player.money.ToString();
     }
 
+    public void OffWindow()     // 창 닫기
+    {
+        Destroy(this.gameObject);
+    }
 
-
+    public void Sell()      // 물품 판매
+    {
+        player.money -= testPrice;
+        MoneyUpdate();
+    }
 
 
 }
