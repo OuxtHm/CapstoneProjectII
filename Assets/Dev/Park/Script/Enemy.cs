@@ -55,7 +55,7 @@ public abstract class Enemy : MonoBehaviour
         Vector2 direction = (target.position - transform.position).normalized;
         
             
-        if (distanceToTarget <= detectionRange && !ishurt && !isdie) // 타겟이 범위 안에 있을 때 수행
+        if (distanceToTarget <= detectionRange && !ishurt && !isdie && enemy_Type != 2) // 타겟이 범위 안에 있을 때 수행
         {
             if(rayHit.collider != null && !istracking && enemy_Type == 1) // 지상 몬스터 일때
             {
@@ -87,12 +87,25 @@ public abstract class Enemy : MonoBehaviour
                 Move();
             }
 
-            if(!istracking && enemy_Type == 2)  // 공중 몬스터 일때
+            
+        }
+        else if (enemy_Type == 2)  // 공중 몬스터 일때
+        {
+            if (direction.x >= 0)   // 타겟이 오른쪽에 있을 때
             {
-                anim.SetBool("Move", true);
-                Debug.Log("공중 추적중");
-                transform.Translate(direction * Time.deltaTime * enemy_Speed);
-            } 
+                DirX = 1;
+                spriteRenderer.flipX = false;
+            }
+            else
+            {
+                DirX = -1;
+                spriteRenderer.flipX = true;
+            }
+            anim.SetBool("Move", true);
+            Vector2 targetPosition = new Vector2(target.position.x - 1, target.position.y - 2);
+            Vector2 targetDirection = (targetPosition - (Vector2)transform.position).normalized;
+            transform.Translate(targetDirection * Time.deltaTime * enemy_Speed);
+            Debug.Log("공중 추적중");
         }
         else // 타겟이 범위 밖에 있을 때 수행
         {
@@ -174,7 +187,7 @@ public abstract class Enemy : MonoBehaviour
 
     IEnumerator Hurt(Transform target)  //플레이어에게 피격 받았을 때 실행
     {
-        if(enemy_CurHP > 0 && !isdie)
+        if(enemy_CurHP > 0 && !isdie && !ishurt)
         {
             ishurt = true;
             Debug.Log(istracking);
@@ -198,7 +211,7 @@ public abstract class Enemy : MonoBehaviour
 
         
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         enemy_Speed = enemy_OriginSpeed;
         ishurt = false;
     }
@@ -209,7 +222,7 @@ public abstract class Enemy : MonoBehaviour
         DirX = 0;
         anim.SetBool("Move", false);
         anim.SetTrigger("Die");
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
         Destroy(gameObject);
         //StopAllCoroutines();
         //gameObject.SetActive(false);
@@ -228,7 +241,7 @@ public abstract class Enemy : MonoBehaviour
     {
         Color originalColor = spriteRenderer.color;
         spriteRenderer.color = new Color(1, 1, 1, 0.5f);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.3f);
         spriteRenderer.color = originalColor;
     }
 
