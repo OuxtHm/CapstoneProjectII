@@ -70,7 +70,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -144,12 +144,12 @@ TextureImporter:
       name: ToxicFrogGreenBrown_Hop_0
       rect:
         serializedVersion: 2
-        x: 11
+        x: 0
         y: 15
-        width: 21
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 48
+        height: 33
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -165,12 +165,12 @@ TextureImporter:
       name: ToxicFrogGreenBrown_Hop_1
       rect:
         serializedVersion: 2
-        x: 59
+        x: 48
         y: 15
-        width: 21
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 48
+        height: 33
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -186,12 +186,12 @@ TextureImporter:
       name: ToxicFrogGreenBrown_Hop_2
       rect:
         serializedVersion: 2
-        x: 106
+        x: 96
         y: 15
-        width: 22
-        height: 13
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 48
+        height: 33
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -207,12 +207,12 @@ TextureImporter:
       name: ToxicFrogGreenBrown_Hop_3
       rect:
         serializedVersion: 2
-        x: 156
-        y: 16
-        width: 21
-        height: 21
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 144
+        y: 15
+        width: 48
+        height: 33
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -228,12 +228,12 @@ TextureImporter:
       name: ToxicFrogGreenBrown_Hop_4
       rect:
         serializedVersion: 2
-        x: 202
-        y: 19
-        width: 22
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 192
+        y: 15
+        width: 48
+        height: 33
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -249,12 +249,12 @@ TextureImporter:
       name: ToxicFrogGreenBrown_Hop_5
       rect:
         serializedVersion: 2
-        x: 249
-        y: 17
-        width: 23
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 240
+        y: 15
+        width: 48
+        height: 33
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -270,12 +270,12 @@ TextureImporter:
       name: ToxicFrogGreenBrown_Hop_6
       rect:
         serializedVersion: 2
-        x: 299
+        x: 288
         y: 15
-        width: 21
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 48
+        height: 33
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

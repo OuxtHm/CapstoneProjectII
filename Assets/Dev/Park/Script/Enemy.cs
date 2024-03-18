@@ -20,6 +20,7 @@ public abstract class Enemy : MonoBehaviour
     protected int enemy_Type; // 몬스터 종류에 따른 분류 번호 1: 일반 지상 몬스터, 2: 일반 공중 몬스터
     bool isdie = false;
     bool ishurt = false;
+    bool isattack = false;
 
     [Header("일반 몬스터 능력치")]
     public int enemy_MaxHP; //일반 몬스터 최대체력
@@ -55,7 +56,7 @@ public abstract class Enemy : MonoBehaviour
         Vector2 direction = (target.position - transform.position).normalized;
         
             
-        if (distanceToTarget <= detectionRange && !ishurt && !isdie && enemy_Type != 2) // 타겟이 범위 안에 있을 때 수행
+        if (distanceToTarget <= detectionRange && !ishurt && !isdie && !isattack && enemy_Type != 2) // 타겟이 범위 안에 있을 때 수행
         {
             if(rayHit.collider != null && !istracking && enemy_Type == 1) // 지상 몬스터 일때
             {
@@ -74,7 +75,13 @@ public abstract class Enemy : MonoBehaviour
                 }
                 anim.SetBool("Move", true);
                 transform.Translate(direction * Time.deltaTime * enemy_Speed);
-                Debug.Log("지상 추적중");
+
+                if(distanceToTarget <= 2.5f && !isattack && !ishurt)
+                {
+                    StartCoroutine(Attack());
+                }
+                //Debug.Log(distanceToTarget);
+                //Debug.Log("지상 추적중");
 
             }
             else if(rayHit.collider == null)
@@ -107,7 +114,7 @@ public abstract class Enemy : MonoBehaviour
             transform.Translate(targetDirection * Time.deltaTime * enemy_Speed);
             Debug.Log("공중 추적중");
         }
-        else // 타겟이 범위 밖에 있을 때 수행
+        else if(distanceToTarget >= detectionRange) // 타겟이 범위 밖에 있을 때 수행
         {
             istracking = false;
             Move();
@@ -177,9 +184,24 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
-    public void OnCollisionEnter2D(Collision2D collision)
+    IEnumerator Attack()
     {
-        if(collision.collider.tag == "Player" && !isdie)
+        enemy_OriginSpeed = enemy_Speed;
+        enemy_Speed = 0;
+        isattack = true;
+        anim.SetBool("Move", false);
+        anim.SetTrigger("Attack");
+        Debug.Log("공격 실행");
+        yield return new WaitForSeconds(2f);
+        isattack = false;
+        enemy_Speed = enemy_OriginSpeed;
+    }
+
+   
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.collider.tag == "Player" && !isdie && !ishurt)
         {
             StartCoroutine(Hurt(collision.transform));
         }
@@ -187,7 +209,7 @@ public abstract class Enemy : MonoBehaviour
 
     IEnumerator Hurt(Transform target)  //플레이어에게 피격 받았을 때 실행
     {
-        if(enemy_CurHP > 0 && !isdie && !ishurt)
+        if(enemy_CurHP > 0 && !isdie)
         {
             ishurt = true;
             Debug.Log(istracking);

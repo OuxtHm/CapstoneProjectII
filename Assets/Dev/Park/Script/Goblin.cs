@@ -6,7 +6,7 @@ public class Goblin : Enemy
 {
     public override void InitSetting()
     {
-        //common = true;
+        enemy_Type = 1;
         enemy_MaxHP = 20;
         enemy_CurHP = 20;
         enemy_Power = 3;

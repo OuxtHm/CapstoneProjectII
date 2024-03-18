@@ -70,7 +70,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -144,12 +144,12 @@ TextureImporter:
       name: Canine_Gray_Idle_0
       rect:
         serializedVersion: 2
-        x: 9
+        x: 0
         y: 0
-        width: 34
-        height: 23
+        width: 48
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -165,12 +165,12 @@ TextureImporter:
       name: Canine_Gray_Idle_1
       rect:
         serializedVersion: 2
-        x: 58
+        x: 48
         y: 0
-        width: 33
-        height: 22
+        width: 48
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -186,12 +186,12 @@ TextureImporter:
       name: Canine_Gray_Idle_2
       rect:
         serializedVersion: 2
-        x: 107
+        x: 96
         y: 0
-        width: 33
-        height: 22
+        width: 48
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -207,12 +207,12 @@ TextureImporter:
       name: Canine_Gray_Idle_3
       rect:
         serializedVersion: 2
-        x: 154
+        x: 144
         y: 0
-        width: 34
-        height: 23
+        width: 48
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
