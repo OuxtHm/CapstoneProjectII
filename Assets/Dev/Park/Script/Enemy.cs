@@ -9,11 +9,12 @@ public abstract class Enemy : MonoBehaviour
     SpriteRenderer spriteRenderer;
     Animator anim;
     Rigidbody2D rigid;
-    Transform target;
+    Transform AttackBox;
     RaycastHit2D rayHit;
+    RaycastHit2D rayHitAtk;
 
     int DirX;   //몬스터가 바라보는 방향값
-    public float detectionRange = 4f;  //몬스터의 타겟 인식 범위
+    public float detectionRange = 5f;  //몬스터의 타겟 인식 범위
     float distanceToTarget; // 몬스터와 타겟 사이의 거리
     bool istracking = false;    // 추적 가능 여부
     int enemy_OriginSpeed;  //몬스터의 원래 속도
@@ -39,26 +40,32 @@ public abstract class Enemy : MonoBehaviour
         spriteRenderer = this.GetComponent<SpriteRenderer>();
         anim = this.GetComponent<Animator>();
         rigid = this.GetComponent<Rigidbody2D>();
+        AttackBox = this.gameObject.transform.GetChild(0).GetComponent<Transform>();
+        this.gameObject.transform.GetChild(0).gameObject.SetActive(false);
         StartCoroutine(NextMove());
     }
 
     public virtual void Short_Monster(Transform target)
     {
-        TargetSensor(target, rayHit);
+        TargetSensor(target);
         Sensor();
     }
 
-    void TargetSensor(Transform target, RaycastHit2D rayHit)  // 플레이어 추적
+    void TargetSensor(Transform target)  // 플레이어 추적
     {
         rigid = this.GetComponent<Rigidbody2D>();
         spriteRenderer = this.GetComponentInChildren<SpriteRenderer>();
         distanceToTarget = Vector3.Distance(this.transform.position, target.position); // 몬스터와 타겟 사이의 거리 계산
         Vector2 direction = (target.position - transform.position).normalized;
-        
-            
+
+        Vector2 AttackVec = new Vector2(rigid.position.x + DirX * 1.2f, rigid.position.y);
+        rayHitAtk = Physics2D.Raycast(AttackVec, Vector3.down, 1.5f, LayerMask.GetMask("Player"));
+        Debug.DrawRay(AttackVec, Vector3.down * 1.5f, new Color(1, 0, 0));
+
+
         if (distanceToTarget <= detectionRange && !ishurt && !isdie && !isattack && enemy_Type != 2) // 타겟이 범위 안에 있을 때 수행
         {
-            if(rayHit.collider != null && !istracking && enemy_Type == 1) // 지상 몬스터 일때
+            if (rayHit.collider != null && !istracking && enemy_Type == 1) // 지상 몬스터 일때
             {
                 direction.y = transform.position.y; // y값 위치 고정을 위해 추가
                 direction.Normalize();
@@ -67,22 +74,21 @@ public abstract class Enemy : MonoBehaviour
                 {
                     DirX = 1;
                     spriteRenderer.flipX = false;
+                    AttackBox.position = new Vector2(transform.position.x + 1, transform.position.y);
                 }
                 else
                 {
                     DirX = -1;
                     spriteRenderer.flipX = true;
+                    AttackBox.position = new Vector2(transform.position.x - 1, transform.position.y);
                 }
                 anim.SetBool("Move", true);
                 transform.Translate(direction * Time.deltaTime * enemy_Speed);
 
-                if(distanceToTarget <= 2.5f && !isattack && !ishurt)
+                if(rayHitAtk.collider != null && !isattack && !ishurt)
                 {
                     StartCoroutine(Attack());
                 }
-                //Debug.Log(distanceToTarget);
-                //Debug.Log("지상 추적중");
-
             }
             else if(rayHit.collider == null)
             {
@@ -112,7 +118,7 @@ public abstract class Enemy : MonoBehaviour
             Vector2 targetPosition = new Vector2(target.position.x - 1, target.position.y - 2);
             Vector2 targetDirection = (targetPosition - (Vector2)transform.position).normalized;
             transform.Translate(targetDirection * Time.deltaTime * enemy_Speed);
-            Debug.Log("공중 추적중");
+            //Debug.Log("공중 추적중");
         }
         else if(distanceToTarget >= detectionRange) // 타겟이 범위 밖에 있을 때 수행
         {
@@ -132,10 +138,12 @@ public abstract class Enemy : MonoBehaviour
             if (DirX == -1)
             {
                 spriteRenderer.flipX = true;
+                AttackBox.position = new Vector2(transform.position.x - 1, transform.position.y);
             }
             else if (DirX == 1)
             {
                 spriteRenderer.flipX = false;
+                AttackBox.position = new Vector2(transform.position.x + 1, transform.position.y);
             }
         }
         else
@@ -184,26 +192,34 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
-    IEnumerator Attack()
+    IEnumerator Attack()    //몬스터 공격 함수
     {
-        enemy_OriginSpeed = enemy_Speed;
-        enemy_Speed = 0;
-        isattack = true;
         anim.SetBool("Move", false);
         anim.SetTrigger("Attack");
+        enemy_OriginSpeed = enemy_Speed;
+        isattack = true;
+        this.gameObject.transform.GetChild(0).gameObject.SetActive(true);
         Debug.Log("공격 실행");
         yield return new WaitForSeconds(2f);
+        this.gameObject.transform.GetChild(0).gameObject.SetActive(false);
         isattack = false;
-        enemy_Speed = enemy_OriginSpeed;
     }
 
-   
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player") && !isdie && !ishurt)
+        {
+            Debug.Log("공격 했음");
+        }
+    }
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if (collision.collider.tag == "Player" && !isdie && !ishurt)
+        
+        if (collision.gameObject.CompareTag("Player") && !isdie && !ishurt)
         {
-            StartCoroutine(Hurt(collision.transform));
+            //StartCoroutine(Hurt(collision.transform));
+            Debug.Log("공격 받았음");
         }
     }
 

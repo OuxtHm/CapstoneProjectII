@@ -88,4 +88,12 @@ public class Player : MonoBehaviour
     {
         
     }*/
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.CompareTag("Respawn"))
+        {
+            Debug.Log("공격 받았음");
+        }
+    }
 }
