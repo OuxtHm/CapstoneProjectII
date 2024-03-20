@@ -28,7 +28,6 @@ public abstract class Enemy : MonoBehaviour
     public int enemy_CurHP; //일반 몬스터 현재체력
     public int enemy_Power; //일반 몬스터 공격력
     public int enemy_Speed; //일반 몬스터 이동속도
-    //public int ActionPattern; //일반 몬스터 공격 패턴
 
     private void Awake()
     {
@@ -41,7 +40,6 @@ public abstract class Enemy : MonoBehaviour
         anim = this.GetComponent<Animator>();
         rigid = this.GetComponent<Rigidbody2D>();
         AttackBox = this.gameObject.transform.GetChild(0).GetComponent<Transform>();
-        this.gameObject.transform.GetChild(0).gameObject.SetActive(false);
         StartCoroutine(NextMove());
     }
 
@@ -58,7 +56,7 @@ public abstract class Enemy : MonoBehaviour
         distanceToTarget = Vector3.Distance(this.transform.position, target.position); // 몬스터와 타겟 사이의 거리 계산
         Vector2 direction = (target.position - transform.position).normalized;
 
-        Vector2 AttackVec = new Vector2(rigid.position.x + DirX * 1.2f, rigid.position.y);
+        Vector2 AttackVec = new Vector2(rigid.position.x + DirX * 1.5f, rigid.position.y);
         rayHitAtk = Physics2D.Raycast(AttackVec, Vector3.down, 1.5f, LayerMask.GetMask("Player"));
         Debug.DrawRay(AttackVec, Vector3.down * 1.5f, new Color(1, 0, 0));
 
@@ -88,6 +86,7 @@ public abstract class Enemy : MonoBehaviour
                 if(rayHitAtk.collider != null && !isattack && !ishurt)
                 {
                     StartCoroutine(Attack());
+                    Debug.Log("추적 후 공격실행");
                 }
             }
             else if(rayHit.collider == null)
@@ -115,7 +114,7 @@ public abstract class Enemy : MonoBehaviour
                 spriteRenderer.flipX = true;
             }
             anim.SetBool("Move", true);
-            Vector2 targetPosition = new Vector2(target.position.x - 1, target.position.y - 2);
+            Vector2 targetPosition = new Vector2(target.position.x - 1, target.position.y - 2); // 타겟의 정면으로 따라가기 위해 x-1, y-2를 해줬음
             Vector2 targetDirection = (targetPosition - (Vector2)transform.position).normalized;
             transform.Translate(targetDirection * Time.deltaTime * enemy_Speed);
             //Debug.Log("공중 추적중");
@@ -194,14 +193,14 @@ public abstract class Enemy : MonoBehaviour
 
     IEnumerator Attack()    //몬스터 공격 함수
     {
-        anim.SetBool("Move", false);
+        this.gameObject.transform.GetChild(0).GetComponent<BoxCollider2D>().enabled = true;
+        //anim.SetBool("Move", false);
         anim.SetTrigger("Attack");
         enemy_OriginSpeed = enemy_Speed;
         isattack = true;
-        this.gameObject.transform.GetChild(0).gameObject.SetActive(true);
         Debug.Log("공격 실행");
         yield return new WaitForSeconds(2f);
-        this.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+        this.gameObject.transform.GetChild(0).GetComponent<BoxCollider2D>().enabled = false;
         isattack = false;
     }
 
@@ -209,7 +208,7 @@ public abstract class Enemy : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player") && !isdie && !ishurt)
         {
-            Debug.Log("공격 했음");
+           
         }
     }
 
@@ -218,7 +217,7 @@ public abstract class Enemy : MonoBehaviour
         
         if (collision.gameObject.CompareTag("Player") && !isdie && !ishurt)
         {
-            //StartCoroutine(Hurt(collision.transform));
+            StartCoroutine(Hurt(collision.transform));
             Debug.Log("공격 받았음");
         }
     }
