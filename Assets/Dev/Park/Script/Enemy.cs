@@ -56,7 +56,7 @@ public abstract class Enemy : MonoBehaviour
         distanceToTarget = Vector3.Distance(this.transform.position, target.position); // 몬스터와 타겟 사이의 거리 계산
         Vector2 direction = (target.position - transform.position).normalized;
 
-        Vector2 AttackVec = new Vector2(rigid.position.x + DirX * 1.5f, rigid.position.y);
+        Vector2 AttackVec = new Vector2(rigid.position.x + DirX * 2.5f, rigid.position.y);
         rayHitAtk = Physics2D.Raycast(AttackVec, Vector3.down, 1.5f, LayerMask.GetMask("Player"));
         Debug.DrawRay(AttackVec, Vector3.down * 1.5f, new Color(1, 0, 0));
 
