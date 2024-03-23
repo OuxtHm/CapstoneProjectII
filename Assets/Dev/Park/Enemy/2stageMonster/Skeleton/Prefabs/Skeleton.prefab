@@ -40,7 +40,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8507460309749666986}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
@@ -57,7 +57,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1.6}
+  m_Size: {x: 1.3, y: 1.6}
   m_EdgeRadius: 0
 --- !u!50 &4226263983450662522
 Rigidbody2D:
@@ -259,3 +259,4 @@ MonoBehaviour:
   enemy_CurHP: 0
   enemy_Power: 0
   enemy_Speed: 0
+  enemy_AttackSensor: 0

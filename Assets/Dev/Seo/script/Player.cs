@@ -84,9 +84,11 @@ public class Player : MonoBehaviour
         // 이동 상태에 따라 애니메이터 변수 설정
         animator.SetBool("isRun", move);
     }
-    /*private void CheckGrounded()
+
+    public void Playerhurt(int damage)
     {
-        
-    }*/
+
+        Debug.Log("플레이어 공격받음" + damage);
+    }
 
 }
