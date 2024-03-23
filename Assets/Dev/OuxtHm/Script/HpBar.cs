@@ -10,8 +10,6 @@ public class HpBar : MonoBehaviour
     public Image hpBar;
     public TextMeshProUGUI hpText;
 
-    /*public float barMaxHp;   // 최대 체력
-    public float barCurHp;   // 현재 체력*/
     public float hpRatio;       // 체력 비율
     public float testCurHp;
     private void Awake()
