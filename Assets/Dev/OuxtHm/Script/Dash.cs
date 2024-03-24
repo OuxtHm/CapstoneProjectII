@@ -9,8 +9,8 @@ public class Dash : MonoBehaviour
     public Image firstEnergy;
     public Image secondEnergy;
 
-    private bool isFillingFirst = false;
-    private bool isFillingSecond = false;
+    public bool isFillingFirst = false;        // 우측 게이지 
+    public bool isFillingSecond = false;       // 좌측 게이지 
 
     private void Awake()
     {
