@@ -11,5 +11,6 @@ public class Goblin : Enemy
         enemy_CurHP = 20;
         enemy_Power = 3;
         enemy_Speed = 3;
+        enemy_AttackSensor = 1f;
     }
 }

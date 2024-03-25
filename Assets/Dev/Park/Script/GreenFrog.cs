@@ -11,5 +11,6 @@ public class GreenFrog : Enemy
         enemy_CurHP = 10;
         enemy_Power = 2;
         enemy_Speed = 2;
+        enemy_AttackSensor = 1f;
     }
 }

@@ -11,5 +11,6 @@ public class Canine : Enemy
         enemy_CurHP = 10;
         enemy_Power = 2;
         enemy_Speed = 3;
+        enemy_AttackSensor = 1.3f;
     }
 }

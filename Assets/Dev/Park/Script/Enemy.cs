@@ -6,11 +6,13 @@ using TMPro;
 public abstract class Enemy : MonoBehaviour
 {
     public static Enemy Instance;
+    Player player;
     SpriteRenderer spriteRenderer;
     Animator anim;
     Rigidbody2D rigid;
     Transform AttackBox;
     BoxCollider2D BoxCollider2DSize;
+    BoxCollider2D BumpCollider;
     RaycastHit2D rayHit;
     RaycastHit2D rayHitAtk;
 
@@ -19,7 +21,7 @@ public abstract class Enemy : MonoBehaviour
     float distanceToTarget; // 몬스터와 타겟 사이의 거리
     bool istracking = false;    // 추적 가능 여부
     int enemy_OriginSpeed;  //몬스터의 원래 속도
-    protected int enemy_Type; // 몬스터 종류에 따른 분류 번호 1: 일반 지상 몬스터, 2: 일반 공중 몬스터
+    protected int enemy_Type; // 몬스터 종류에 따른 분류 번호 1: 일반 몬스터, 2: 공중 몬스터, 3: 충돌 몬스터
     bool isdie = false;
     bool ishurt = false;    //피격 적용 확인
     bool isattack = false;  //공격 가능 확인
@@ -38,6 +40,7 @@ public abstract class Enemy : MonoBehaviour
 
     private void Start()
     {
+        player = GetComponent<Player>();
         spriteRenderer = this.GetComponent<SpriteRenderer>();
         anim = this.GetComponent<Animator>();
         rigid = this.GetComponent<Rigidbody2D>();
@@ -61,22 +64,22 @@ public abstract class Enemy : MonoBehaviour
     {
         rigid = this.GetComponent<Rigidbody2D>();
         spriteRenderer = this.GetComponentInChildren<SpriteRenderer>();
-        distanceToTarget = Vector3.Distance(this.transform.position, target.position); // 몬스터와 타겟 사이의 거리 계산
+        //distanceToTarget = Vector3.Distance(this.transform.position, target.position); // 몬스터와 타겟 사이의 거리 계산
+        float distanceToTarget = Mathf.Abs(target.position.x - transform.position.x); // 몬스터와 타겟 사이의 x축 거리 계산
         Vector2 direction = (target.position - transform.position).normalized;
 
         //몬스터별 플레이어를 감지하여 공격을 실행하는 raycast 범위 설정
         float dir = DirX > 0 ? 1 : -1; // DirX가 양수이면 1, 음수이면 -1을 direction으로 설정
-        Vector2 rayDirection = new Vector2(dir, -0.5f);
+        Vector2 rayDirection = new Vector2(dir, 0);
         rayHitAtk = Physics2D.Raycast(rigid.position, rayDirection, enemy_AttackSensor, LayerMask.GetMask("Player"));
         Debug.DrawRay(rigid.position, rayDirection * enemy_AttackSensor, new Color(1, 0, 0));
 
-        if (distanceToTarget <= detectionRange && !ishurt && !isdie && enemy_Type != 2) // 타겟이 범위 안에 있을 때 수행
+        if (distanceToTarget <= detectionRange && !ishurt && !isdie && enemy_Type != 2) //공중 몬스터 이외의 몬스터가 타겟이 범위 안에 있을 때 수행
         {
-            if (rayHit.collider != null && !istracking && !isattack && enemy_Type == 1) // 지상 몬스터 일때
+            if (rayHit.collider != null && !istracking && !isattack)
             {
                 direction.y = transform.position.y; // y값 위치 고정을 위해 추가
                 direction.Normalize();
-
                 if (direction.x >= 0)   // 타겟이 오른쪽에 있을 때
                 {
                     DirX = 1;
@@ -89,16 +92,20 @@ public abstract class Enemy : MonoBehaviour
                     spriteRenderer.flipX = true;
                     AttackBox.position = new Vector2(transform.position.x - 1, transform.position.y);
                 }
+                Debug.Log(distanceToTarget);
                 anim.SetBool("Move", true);
                 transform.Translate(direction * Time.deltaTime * enemy_Speed);
 
-                if(rayHitAtk.collider != null && !isattack && !ishurt)
+                if(distanceToTarget <= 1)   //몬스터와 같은 y값이 아닐경우 추적 안함
+                    istracking = true;
+
+                if (rayHitAtk.collider != null && !isattack && !ishurt && enemy_Type == 1)   //일반 몬스터의 공격 실행
                 {
                     StartCoroutine(Attack());
                     Debug.Log("공격시작");
                 }
             }
-            else if(rayHit.collider == null)
+            else if(rayHit.collider == null)  //바닥이 없으면 추적 종료
             {
                 istracking = true;
                 anim.SetBool("Move", false);
@@ -134,6 +141,33 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision != null && collision.gameObject.CompareTag("Player"))
+        {
+            player = collision.gameObject.GetComponent<Player>();
+            if (player != null)
+            {
+                player.Playerhurt(enemy_Power);
+                if (enemy_Type == 3)
+                {
+
+                }
+            }
+            else
+                Debug.Log("플레이어를 못 불러옴");
+        }
+    }
+
+    /*  벽 태그 추가될 시 적용할 예정
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Wall") && enemy_Type != 2)
+        {
+            Turn();
+        }
+    }
+    */
 
     public void Move()
     {
@@ -267,9 +301,19 @@ public abstract class Enemy : MonoBehaviour
 
     IEnumerator Knockback(Transform target)
     {
-        Vector3 knockbackDirection = transform.position - target.position;  //피격된 위치를 저장
+        Vector3 knockbackDirection = transform.position - target.position;  // 피격된 위치를 저장
         knockbackDirection.Normalize();
-        rigid.AddForce(knockbackDirection * 1f, ForceMode2D.Impulse); // 피격된 위치 * 원하는 힘의 크기만큼 넉백. ForceMode2D.Impulse를 사용하면 순간적인 강한 힘을 줄 수 있음 
+
+        float maxKnockbackDistance = 3f;    //넉백 가능한 최대 거리
+        float knockbackDistance = 2.0f;  // 넉백 거리를 나타내는 변수
+        rigid.AddForce(knockbackDirection * knockbackDistance, ForceMode2D.Impulse);  // 피격된 위치 * 넉백 거리만큼의 힘을 넉백에 사용
+        float distanceTravelled = 0f;  // 이미 이동한 거리를 나타내는 변수
+
+        while (distanceTravelled < maxKnockbackDistance)
+        {
+            distanceTravelled += knockbackDistance * Time.fixedDeltaTime;  // 이동한 거리를 누적
+            yield return new WaitForFixedUpdate();  // Fixed Update마다 체크하여 일정 거리까지만 이동하도록 함
+        }
         yield return new WaitForSeconds(0.3f);
     }
 
