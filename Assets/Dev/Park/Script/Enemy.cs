@@ -21,12 +21,12 @@ public abstract class Enemy : MonoBehaviour
     float distanceToTarget; // 몬스터와 타겟 사이의 거리
     bool istracking = false;    // 추적 가능 여부
     int enemy_OriginSpeed;  //몬스터의 원래 속도
-    protected int enemy_Type; // 몬스터 종류에 따른 분류 번호 1: 일반 몬스터, 2: 공중 몬스터, 3: 충돌 몬스터
     bool isdie = false;
     bool ishurt = false;    //피격 적용 확인
     bool isattack = false;  //공격 가능 확인
 
     [Header("일반 몬스터 능력치")]
+    protected int enemy_Type; // 몬스터 종류에 따른 분류 번호 1: 일반 몬스터, 2: 공중 몬스터, 3: 충돌 몬스터
     public int enemy_MaxHP; //일반 몬스터 최대체력
     public int enemy_CurHP; //일반 몬스터 현재체력
     public int enemy_Power; //일반 몬스터 공격력
@@ -92,12 +92,17 @@ public abstract class Enemy : MonoBehaviour
                     spriteRenderer.flipX = true;
                     AttackBox.position = new Vector2(transform.position.x - 1, transform.position.y);
                 }
-                Debug.Log(distanceToTarget);
-                anim.SetBool("Move", true);
-                transform.Translate(direction * Time.deltaTime * enemy_Speed);
-
-                if(distanceToTarget <= 1)   //몬스터와 같은 y값이 아닐경우 추적 안함
-                    istracking = true;
+                
+                if((target.position.y - transform.position.y) <= 4f)   //타겟과 어느정도의 높이 차이가 있을경우 추적 멈춤
+                {
+                    anim.SetBool("Move", true);
+                    transform.Translate(direction * Time.deltaTime * enemy_Speed);
+                }
+                else
+                {
+                    anim.SetBool("Move", false);
+                }
+                    
 
                 if (rayHitAtk.collider != null && !isattack && !ishurt && enemy_Type == 1)   //일반 몬스터의 공격 실행
                 {
