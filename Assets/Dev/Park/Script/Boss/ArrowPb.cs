@@ -43,7 +43,7 @@ public class ArrowPb : MonoBehaviour
     {
         if (collision.tag == "Player")
         {
-            Player.instance.GetComponent<Player>().Playerhurt(Power);
+            //Player.instance.GetComponent<Player>().Playerhurt(Power);
         }
 
     }

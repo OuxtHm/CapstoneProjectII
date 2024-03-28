@@ -7,6 +7,7 @@ public abstract class Enemy : MonoBehaviour
 {
     public static Enemy Instance;
     Player player;
+    EnemyHpBar enemyHpbar;
     SpriteRenderer spriteRenderer;
     Animator anim;
     Rigidbody2D rigid;
@@ -36,6 +37,7 @@ public abstract class Enemy : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        enemyHpbar = this.transform.GetChild(1).GetComponent<EnemyHpBar>();
     }
 
     private void Start()
@@ -153,7 +155,7 @@ public abstract class Enemy : MonoBehaviour
             player = collision.gameObject.GetComponent<Player>();
             if (player != null)
             {
-                player.Playerhurt(enemy_Power);
+                //player.Playerhurt(enemy_Power);
                 if (enemy_Type == 3)
                 {
 
@@ -217,7 +219,7 @@ public abstract class Enemy : MonoBehaviour
         Debug.DrawRay(frontVec, Vector3.down * 2.5f, new Color(0, 1, 0));
         
         // 물리 기반으로 레이저를 아래로 쏘아서 실질적인 레이저 생성, LayMask.GetMask("")는 해당하는 레이어만 스캔함
-        rayHit = Physics2D.Raycast(frontVec, Vector3.down, 2.5f, LayerMask.GetMask("Tilemap", "UI"));   //레이어는 맵 레이어가 정해지면 수정해야함
+        rayHit = Physics2D.Raycast(frontVec, Vector3.down, 2.5f, LayerMask.GetMask("Ground"));   //레이어는 맵 레이어가 정해지면 수정해야함
         if (rayHit.collider == null && enemy_CurHP >= 0 && enemy_Type != 2)
         {
             Turn();
@@ -253,7 +255,7 @@ public abstract class Enemy : MonoBehaviour
         {
             if (collider.tag == "Player")
             {
-                collider.GetComponent<Player>().Playerhurt(enemy_Power);
+                //collider.GetComponent<Player>().Playerhurt(enemy_Power);
             }
         }
         yield return new WaitForSeconds(1.5f);
@@ -276,7 +278,7 @@ public abstract class Enemy : MonoBehaviour
 
             StartCoroutine(Blink());
             StartCoroutine(Knockback(target));
-
+            StartCoroutine(enemyHpbar.HpUpdate());
             if (enemy_CurHP <= 0)
             {
                 isdie = true;

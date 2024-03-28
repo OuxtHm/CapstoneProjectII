@@ -112,7 +112,7 @@ public abstract class Boss : MonoBehaviour
             player = collision.gameObject.GetComponent<Player>();
             if (player != null)
             {
-                player.Playerhurt(boss_Power);
+                //player.Playerhurt(boss_Power);
             }
             else
                 Debug.Log("플레이어를 못 불러옴");
@@ -148,7 +148,7 @@ public abstract class Boss : MonoBehaviour
         {
             if (collider.tag == "Player")
             {
-                collider.GetComponent<Player>().Playerhurt(boss_Power);
+                //collider.GetComponent<Player>().Playerhurt(boss_Power);
             }
         }
         Invoke("MoveOn", 3f);

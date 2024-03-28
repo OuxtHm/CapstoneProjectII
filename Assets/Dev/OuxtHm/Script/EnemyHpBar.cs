@@ -6,8 +6,15 @@ using UnityEngine.UI;
 public class EnemyHpBar : MonoBehaviour
 {
     public Enemy enemy;
+    public static EnemyHpBar instance;
     Image hpBar;
     float hpRatio;      // 체력 비율
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
     private void Start()
     {
         enemy = this.GetComponentInParent<Enemy>();

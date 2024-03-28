@@ -190,7 +190,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 8
   m_Sprite: {fileID: 21300000, guid: 5bd89c9a23833f841b0603f8362d94eb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -266,8 +266,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ArrowPb: {fileID: 0}
+  ArrowrainPb: {fileID: 0}
   playerLoc: 0
   bossLoc: 0
+  atkPattern: 0
   boss_MaxHP: 0
   boss_CurHP: 0
   boss_Power: 0
