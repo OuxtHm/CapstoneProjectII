@@ -48,7 +48,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7076099497834112969
 Transform:
   m_ObjectHideFlags: 0
@@ -121,11 +121,11 @@ GameObject:
   m_Component:
   - component: {fileID: 7076099498882749978}
   - component: {fileID: 7076099498882749973}
-  - component: {fileID: 7076099498882749974}
   - component: {fileID: 7076099498882749972}
   - component: {fileID: 7076099498882749975}
   - component: {fileID: 7076099498882749976}
   - component: {fileID: 7076099498882749979}
+  - component: {fileID: 8921776370552827788}
   m_Layer: 12
   m_Name: Ranger_Boss
   m_TagString: Boss
@@ -202,27 +202,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &7076099498882749974
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7076099498882749969}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 1c82ca322d8c4074da39c38507213a32, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!50 &7076099498882749972
 Rigidbody2D:
   serializedVersion: 4
@@ -286,9 +265,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8da4a43c0562b544bfad80e29e53c83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ArrowPb: {fileID: 0}
   playerLoc: 0
   bossLoc: 0
   boss_MaxHP: 0
   boss_CurHP: 0
   boss_Power: 0
   boss_Speed: 0
+--- !u!95 &8921776370552827788
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7076099498882749969}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1c82ca322d8c4074da39c38507213a32, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

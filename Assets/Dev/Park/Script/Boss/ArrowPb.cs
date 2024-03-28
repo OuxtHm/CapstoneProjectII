@@ -9,24 +9,35 @@ public class ArrowPb : MonoBehaviour
     Boss boss;
     Rigidbody2D rigid;
     SpriteRenderer spriteRenderer;
+    Transform pos;
+    Vector3 moveDirection = Vector3.right; // 화살이 나가는 방향
 
     public int Dir;
     public float DelTime;
     public int Power;
+    public int speed = 10;
     void Start()
     {
         rigid = this.GetComponent<Rigidbody2D>();
         spriteRenderer = this.GetComponent<SpriteRenderer>();
+        boss = this.GetComponent<Boss>();
+        if (Dir == 1)
+        {
+            spriteRenderer.flipX = false;
+            moveDirection = Vector3.right;
+        }
+        else
+        {
+            spriteRenderer.flipX = true;
+            moveDirection = Vector3.left;
+        }
+        pos = transform;
         DestoryObject();
     }
 
     private void Update()
     {
-        if (Dir == 1)
-            spriteRenderer.flipX = false;
-        else
-            spriteRenderer.flipX = true;
-        transform.Translate(new Vector2(Dir, transform.position.y).normalized * Time.deltaTime);
+        pos.position += moveDirection * speed * Time.deltaTime;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {

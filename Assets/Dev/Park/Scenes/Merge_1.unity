@@ -3647,7 +3647,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1500697196}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.25, y: 2.03, z: 0}
+  m_LocalPosition: {x: 5.95, y: 3.52, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4422,9 +4422,21 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -1.6
       objectReference: {fileID: 0}
+    - target: {fileID: 7076099497834112969, guid: 4fe24cf752cbbac4ba94f8a616645957, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.6
+      objectReference: {fileID: 0}
     - target: {fileID: 7076099498882749969, guid: 4fe24cf752cbbac4ba94f8a616645957, type: 3}
       propertyPath: m_Name
       value: Ranger_Boss
+      objectReference: {fileID: 0}
+    - target: {fileID: 7076099498882749969, guid: 4fe24cf752cbbac4ba94f8a616645957, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7076099498882749973, guid: 4fe24cf752cbbac4ba94f8a616645957, type: 3}
+      propertyPath: m_FlipX
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7076099498882749978, guid: 4fe24cf752cbbac4ba94f8a616645957, type: 3}
       propertyPath: m_RootOrder
@@ -4474,5 +4486,9 @@ PrefabInstance:
       propertyPath: ArrowPb
       value: 
       objectReference: {fileID: 7389849368303966876, guid: b6f1421886f64ac4399a7adf4899c989, type: 3}
+    - target: {fileID: 7076099498882749979, guid: 4fe24cf752cbbac4ba94f8a616645957, type: 3}
+      propertyPath: ArrowrainPb
+      value: 
+      objectReference: {fileID: 7000764193863456653, guid: bd7be2bd8d041814c9074920cd76a4a9, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4fe24cf752cbbac4ba94f8a616645957, type: 3}

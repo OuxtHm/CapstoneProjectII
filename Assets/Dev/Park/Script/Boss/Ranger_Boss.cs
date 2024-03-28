@@ -9,6 +9,6 @@ public class Ranger_Boss : Boss
         boss_MaxHP = 100;
         boss_CurHP = 100;
         boss_Power = 20;
-        boss_Speed = 2;
+        boss_Speed = 1;
     }
 }
