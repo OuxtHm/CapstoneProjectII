@@ -8,10 +8,16 @@ public class Player : MonoBehaviour
     public bool move;
     private Rigidbody2D rb;
     private Animator  animator;
-    public float jumpForce = 250f;
-    public float moveSpeed = 2f;
     private SpriteRenderer sr;
     //private bool isGrounded;
+
+    [Header("능력치")]
+    public float maxHp;       // 최대 체력
+    public float curHp;       // 현재 체력
+    public float jumpForce = 250f;
+    public float moveSpeed = 2f;
+
+    public int money;
 
     public void Awake()
     {
@@ -19,11 +25,12 @@ public class Player : MonoBehaviour
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
-
+        maxHp = 100f;
+        curHp = 100f;
+        money = 9999;
     }
     public void Start()
     {
-
     }
 
     // Update is called once per frame

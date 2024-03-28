@@ -178,4 +178,3 @@ MonoBehaviour:
   enemy_CurHP: 0
   enemy_Power: 0
   enemy_Speed: 0
-  ActionPattern: 0
