@@ -109,20 +109,20 @@ public class Player : MonoBehaviour
             }
         }
 
-        void OnCollisionEnter2D(Collision2D collision)
+        /*void OnCollisionEnter2D(Collision2D collision)
         {
             if (collision.collider.tag == "Enemy")
             { 
-                playerHP -= 5; 
-                if (playerHP <= 0)
+                curHp -= 5; 
+                if (curHp <= 0)
                 {
                     animator.SetTrigger("isDie");
                 }
-                else if(playerHP > 0)
+                else if(curHp > 0)
                 {
                     animator.SetTrigger("isHit");
                 }
             }
-        }
+        }*/
     }           
 }
