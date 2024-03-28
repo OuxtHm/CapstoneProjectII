@@ -70,7 +70,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -144,12 +144,12 @@ TextureImporter:
       name: Idle_0
       rect:
         serializedVersion: 2
-        x: 58
+        x: 0
         y: 49
-        width: 33
-        height: 36
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 150
+        height: 101
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -165,12 +165,12 @@ TextureImporter:
       name: Idle_1
       rect:
         serializedVersion: 2
-        x: 208
+        x: 150
         y: 49
-        width: 33
-        height: 35
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 150
+        height: 101
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -186,18 +186,18 @@ TextureImporter:
       name: Idle_2
       rect:
         serializedVersion: 2
-        x: 358
+        x: 300
         y: 49
-        width: 33
-        height: 34
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 150
+        height: 101
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c375fc83c4f949e4e82a47d3f4af0c7d
+      spriteID: f214d888039db4a4fa97994ea79b521b
       internalID: -1453113031
       vertices: []
       indices: 
@@ -207,18 +207,18 @@ TextureImporter:
       name: Idle_3
       rect:
         serializedVersion: 2
-        x: 508
+        x: 450
         y: 49
-        width: 33
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 150
+        height: 101
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 437869295117fe946a57b2de715f1470
+      spriteID: 9fede299b2c442d4382db9394a794629
       internalID: -497613432
       vertices: []
       indices: 

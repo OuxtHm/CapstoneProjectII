@@ -70,7 +70,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -144,12 +144,12 @@ TextureImporter:
       name: Take Hit_0
       rect:
         serializedVersion: 2
-        x: 58
+        x: 0
         y: 49
-        width: 33
-        height: 36
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        width: 150
+        height: 101
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -165,12 +165,12 @@ TextureImporter:
       name: Take Hit_1
       rect:
         serializedVersion: 2
-        x: 208
+        x: 150
         y: 49
-        width: 33
-        height: 36
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        width: 150
+        height: 101
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -186,12 +186,12 @@ TextureImporter:
       name: Take Hit_3
       rect:
         serializedVersion: 2
-        x: 353
+        x: 450
         y: 49
-        width: 43
-        height: 37
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        width: 150
+        height: 101
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -204,22 +204,22 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Take Hit_5
+      name: Take Hit_2
       rect:
         serializedVersion: 2
-        x: 502
+        x: 300
         y: 49
-        width: 41
-        height: 37
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        width: 150
+        height: 101
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6980cb51ee0663c4cb72420b9aa61928
-      internalID: 63794741
+      spriteID: d29869384c3cbe5419c051b3fc8144a3
+      internalID: -1487441476
       vertices: []
       indices: 
       edges: []
@@ -239,8 +239,6 @@ TextureImporter:
       Take Hit_1: -1627847299
       Take Hit_2: -1487441476
       Take Hit_3: 1457952218
-      Take Hit_4: -130680550
-      Take Hit_5: 63794741
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
