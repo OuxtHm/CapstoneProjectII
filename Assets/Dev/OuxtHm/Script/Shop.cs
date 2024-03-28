@@ -26,8 +26,12 @@ public class Shop : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        keyX.SetActive(true);
-        inShop = true;
+        if(collision.gameObject.CompareTag("Player"))
+        {
+            keyX.SetActive(true);
+            inShop = true;
+
+        }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
