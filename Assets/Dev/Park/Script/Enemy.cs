@@ -28,8 +28,8 @@ public abstract class Enemy : MonoBehaviour
 
     [Header("일반 몬스터 능력치")]
     protected int enemy_Type; // 몬스터 종류에 따른 분류 번호 1: 일반 몬스터, 2: 공중 몬스터, 3: 충돌 몬스터
-    public int enemy_MaxHP; //일반 몬스터 최대체력
-    public int enemy_CurHP; //일반 몬스터 현재체력
+    public float enemy_MaxHP; //일반 몬스터 최대체력
+    public float enemy_CurHP; //일반 몬스터 현재체력
     public int enemy_Power; //일반 몬스터 공격력
     public int enemy_Speed; //일반 몬스터 이동속도
     public float enemy_AttackSensor;  //일반 몬스터 플레이어 감지 범위
@@ -270,6 +270,7 @@ public abstract class Enemy : MonoBehaviour
             ishurt = true;
             Debug.Log(istracking);
             enemy_CurHP = enemy_CurHP - 1;
+            StartCoroutine(enemyHpbar.HpUpdate());
             anim.SetBool("Move", false);
             anim.SetTrigger("Hurt");
             if(enemy_Speed > 0)
@@ -278,11 +279,11 @@ public abstract class Enemy : MonoBehaviour
 
             StartCoroutine(Blink());
             StartCoroutine(Knockback(target));
-            StartCoroutine(enemyHpbar.HpUpdate());
             if (enemy_CurHP <= 0)
             {
                 isdie = true;
                 StopAllCoroutines();
+                StartCoroutine(enemyHpbar.HpUpdate());
                 StartCoroutine(Die());
                 Debug.Log("죽었음");
             }
