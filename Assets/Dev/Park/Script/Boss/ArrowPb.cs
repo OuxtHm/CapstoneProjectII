@@ -5,7 +5,6 @@ using TMPro;
 
 public class ArrowPb : MonoBehaviour
 {
-    Player player;
     Boss boss;
     Rigidbody2D rigid;
     SpriteRenderer spriteRenderer;
@@ -15,12 +14,15 @@ public class ArrowPb : MonoBehaviour
     public int Dir;
     public float DelTime;
     public int Power;
-    public int speed = 10;
+    public int speed = 15;
+    public int Arrowpatten;
+
     void Start()
     {
         rigid = this.GetComponent<Rigidbody2D>();
         spriteRenderer = this.GetComponent<SpriteRenderer>();
         boss = this.GetComponent<Boss>();
+
         if (Dir == 1)
         {
             spriteRenderer.flipX = false;
@@ -37,13 +39,15 @@ public class ArrowPb : MonoBehaviour
 
     private void Update()
     {
-        pos.position += moveDirection * speed * Time.deltaTime;
+        if(Arrowpatten == 1)
+            pos.position += moveDirection * speed * Time.deltaTime;
     }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Player")
         {
-            //Player.instance.GetComponent<Player>().Playerhurt(Power);
+            Player.instance.GetComponent<Player>().Playerhurt(Power);
         }
 
     }

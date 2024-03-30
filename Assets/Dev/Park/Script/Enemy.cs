@@ -28,8 +28,8 @@ public abstract class Enemy : MonoBehaviour
 
     [Header("일반 몬스터 능력치")]
     protected int enemy_Type; // 몬스터 종류에 따른 분류 번호 1: 일반 몬스터, 2: 공중 몬스터, 3: 충돌 몬스터
-    public int enemy_MaxHP; //일반 몬스터 최대체력
-    public int enemy_CurHP; //일반 몬스터 현재체력
+    public float enemy_MaxHP; //일반 몬스터 최대체력
+    public float enemy_CurHP; //일반 몬스터 현재체력
     public int enemy_Power; //일반 몬스터 공격력
     public int enemy_Speed; //일반 몬스터 이동속도
     public float enemy_AttackSensor;  //일반 몬스터 플레이어 감지 범위
@@ -255,7 +255,7 @@ public abstract class Enemy : MonoBehaviour
         {
             if (collider.tag == "Player")
             {
-                //collider.GetComponent<Player>().Playerhurt(enemy_Power);
+                collider.GetComponent<Player>().Playerhurt(enemy_Power);
             }
         }
         yield return new WaitForSeconds(1.5f);
@@ -301,9 +301,6 @@ public abstract class Enemy : MonoBehaviour
         anim.SetTrigger("Die");
         yield return new WaitForSeconds(1f);
         Destroy(gameObject);
-        //StopAllCoroutines();
-        //gameObject.SetActive(false);
-        //Destroy(gameObject); 삭제할거면 이 방법을 사용
     }
 
     IEnumerator Knockback(Transform target)
