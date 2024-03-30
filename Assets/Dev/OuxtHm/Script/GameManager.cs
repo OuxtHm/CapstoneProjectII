@@ -4,15 +4,27 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
+    public GameObject optionUI;     // ¿É¼Ç Ã¢
+    public bool show;   
     void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            ShowOptionUI();
+        }    
+    }
+
+    public void ShowOptionUI()
+    {
+        if (show)
+        {
+            show = false;
+            optionUI.SetActive(false);
+        }
+        else
+        {
+            show = true;
+            optionUI.SetActive(true);
+        }
     }
 }

@@ -41,7 +41,6 @@ public class EnemyHpBar : MonoBehaviour
             yield return null;
         }
 
-        // 보간 완료 후 최종 값을 확실히 적용
         hpRatio = endRatio;
         hpBar.fillAmount = hpRatio;
     }

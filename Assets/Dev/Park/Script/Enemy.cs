@@ -270,7 +270,7 @@ public abstract class Enemy : MonoBehaviour
             ishurt = true;
             Debug.Log(istracking);
             enemy_CurHP = enemy_CurHP - 1;
-            StartCoroutine(enemyHpbar.HpUpdate());
+            StartCoroutine(enemyHpbar.HpUpdate());      // 2024-03-30 유재현 추가
             anim.SetBool("Move", false);
             anim.SetTrigger("Hurt");
             if(enemy_Speed > 0)
@@ -283,7 +283,7 @@ public abstract class Enemy : MonoBehaviour
             {
                 isdie = true;
                 StopAllCoroutines();
-                StartCoroutine(enemyHpbar.HpUpdate());
+                StartCoroutine(enemyHpbar.HpUpdate());      // 2024-03-30 유재현 추가
                 StartCoroutine(Die());
                 Debug.Log("죽었음");
             }
