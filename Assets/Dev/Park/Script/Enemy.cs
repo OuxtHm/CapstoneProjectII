@@ -22,6 +22,7 @@ public abstract class Enemy : MonoBehaviour
     float distanceToTarget; // 몬스터와 타겟 사이의 거리
     bool istracking = false;    // 추적 가능 여부
     int enemy_OriginSpeed;  //몬스터의 원래 속도
+    int atkPattern;
     bool isdie = false;
     bool ishurt = false;    //피격 적용 확인
     bool isattack = false;  //공격 가능 확인
@@ -80,7 +81,7 @@ public abstract class Enemy : MonoBehaviour
         {
             if (rayHit.collider != null && !istracking && !isattack)
             {
-                direction.y = transform.position.y; // y값 위치 고정을 위해 추가
+                direction.y = 0; // y값 위치 고정을 위해 추가
                 direction.Normalize();
                 if (direction.x >= 0)   // 타겟이 오른쪽에 있을 때
                 {
@@ -181,7 +182,7 @@ public abstract class Enemy : MonoBehaviour
         if (DirX != 0 && !isdie && !ishurt && !isattack)
         {
             anim.SetBool("Move", true);
-            transform.Translate(new Vector2(DirX, transform.position.y).normalized * Time.deltaTime * enemy_Speed);
+            gameObject.transform.Translate(new Vector2(DirX, 0) * Time.deltaTime * enemy_Speed);
 
             if (DirX == -1)
             {
@@ -242,7 +243,9 @@ public abstract class Enemy : MonoBehaviour
 
     IEnumerator Attack()    //몬스터 공격 함수
     {
+        atkPattern = Random.Range(1, 3);
         anim.SetTrigger("Attack");
+        anim.SetFloat("Attackpatten", atkPattern);
         enemy_OriginSpeed = enemy_Speed;
         isattack = true;
 

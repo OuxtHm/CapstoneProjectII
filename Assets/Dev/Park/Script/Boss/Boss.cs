@@ -13,8 +13,6 @@ public abstract class Boss : MonoBehaviour
     Transform PbSpawn;  //프리펩 생성 위치 오브젝트
     Transform AttackBox;    // 근접 공격 범위 오브젝트
     BoxCollider2D BoxCollider2DSize;    //Attackbox 오브젝트의 boxcollider2D
-    public GameObject ArrowPb; // 화살 프리펩
-    public GameObject ArrowrainPb; // 화살비 프리펩
 
     bool ishurt = false;
     bool bossMoving = true;
@@ -35,6 +33,11 @@ public abstract class Boss : MonoBehaviour
     public int boss_TwoPattenPower;   //두번째 공격 패턴 대미지
     public int boss_ThreePattenPower;    //세번째 공격 패턴 대미지
     public int boss_FourPattenPower;   //네번째 공격 패턴 대미지
+
+    [Header("1스테이지 보스 프리펩")]
+    public GameObject ArrowPb; // 1스테이지 보스 화살 프리펩
+    public GameObject ArrowrainPb; // 1스테이지 보스 화살비 프리펩
+    public GameObject LaserPb; // 1스테이지 보스 화살비 프리펩
 
     private void Awake()
     {
@@ -74,10 +77,21 @@ public abstract class Boss : MonoBehaviour
             anim.SetBool("Move", true);
         }
         else
+        {
             anim.SetBool("Move", false);
-
+        }
+            
     }
-
+    
+    /*
+    void bossRoll()
+    {
+        anim.SetTrigger("Roll");
+        float moveDistance = DirX * boss_Speed * 5 * Time.deltaTime;
+        gameObject.transform.Translate(new Vector2(moveDistance, 0));
+        Debug.Log("굴렀음");
+    }
+    */
     public void bossAttack()
     {
         if(!isdie)
@@ -125,7 +139,7 @@ public abstract class Boss : MonoBehaviour
                     bossMoving = false;
                     anim.SetTrigger("Attack");
                     anim.SetFloat("Attackpatten", 4);
-                    Ranger_Laserattack();
+                    StartCoroutine(Ranger_Laserattack());
                     atkPattern = 0;
                     break;
             }
@@ -141,17 +155,17 @@ public abstract class Boss : MonoBehaviour
             {
                 player.Playerhurt(boss_BumpPower);
             }
-            else
-                Debug.Log("플레이어를 못 불러옴");
         }
     }
     public void randomAtk() // 공격 패턴 랜덤으로 정하기
     {
         atkPattern = Random.Range(2, 5);    // 2~4 사이의 숫자 랜덤값을 받음
-        if ((playerLoc - bossLoc) <= 4f)    //보스와 플레이어의 거리가 4만큼 이내에 있으면 근접 공격 확정
+        if (DirX == 1 && (playerLoc - bossLoc) <= 4f || (DirX == -1 && (playerLoc - bossLoc) >= -4f))    //보스와 플레이어의 거리가 4만큼 이내에 있으면 근접 공격 확정
             atkPattern = 1;
-        if (!isdie)
+        if (!isdie && boss_CurHP > boss_MaxHP / 2)  // 1페이즈와 2페이즈의 패턴 실행 시간이 다름
             Invoke("randomAtk", 5f);
+        else
+            Invoke("randomAtk", 3.5f);
     }
 
     void Ranger_Normalattack()  //근접 공격
@@ -167,7 +181,8 @@ public abstract class Boss : MonoBehaviour
                 collider.GetComponent<Player>().Playerhurt(boss_OnePattenPower);
             }
         }
-        Invoke("MoveOn", 2.5f);
+        Invoke("bossRoll", 0.5f);
+        Invoke("MoveOn", 2f);
         this.gameObject.transform.GetChild(0).GetComponent<BoxCollider2D>().enabled = false;
     }
 
@@ -186,8 +201,8 @@ public abstract class Boss : MonoBehaviour
 
     IEnumerator Ranger_Arrowrain()  //화살비 공격
     {
-        Vector2 newPosition = new Vector2(player.transform.position.x, PbSpawn.position.y + 1.1f);  //원래 있는 Pbspawn위치값을 수정해서 새로운 위치 선언
         ArrowPb ArPb = ArrowrainPb.GetComponent<ArrowPb>();
+        Vector2 newPosition = new Vector2(player.transform.position.x, PbSpawn.position.y + 1.1f);  //원래 있는 Pbspawn위치값을 수정해서 새로운 위치 선언
         ArPb.Power = boss_ThreePattenPower;
         ArPb.Dir = DirX;
         ArPb.DelTime = 1.5f;
@@ -199,9 +214,19 @@ public abstract class Boss : MonoBehaviour
         Invoke("MoveOn", 2.5f);
     }
 
-    void Ranger_Laserattack()
+    IEnumerator Ranger_Laserattack()    //레이져 공격
     {
+        Vector2 newPosition = new Vector2(PbSpawn.position.x + (DirX * 9.4f), PbSpawn.position.y - 0.07f);  //원래 있는 Pbspawn위치값을 수정해서 새로운 위치 선언
+        ArrowPb LrPb = LaserPb.GetComponent<ArrowPb>();
+        LrPb.Power = boss_FourPattenPower;
+        LrPb.Dir = DirX;
+        LrPb.DelTime = 0.3f;
+        LrPb.Arrowpatten = 3;
 
+        yield return new WaitForSeconds(0.9f);
+        GameObject arrowrain = Instantiate(LaserPb, newPosition, PbSpawn.rotation);
+
+        Invoke("MoveOn", 2.5f);
     }
     
     IEnumerator Hurt(Transform target)  //플레이어에게 피격 받았을 때 실행

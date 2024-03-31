@@ -11,11 +11,11 @@ public class ArrowPb : MonoBehaviour
     Transform pos;
     Vector3 moveDirection = Vector3.right; // 화살이 나가는 방향
 
-    public int Dir;
-    public float DelTime;
-    public int Power;
-    public int speed = 15;
-    public int Arrowpatten;
+    public int Dir; // 날아가는 방향값
+    public float DelTime;   //제거되는 시간
+    public int Power;   // 투사체 대미지
+    public int speed = 15;  // 투사체 속도
+    public int Arrowpatten; //공격 패턴
 
     void Start()
     {
