@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager instance;
     public GameObject optionUI;     // ¿É¼Ç Ã¢
-    public bool show;   
+    public bool show;
+    private void Awake()
+    {
+        instance = this;
+    }
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.Escape))
