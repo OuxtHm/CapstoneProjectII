@@ -79,7 +79,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 8
   m_Sprite: {fileID: 1228320560, guid: 17f35520065756740aebf7213b00632e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -175,6 +175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d55f23c938db34d98f70ae20b2ff15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ExplosionPb: {fileID: 0}
   detectionRange: 5
   enemy_MaxHP: 0
   enemy_CurHP: 0

@@ -22,8 +22,10 @@ public abstract class Boss : MonoBehaviour
     public float bossLoc;  // boss의 X좌표
     public int atkPattern; //boss 공격 패턴
     int boss_OriginSpeed;   //몬스터의 이전 속도값 저장
+    float distanceToTarget; //플레이어와 보스 사이의 거리
 
     [Header("보스 몬스터 능력치")]
+    public int boss_stage;
     public float boss_MaxHP; //보스 최대체력
     public float boss_CurHP; //보스 현재체력
     public int boss_Power; //보스 공격력
@@ -38,6 +40,7 @@ public abstract class Boss : MonoBehaviour
     public GameObject ArrowPb; // 1스테이지 보스 화살 프리펩
     public GameObject ArrowrainPb; // 1스테이지 보스 화살비 프리펩
     public GameObject LaserPb; // 1스테이지 보스 화살비 프리펩
+    public GameObject WarringPb;  //공격 전 위험표시 프리펩
 
     private void Awake()
     {
@@ -65,44 +68,55 @@ public abstract class Boss : MonoBehaviour
     {
         playerLoc = target.position.x;
         bossLoc = this.gameObject.transform.position.x;
+        distanceToTarget = Mathf.Abs(target.position.x - transform.position.x); // 거리의 차이를 절대값으로 저장
         bossMove();
         bossAttack();
     }
 
     public void bossMove()  // boss의 움직이도록 하는 함수
     {
-        if (bossMoving && !isdie)
+        if(boss_stage == 1)
         {
-            gameObject.transform.Translate(new Vector2(DirX, 0) * Time.deltaTime * boss_Speed);
-            anim.SetBool("Move", true);
+            if (bossMoving && !isdie && distanceToTarget <= 15f)
+            {
+                gameObject.transform.Translate(new Vector2(DirX * -1, 0) * Time.deltaTime * boss_Speed);
+                if (DirX == 1)
+                    spriteRenderer.flipX = true;
+                else
+                    spriteRenderer.flipX = false;
+                anim.SetBool("Move", true);
+            }
+            else
+            {
+                anim.SetBool("Move", false);
+            }
         }
         else
         {
-            anim.SetBool("Move", false);
+            if (bossMoving && !isdie)
+            {
+                gameObject.transform.Translate(new Vector2(DirX, 0) * Time.deltaTime * boss_Speed);
+                anim.SetBool("Move", true);
+            }
+            else
+            {
+                anim.SetBool("Move", false);
+            }
         }
+        
             
     }
-    
-    /*
-    void bossRoll()
-    {
-        anim.SetTrigger("Roll");
-        float moveDistance = DirX * boss_Speed * 5 * Time.deltaTime;
-        gameObject.transform.Translate(new Vector2(moveDistance, 0));
-        Debug.Log("굴렀음");
-    }
-    */
     public void bossAttack()
     {
         if(!isdie)
         {
-            if (playerLoc < bossLoc && bossMoving)
+            if (playerLoc < bossLoc && !bossMoving)
             {
                 spriteRenderer.flipX = true;
                 DirX = -1;
                 AttackBox.position = new Vector2(transform.position.x - 1.6f, transform.position.y - 3f);
             }
-            else if (playerLoc > bossLoc && bossMoving)
+            else if (playerLoc > bossLoc && !bossMoving)
             {
                 spriteRenderer.flipX = false;
                 DirX = 1;
@@ -163,7 +177,9 @@ public abstract class Boss : MonoBehaviour
         if (DirX == 1 && (playerLoc - bossLoc) <= 4f || (DirX == -1 && (playerLoc - bossLoc) >= -4f))    //보스와 플레이어의 거리가 4만큼 이내에 있으면 근접 공격 확정
             atkPattern = 1;
         if (!isdie && boss_CurHP > boss_MaxHP / 2)  // 1페이즈와 2페이즈의 패턴 실행 시간이 다름
-            Invoke("randomAtk", 5f);
+        {
+            Invoke("randomAtk", 6f);
+        }  
         else
             Invoke("randomAtk", 3.5f);
     }
@@ -196,22 +212,25 @@ public abstract class Boss : MonoBehaviour
 
         GameObject arrow = Instantiate(ArrowPb, PbSpawn.position, PbSpawn.rotation);
 
-        Invoke("MoveOn", 2.5f);
+        Invoke("MoveOn", 2f);
     }
 
     IEnumerator Ranger_Arrowrain()  //화살비 공격
     {
         ArrowPb ArPb = ArrowrainPb.GetComponent<ArrowPb>();
-        Vector2 newPosition = new Vector2(player.transform.position.x, PbSpawn.position.y + 1.1f);  //원래 있는 Pbspawn위치값을 수정해서 새로운 위치 선언
+        Vector2 Targetpos = new Vector2(player.transform.position.x, PbSpawn.position.y + 1.1f);  //원래 있는 Pbspawn위치값을 수정해서 새로운 위치 선언
+        Vector2 Warringpos = new Vector2(player.transform.position.x, player.transform.position.y - 1.3f);
         ArPb.Power = boss_ThreePattenPower;
         ArPb.Dir = DirX;
         ArPb.DelTime = 1.5f;
         ArPb.Arrowpatten = 2;
 
+        GameObject Warring = Instantiate(WarringPb, Warringpos, PbSpawn.rotation);
         yield return new WaitForSeconds(1.5f);
-        GameObject arrowrain = Instantiate(ArrowrainPb, newPosition, PbSpawn.rotation);
-       
-        Invoke("MoveOn", 2.5f);
+        GameObject arrowrain = Instantiate(ArrowrainPb, Targetpos, PbSpawn.rotation);
+
+        Destroy(Warring);
+        Invoke("MoveOn", 3f);
     }
 
     IEnumerator Ranger_Laserattack()    //레이져 공격
@@ -226,7 +245,7 @@ public abstract class Boss : MonoBehaviour
         yield return new WaitForSeconds(0.9f);
         GameObject arrowrain = Instantiate(LaserPb, newPosition, PbSpawn.rotation);
 
-        Invoke("MoveOn", 2.5f);
+        Invoke("MoveOn", 3f);
     }
     
     IEnumerator Hurt(Transform target)  //플레이어에게 피격 받았을 때 실행
@@ -251,7 +270,7 @@ public abstract class Boss : MonoBehaviour
             }
         }
 
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.1f);
         boss_Speed = boss_OriginSpeed;
         ishurt = false;
     }
