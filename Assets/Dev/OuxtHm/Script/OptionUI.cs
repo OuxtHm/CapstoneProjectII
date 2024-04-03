@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class OptionUI : MonoBehaviour
@@ -91,12 +92,19 @@ public class OptionUI : MonoBehaviour
     }
     public void QuitGame()  // 게임 종료 함수
     {
-        // 유니티 에디터에서 실행 중이라면
-        #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-        #else
-        // 빌드된 애플리케이션에서 실행 중이라면
-            Application.Quit();
-        #endif
+        if (questionTxt.text == gameOverTxt)
+        {
+            // 유니티 에디터에서 실행 중이라면
+            #if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+            #else
+            // 빌드된 애플리케이션에서 실행 중이라면
+                Application.Quit();
+            #endif
+        }
+        else
+        {
+            SceneManager.LoadScene("MainScene");
+        }
     }
 }
