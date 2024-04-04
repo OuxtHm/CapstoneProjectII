@@ -5,22 +5,24 @@ using TMPro;
 
 public class ArrowPb : MonoBehaviour
 {
-    Player player;
     Boss boss;
     Rigidbody2D rigid;
     SpriteRenderer spriteRenderer;
     Transform pos;
     Vector3 moveDirection = Vector3.right; // 화살이 나가는 방향
 
-    public int Dir;
-    public float DelTime;
-    public int Power;
-    public int speed = 10;
+    public int Dir; // 날아가는 방향값
+    public float DelTime;   //제거되는 시간
+    public int Power;   // 투사체 대미지
+    public int speed = 20;  // 투사체 속도
+    public int Arrowpatten; //공격 패턴
+
     void Start()
     {
         rigid = this.GetComponent<Rigidbody2D>();
         spriteRenderer = this.GetComponent<SpriteRenderer>();
         boss = this.GetComponent<Boss>();
+
         if (Dir == 1)
         {
             spriteRenderer.flipX = false;
@@ -37,13 +39,15 @@ public class ArrowPb : MonoBehaviour
 
     private void Update()
     {
-        pos.position += moveDirection * speed * Time.deltaTime;
+        if(Arrowpatten == 1)
+            pos.position += moveDirection * speed * Time.deltaTime;
     }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Player")
         {
-            //Player.instance.GetComponent<Player>().Playerhurt(Power);
+            Player.instance.GetComponent<Player>().Playerhurt(Power);
         }
 
     }

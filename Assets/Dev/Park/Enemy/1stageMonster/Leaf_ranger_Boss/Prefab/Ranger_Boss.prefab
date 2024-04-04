@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5330045833064441030}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5, y: -1.6, z: 0}
+  m_LocalPosition: {x: 0.5, y: -2.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -57,7 +57,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7076099497834112968}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.6, y: -2, z: 0}
+  m_LocalPosition: {x: 1.6, y: -3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -71,7 +71,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7076099497834112968}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
@@ -121,11 +121,11 @@ GameObject:
   m_Component:
   - component: {fileID: 7076099498882749978}
   - component: {fileID: 7076099498882749973}
+  - component: {fileID: 6546936237092612961}
   - component: {fileID: 7076099498882749972}
   - component: {fileID: 7076099498882749975}
   - component: {fileID: 7076099498882749976}
   - component: {fileID: 7076099498882749979}
-  - component: {fileID: 8921776370552827788}
   m_Layer: 12
   m_Name: Ranger_Boss
   m_TagString: Boss
@@ -202,6 +202,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &6546936237092612961
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7076099498882749969}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1c82ca322d8c4074da39c38507213a32, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!50 &7076099498882749972
 Rigidbody2D:
   serializedVersion: 4
@@ -236,8 +257,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -2.2}
-  m_Size: {x: 1.35, y: 2.6}
+  m_Offset: {x: 0, y: -3}
+  m_Size: {x: 1.8, y: 3}
   m_Direction: 0
 --- !u!114 &7076099498882749976
 MonoBehaviour:
@@ -265,8 +286,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8da4a43c0562b544bfad80e29e53c83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrowPb: {fileID: 0}
-  ArrowrainPb: {fileID: 0}
+  ArrowPb: {fileID: 7389849368303966876, guid: b6f1421886f64ac4399a7adf4899c989, type: 3}
+  ArrowrainPb: {fileID: 7000764193863456653, guid: bd7be2bd8d041814c9074920cd76a4a9, type: 3}
   playerLoc: 0
   bossLoc: 0
   atkPattern: 0
@@ -274,24 +295,8 @@ MonoBehaviour:
   boss_CurHP: 0
   boss_Power: 0
   boss_Speed: 0
---- !u!95 &8921776370552827788
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7076099498882749969}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 1c82ca322d8c4074da39c38507213a32, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
+  boss_BumpPower: 0
+  boss_OnePattenPower: 0
+  boss_TwoPattenPower: 0
+  boss_ThreePattenPower: 0
+  boss_FourPattenPower: 0

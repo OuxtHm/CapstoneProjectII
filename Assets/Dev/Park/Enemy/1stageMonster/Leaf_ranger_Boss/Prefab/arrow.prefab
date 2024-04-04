@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8255120400147847216}
   m_Layer: 0
   m_Name: arrow
-  m_TagString: Untagged
+  m_TagString: projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -146,7 +146,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05ee2591838c96c45ae085869bbac7e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Dir: 1
-  DelTime: 3
-  Power: 20
-  speed: 10
+  Dir: 0
+  DelTime: 0
+  Power: 0
+  speed: 20
+  Arrowpatten: 0

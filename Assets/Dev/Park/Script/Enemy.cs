@@ -12,16 +12,19 @@ public abstract class Enemy : MonoBehaviour
     Animator anim;
     Rigidbody2D rigid;
     Transform AttackBox;
-    BoxCollider2D BoxCollider2DSize;
-    BoxCollider2D BumpCollider;
+    BoxCollider2D AttackBoxSize; //공격 범위 콜라이더 사이즈
+    //BoxCollider2D BumpCollider;
     RaycastHit2D rayHit;
     RaycastHit2D rayHitAtk;
+
+    public GameObject ExplosionPb; //개구리 몬스터 독안개 프리펩
 
     int DirX;   //몬스터가 바라보는 방향값
     public float detectionRange = 7f;  //몬스터의 타겟 인식 범위
     float distanceToTarget; // 몬스터와 타겟 사이의 거리
     bool istracking = false;    // 추적 가능 여부
     int enemy_OriginSpeed;  //몬스터의 원래 속도
+    int atkPattern; //몬스터 공격 패턴
     bool isdie = false;
     bool ishurt = false;    //피격 적용 확인
     bool isattack = false;  //공격 가능 확인
@@ -80,7 +83,7 @@ public abstract class Enemy : MonoBehaviour
         {
             if (rayHit.collider != null && !istracking && !isattack)
             {
-                direction.y = transform.position.y; // y값 위치 고정을 위해 추가
+                direction.y = 0; // y값 위치 고정을 위해 추가
                 direction.Normalize();
                 if (direction.x >= 0)   // 타겟이 오른쪽에 있을 때
                 {
@@ -166,7 +169,7 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
-    /*  벽 태그 추가될 시 적용할 예정
+    /*
     private void OnCollisionStay2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Wall") && enemy_Type != 2)
@@ -175,13 +178,12 @@ public abstract class Enemy : MonoBehaviour
         }
     }
     */
-
     public void Move()
     {
         if (DirX != 0 && !isdie && !ishurt && !isattack)
         {
             anim.SetBool("Move", true);
-            transform.Translate(new Vector2(DirX, transform.position.y).normalized * Time.deltaTime * enemy_Speed);
+            gameObject.transform.Translate(new Vector2(DirX, 0) * Time.deltaTime * enemy_Speed);
 
             if (DirX == -1)
             {
@@ -242,25 +244,46 @@ public abstract class Enemy : MonoBehaviour
 
     IEnumerator Attack()    //몬스터 공격 함수
     {
+        atkPattern = Random.Range(1, 3);
         anim.SetTrigger("Attack");
+        anim.SetFloat("Attackpatten", atkPattern);
         enemy_OriginSpeed = enemy_Speed;
         isattack = true;
 
         yield return new WaitForSeconds(0.7f);
-        BoxCollider2DSize = this.gameObject.transform.GetChild(0).GetComponent<BoxCollider2D>();
+        AttackBoxSize = this.gameObject.transform.GetChild(0).GetComponent<BoxCollider2D>();
         this.gameObject.transform.GetChild(0).GetComponent<BoxCollider2D>().enabled = true;
-        Collider2D[] collider2D = Physics2D.OverlapBoxAll(AttackBox.position, BoxCollider2DSize.size, 0);
+        Collider2D[] collider2D = Physics2D.OverlapBoxAll(AttackBox.position, AttackBoxSize.size, 0);
 
         foreach (Collider2D collider in collider2D)
         {
             if (collider.tag == "Player")
             {
-                //collider.GetComponent<Player>().Playerhurt(enemy_Power);
+                collider.GetComponent<Player>().Playerhurt(enemy_Power);
             }
         }
         yield return new WaitForSeconds(1.5f);
         this.gameObject.transform.GetChild(0).GetComponent<BoxCollider2D>().enabled = false;
         isattack = false;
+    }
+
+    IEnumerator FrogExplosion() //개구리 몬스터 공격 패턴 - 애니메이션에서 실행됨
+    {
+        GameObject Explosion = Instantiate(ExplosionPb, AttackBox.position, AttackBox.rotation);
+
+        //while()
+        anim.SetTrigger("Explosion");
+        AttackBoxSize = ExplosionPb.gameObject.transform.GetComponent<BoxCollider2D>();
+        Collider2D[] collider2D = Physics2D.OverlapBoxAll(ExplosionPb.transform.position, AttackBoxSize.size, 0);
+        foreach (Collider2D collider in collider2D)
+        {
+            if (collider.tag == "Player")
+            {
+                collider.GetComponent<Player>().Playerhurt(enemy_Power);
+            }
+        }
+        yield return new WaitForSeconds(0.5f);
+        Destroy(Explosion);
     }
     
     IEnumerator Hurt(Transform target)  //플레이어에게 피격 받았을 때 실행
@@ -302,9 +325,6 @@ public abstract class Enemy : MonoBehaviour
         anim.SetTrigger("Die");
         yield return new WaitForSeconds(1f);
         Destroy(gameObject);
-        //StopAllCoroutines();
-        //gameObject.SetActive(false);
-        //Destroy(gameObject); 삭제할거면 이 방법을 사용
     }
 
     IEnumerator Knockback(Transform target)

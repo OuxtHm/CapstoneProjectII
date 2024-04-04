@@ -22,7 +22,8 @@ public class Player : MonoBehaviour
     public float groundCheckRadius = 0.2f;
     public LayerMask whatIsGround;
     public bool isGround;
-    
+
+
     public int money;
 
     public void Awake()
@@ -108,8 +109,8 @@ public class Player : MonoBehaviour
                 isBoosted = false;
             }
         }
-
-        /*void OnCollisionEnter2D(Collision2D collision)
+        /*
+        void OnCollisionEnter2D(Collision2D collision)
         {
             if (collision.collider.tag == "Enemy")
             { 
@@ -123,6 +124,7 @@ public class Player : MonoBehaviour
                     animator.SetTrigger("isHit");
                 }
             }
-        }*/
-    }           
+        }
+        */
+    }
 }
