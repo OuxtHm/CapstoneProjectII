@@ -149,4 +149,5 @@ MonoBehaviour:
   Dir: 0
   DelTime: 0
   Power: 0
-  speed: 15
+  speed: 20
+  Arrowpatten: 0

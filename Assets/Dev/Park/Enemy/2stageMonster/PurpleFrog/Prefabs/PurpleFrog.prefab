@@ -255,6 +255,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22b4d7c5f0b63ef4b85fb7b1bbaedf91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ExplosionPb: {fileID: 4390872846123526793, guid: 7f769ab235ef15d469b8eafe58db7749, type: 3}
   detectionRange: 4
   enemy_MaxHP: 0
   enemy_CurHP: 0

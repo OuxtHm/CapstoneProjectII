@@ -127,16 +127,4 @@ public class Player : MonoBehaviour
         }
         */
     }
-
-    public void Playerhurt(int damage)
-    {
-        animator.SetTrigger("isHit");
-        curHp -= damage;
-        Debug.Log("입은 피해:" + damage);
-
-        if (curHp <= 0)
-        {
-            animator.SetTrigger("isDie");
-        }
-    }
 }

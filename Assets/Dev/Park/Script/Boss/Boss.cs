@@ -23,6 +23,8 @@ public abstract class Boss : MonoBehaviour
     public int atkPattern; //boss 공격 패턴
     int boss_OriginSpeed;   //몬스터의 이전 속도값 저장
     float distanceToTarget; //플레이어와 보스 사이의 거리
+    int turnPoint=1;    // 벽에 닿을 시 이동 방법 변경 조건
+    int countRange; //패턴 값 범위 조절
 
     [Header("보스 몬스터 능력치")]
     public int boss_stage;
@@ -75,7 +77,7 @@ public abstract class Boss : MonoBehaviour
 
     public void bossMove()  // boss의 움직이도록 하는 함수
     {
-        if(boss_stage == 1)
+        if(boss_stage == 1 && turnPoint == 1)   //벽에 닿을 시 플레이어쪽으로 이동
         {
             if (bossMoving && !isdie && distanceToTarget <= 15f)
             {
@@ -170,18 +172,29 @@ public abstract class Boss : MonoBehaviour
                 player.Playerhurt(boss_BumpPower);
             }
         }
+
+        if (collision != null && collision.gameObject.CompareTag("Wall"))   //벽 충돌 처리
+        {
+            turnPoint *= -1;
+        }
     }
+    
     public void randomAtk() // 공격 패턴 랜덤으로 정하기
     {
-        atkPattern = Random.Range(2, 5);    // 2~4 사이의 숫자 랜덤값을 받음
+        atkPattern = Random.Range(2, countRange);    // 2 ~ (countRange - 1) 사이의 숫자 랜덤값을 받음
         if (DirX == 1 && (playerLoc - bossLoc) <= 4f || (DirX == -1 && (playerLoc - bossLoc) >= -4f))    //보스와 플레이어의 거리가 4만큼 이내에 있으면 근접 공격 확정
             atkPattern = 1;
         if (!isdie && boss_CurHP > boss_MaxHP / 2)  // 1페이즈와 2페이즈의 패턴 실행 시간이 다름
         {
-            Invoke("randomAtk", 6f);
+            Invoke("randomAtk", 5f);
+            countRange = 4;
         }  
         else
-            Invoke("randomAtk", 3.5f);
+        {
+            Invoke("randomAtk", 4f);
+            countRange = 5;
+        }
+            
     }
 
     void Ranger_Normalattack()  //근접 공격
@@ -219,18 +232,18 @@ public abstract class Boss : MonoBehaviour
     {
         ArrowPb ArPb = ArrowrainPb.GetComponent<ArrowPb>();
         Vector2 Targetpos = new Vector2(player.transform.position.x, PbSpawn.position.y + 1.1f);  //원래 있는 Pbspawn위치값을 수정해서 새로운 위치 선언
-        Vector2 Warringpos = new Vector2(player.transform.position.x, player.transform.position.y - 1.3f);
+        Vector2 Warringpos = new Vector2(player.transform.position.x, PbSpawn.position.y - 2.1f);  //위험 표시 생성 위치
         ArPb.Power = boss_ThreePattenPower;
         ArPb.Dir = DirX;
         ArPb.DelTime = 1.5f;
         ArPb.Arrowpatten = 2;
 
-        GameObject Warring = Instantiate(WarringPb, Warringpos, PbSpawn.rotation);
+        GameObject Warring = Instantiate(WarringPb, Warringpos, PbSpawn.rotation);  //위험 표시 생성
         yield return new WaitForSeconds(1.5f);
-        GameObject arrowrain = Instantiate(ArrowrainPb, Targetpos, PbSpawn.rotation);
+        GameObject arrowrain = Instantiate(ArrowrainPb, Targetpos, PbSpawn.rotation);//화살비 공격 생성
 
         Destroy(Warring);
-        Invoke("MoveOn", 3f);
+        Invoke("MoveOn", 4f);
     }
 
     IEnumerator Ranger_Laserattack()    //레이져 공격

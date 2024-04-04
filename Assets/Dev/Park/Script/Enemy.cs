@@ -270,6 +270,8 @@ public abstract class Enemy : MonoBehaviour
     IEnumerator FrogExplosion() //개구리 몬스터 공격 패턴 - 애니메이션에서 실행됨
     {
         GameObject Explosion = Instantiate(ExplosionPb, AttackBox.position, AttackBox.rotation);
+
+        //while()
         anim.SetTrigger("Explosion");
         AttackBoxSize = ExplosionPb.gameObject.transform.GetComponent<BoxCollider2D>();
         Collider2D[] collider2D = Physics2D.OverlapBoxAll(ExplosionPb.transform.position, AttackBoxSize.size, 0);
