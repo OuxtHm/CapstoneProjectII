@@ -28,6 +28,7 @@ public abstract class Enemy : MonoBehaviour
     bool isdie = false;
     bool ishurt = false;    //피격 적용 확인
     bool isattack = false;  //공격 가능 확인
+    bool giveDmg = false;
 
     [Header("일반 몬스터 능력치")]
     protected int enemy_Type; // 몬스터 종류에 따른 분류 번호 1: 일반 몬스터, 2: 공중 몬스터, 3: 충돌 몬스터
@@ -112,7 +113,6 @@ public abstract class Enemy : MonoBehaviour
                 if (rayHitAtk.collider != null && !isattack && !ishurt && enemy_Type == 1)   //일반 몬스터의 공격 실행
                 {
                     StartCoroutine(Attack());
-                    Debug.Log("공격시작");
                 }
             }
             else if(rayHit.collider == null)  //바닥이 없으면 추적 종료
@@ -158,7 +158,7 @@ public abstract class Enemy : MonoBehaviour
             player = collision.gameObject.GetComponent<Player>();
             if (player != null)
             {
-                //player.Playerhurt(enemy_Power);
+                player.Playerhurt(enemy_Power);
                 if (enemy_Type == 3)
                 {
 
@@ -169,15 +169,15 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
-    /*
+    
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Wall") && enemy_Type != 2)
+        if (collision.gameObject.CompareTag("wall") && enemy_Type != 2)
         {
             Turn();
         }
     }
-    */
+    
     public void Move()
     {
         if (DirX != 0 && !isdie && !ishurt && !isattack)
@@ -270,22 +270,37 @@ public abstract class Enemy : MonoBehaviour
     IEnumerator FrogExplosion() //개구리 몬스터 공격 패턴 - 애니메이션에서 실행됨
     {
         GameObject Explosion = Instantiate(ExplosionPb, AttackBox.position, AttackBox.rotation);
-
-        //while()
+        Vector2 dir = new Vector2(DirX, 0);
+        float DelTime = 2f;
+        giveDmg = false;
+        while (DelTime >= 0)
+        {
+            DelTime -= Time.deltaTime;
+            if(!giveDmg)
+                ExplosionGiveDamage(Explosion);
+            Explosion.transform.Translate(dir * Time.deltaTime * 1); // 이동
+            yield return new WaitForEndOfFrame();
+        }
         anim.SetTrigger("Explosion");
+        yield return new WaitForSeconds(0.5f);
+        Destroy(Explosion); 
+    }
+
+    void ExplosionGiveDamage(GameObject explosion)
+    {
         AttackBoxSize = ExplosionPb.gameObject.transform.GetComponent<BoxCollider2D>();
-        Collider2D[] collider2D = Physics2D.OverlapBoxAll(ExplosionPb.transform.position, AttackBoxSize.size, 0);
+        Collider2D[] collider2D = Physics2D.OverlapBoxAll(explosion.transform.position, AttackBoxSize.size, 0);
         foreach (Collider2D collider in collider2D)
         {
             if (collider.tag == "Player")
             {
                 collider.GetComponent<Player>().Playerhurt(enemy_Power);
+                giveDmg = true;
             }
         }
-        yield return new WaitForSeconds(0.5f);
-        Destroy(Explosion);
     }
-    
+
+
     IEnumerator Hurt(Transform target)  //플레이어에게 피격 받았을 때 실행
     {
         if(enemy_CurHP > 0 && !isdie && !ishurt)

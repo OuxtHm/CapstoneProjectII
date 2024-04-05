@@ -81,7 +81,7 @@ public abstract class Boss : MonoBehaviour
         {
             if (bossMoving && !isdie && distanceToTarget <= 15f)
             {
-                gameObject.transform.Translate(new Vector2(DirX * -1, 0) * Time.deltaTime * boss_Speed);
+                gameObject.transform.Translate(new Vector2(-DirX, 0) * Time.deltaTime * boss_Speed);
                 if (DirX == 1)
                     spriteRenderer.flipX = true;
                 else
@@ -95,7 +95,7 @@ public abstract class Boss : MonoBehaviour
         }
         else
         {
-            if (bossMoving && !isdie)
+            if (bossMoving && !isdie && distanceToTarget >= 5f)
             {
                 gameObject.transform.Translate(new Vector2(DirX, 0) * Time.deltaTime * boss_Speed);
                 anim.SetBool("Move", true);
@@ -164,18 +164,19 @@ public abstract class Boss : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision != null && collision.gameObject.CompareTag("Player")) //충돌 대미지 처리
+        if (collision != null && collision.gameObject.layer == LayerMask.NameToLayer("Player")) //충돌 대미지 처리
         {
             player = collision.gameObject.GetComponent<Player>();
-            if (player != null)
+            if (player != null && boss_CurHP > 0)
             {
                 player.Playerhurt(boss_BumpPower);
             }
         }
 
-        if (collision != null && collision.gameObject.CompareTag("Wall"))   //벽 충돌 처리
+        if (collision != null && collision.gameObject.CompareTag("wall"))   //벽 충돌 처리
         {
             turnPoint *= -1;
+            DirX *= -1;
         }
     }
     
@@ -205,13 +206,12 @@ public abstract class Boss : MonoBehaviour
 
         foreach (Collider2D collider in collider2D)
         {
-            if (collider.tag == "Player")
+            if (collider.gameObject.layer == LayerMask.NameToLayer("Player")) 
             {
                 collider.GetComponent<Player>().Playerhurt(boss_OnePattenPower);
             }
         }
-        Invoke("bossRoll", 0.5f);
-        Invoke("MoveOn", 2f);
+        Invoke("MoveOn", 3f);
         this.gameObject.transform.GetChild(0).GetComponent<BoxCollider2D>().enabled = false;
     }
 
@@ -225,7 +225,7 @@ public abstract class Boss : MonoBehaviour
 
         GameObject arrow = Instantiate(ArrowPb, PbSpawn.position, PbSpawn.rotation);
 
-        Invoke("MoveOn", 2f);
+        Invoke("MoveOn", 3f);
     }
 
     IEnumerator Ranger_Arrowrain()  //화살비 공격
@@ -235,7 +235,7 @@ public abstract class Boss : MonoBehaviour
         Vector2 Warringpos = new Vector2(player.transform.position.x, PbSpawn.position.y - 2.1f);  //위험 표시 생성 위치
         ArPb.Power = boss_ThreePattenPower;
         ArPb.Dir = DirX;
-        ArPb.DelTime = 1.5f;
+        ArPb.DelTime = 1.1f;
         ArPb.Arrowpatten = 2;
 
         GameObject Warring = Instantiate(WarringPb, Warringpos, PbSpawn.rotation);  //위험 표시 생성
@@ -243,7 +243,7 @@ public abstract class Boss : MonoBehaviour
         GameObject arrowrain = Instantiate(ArrowrainPb, Targetpos, PbSpawn.rotation);//화살비 공격 생성
 
         Destroy(Warring);
-        Invoke("MoveOn", 4f);
+        Invoke("MoveOn", 4.5f);
     }
 
     IEnumerator Ranger_Laserattack()    //레이져 공격
@@ -258,7 +258,7 @@ public abstract class Boss : MonoBehaviour
         yield return new WaitForSeconds(0.9f);
         GameObject arrowrain = Instantiate(LaserPb, newPosition, PbSpawn.rotation);
 
-        Invoke("MoveOn", 3f);
+        Invoke("MoveOn", 4f);
     }
     
     IEnumerator Hurt(Transform target)  //플레이어에게 피격 받았을 때 실행
@@ -266,9 +266,9 @@ public abstract class Boss : MonoBehaviour
         if (boss_CurHP > 0 && !ishurt)
         {
             ishurt = true;
-            boss_CurHP = boss_CurHP - 10;
+            boss_CurHP = boss_CurHP - 50;
             anim.SetBool("Move", false);
-            anim.SetTrigger("Hurt");
+            StartCoroutine(Blink());
 
             if (boss_Speed > 0)
                 boss_OriginSpeed = boss_Speed;
@@ -277,23 +277,28 @@ public abstract class Boss : MonoBehaviour
             if (boss_CurHP <= 0)
             {
                 isdie = true;
-                StopAllCoroutines();
                 StartCoroutine(Die());
-                Debug.Log("죽었음");
             }
         }
 
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.3f);
         boss_Speed = boss_OriginSpeed;
         ishurt = false;
     }
+    IEnumerator Blink() // 피격 효과
+    {
+        Color originalColor = spriteRenderer.color;
+        spriteRenderer.color = new Color(1, 1, 1, 0.5f);
+        yield return new WaitForSeconds(0.1f);
+        spriteRenderer.color = originalColor;
+    }
 
-    IEnumerator Die()  //몬스터가 죽었을 실행
+    IEnumerator Die()  //보스가 죽었을 실행
     {
         DirX = 0;
         bossMoving = false;
+        anim.SetTrigger("Die");
         anim.SetBool("Move", false);
-        anim.SetBool("Die", true);
         yield return new WaitForSeconds(2f);
         Destroy(gameObject);
     }
