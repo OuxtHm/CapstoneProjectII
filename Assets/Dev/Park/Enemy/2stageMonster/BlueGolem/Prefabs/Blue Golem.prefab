@@ -79,7 +79,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 8
   m_Sprite: {fileID: 1619542474, guid: 7e80be4b6dc0380458b222dff34bf0f3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -175,7 +175,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bec65be2bb6991f4fbb242b6f86228e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectionRange: 4
+  ExplosionPb: {fileID: 4390872846123526793, guid: 7f769ab235ef15d469b8eafe58db7749, type: 3}
+  detectionRange: 7
   enemy_MaxHP: 0
   enemy_CurHP: 0
   enemy_Power: 0
@@ -238,7 +239,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 4, y: 4}
+  m_Size: {x: 5, y: 4}
   m_EdgeRadius: 0
 --- !u!50 &1427501398442314045
 Rigidbody2D:
@@ -288,6 +289,10 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 5317606563680401836, guid: 7761356fd6f073a42b020c98e5b97a97, type: 3}
+      propertyPath: enemy
+      value: 
+      objectReference: {fileID: 388277834285402557}
     - target: {fileID: 5317606563680401837, guid: 7761356fd6f073a42b020c98e5b97a97, type: 3}
       propertyPath: m_Pivot.x
       value: 0

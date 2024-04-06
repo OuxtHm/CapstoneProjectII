@@ -13,7 +13,6 @@ public abstract class Enemy : MonoBehaviour
     Rigidbody2D rigid;
     Transform AttackBox;
     BoxCollider2D AttackBoxSize; //공격 범위 콜라이더 사이즈
-    //BoxCollider2D BumpCollider;
     RaycastHit2D rayHit;
     RaycastHit2D rayHitAtk;
 
@@ -25,10 +24,10 @@ public abstract class Enemy : MonoBehaviour
     bool istracking = false;    // 추적 가능 여부
     int enemy_OriginSpeed;  //몬스터의 원래 속도
     int atkPattern; //몬스터 공격 패턴
-    bool isdie = false;
+    bool isdie = false; //죽음 확인
     bool ishurt = false;    //피격 적용 확인
     bool isattack = false;  //공격 가능 확인
-    bool giveDmg = false;
+    bool giveDmg = false;   //개구리 투사체 대미지 확인
 
     [Header("일반 몬스터 능력치")]
     protected int enemy_Type; // 몬스터 종류에 따른 분류 번호 1: 일반 몬스터, 2: 공중 몬스터, 3: 충돌 몬스터
@@ -70,7 +69,6 @@ public abstract class Enemy : MonoBehaviour
     {
         rigid = this.GetComponent<Rigidbody2D>();
         spriteRenderer = this.GetComponentInChildren<SpriteRenderer>();
-        //distanceToTarget = Vector3.Distance(this.transform.position, target.position); // 몬스터와 타겟 사이의 거리 계산
         float distanceToTarget = Mathf.Abs(target.position.x - transform.position.x); // 몬스터와 타겟 사이의 x축 거리 계산
         Vector2 direction = (target.position - transform.position).normalized;
 
@@ -123,9 +121,7 @@ public abstract class Enemy : MonoBehaviour
             else //추적중에 바닥이 없으면 타겟 인식 범위까지 반대방향으로 이동함
             {
                 Move();
-            }
-
-            
+            }  
         }
         else if (enemy_Type == 2)  // 공중 몬스터 일때
         {
@@ -140,7 +136,7 @@ public abstract class Enemy : MonoBehaviour
                 spriteRenderer.flipX = true;
             }
             anim.SetBool("Move", true);
-            Vector2 targetPosition = new Vector2(target.position.x - 1, target.position.y - 2); // 타겟의 정면으로 따라가기 위해 x-1, y-2를 해줬음
+            Vector2 targetPosition = new Vector2(target.position.x - 1, target.position.y); // 타겟의 정면으로 따라가기 위해 x-1, y-2를 해줬음
             Vector2 targetDirection = (targetPosition - (Vector2)transform.position).normalized;
             transform.Translate(targetDirection * Time.deltaTime * enemy_Speed);
         }
@@ -170,7 +166,7 @@ public abstract class Enemy : MonoBehaviour
     }
 
     
-    private void OnCollisionStay2D(Collision2D collision)
+    private void OnCollisionStay2D(Collision2D collision)   //벽에 닿았을 시 반대로 돌아감
     {
         if (collision.gameObject.CompareTag("wall") && enemy_Type != 2)
         {
@@ -178,7 +174,7 @@ public abstract class Enemy : MonoBehaviour
         }
     }
     
-    public void Move()
+    public void Move()  //몬스터 기본 이동 동작
     {
         if (DirX != 0 && !isdie && !ishurt && !isattack)
         {
@@ -204,7 +200,8 @@ public abstract class Enemy : MonoBehaviour
 
     IEnumerator NextMove()  // 몬스터가 다음 실행할 이동 방향
     {
-        DirX = Random.Range(-1, 2);
+        if(!istracking)
+            DirX = Random.Range(-1, 2);
         float NextMoveTime = Random.Range(3f, 5f);
         yield return new WaitForSeconds(NextMoveTime);
         StartCoroutine(NextMove());
@@ -267,10 +264,14 @@ public abstract class Enemy : MonoBehaviour
         isattack = false;
     }
 
-    IEnumerator FrogExplosion() //개구리 몬스터 공격 패턴 - 애니메이션에서 실행됨
+    IEnumerator FrogExplosion() //개구리 몬스터 투사체 패턴 - 애니메이션에서 실행됨
     {
+        int dirx = 1;
         GameObject Explosion = Instantiate(ExplosionPb, AttackBox.position, AttackBox.rotation);
-        Vector2 dir = new Vector2(DirX, 0);
+        Animator anim = Explosion.GetComponent<Animator>();
+        if (DirX != 0)
+            dirx = DirX;
+            Vector2 dir = new Vector2(dirx, 0);
         float DelTime = 2f;
         giveDmg = false;
         while (DelTime >= 0)
@@ -281,12 +282,13 @@ public abstract class Enemy : MonoBehaviour
             Explosion.transform.Translate(dir * Time.deltaTime * 1); // 이동
             yield return new WaitForEndOfFrame();
         }
-        anim.SetTrigger("Explosion");
+        anim.SetBool("Explosion",true);
         yield return new WaitForSeconds(0.5f);
+        anim.SetBool("Explosion", false);
         Destroy(Explosion); 
     }
 
-    void ExplosionGiveDamage(GameObject explosion)
+    void ExplosionGiveDamage(GameObject explosion)  //투사체 대미지 기능 동작
     {
         AttackBoxSize = ExplosionPb.gameObject.transform.GetComponent<BoxCollider2D>();
         Collider2D[] collider2D = Physics2D.OverlapBoxAll(explosion.transform.position, AttackBoxSize.size, 0);
@@ -295,7 +297,7 @@ public abstract class Enemy : MonoBehaviour
             if (collider.tag == "Player")
             {
                 collider.GetComponent<Player>().Playerhurt(enemy_Power);
-                giveDmg = true;
+                giveDmg = true; //한 번만 대미지를 주기 위해 사용
             }
         }
     }
@@ -306,7 +308,6 @@ public abstract class Enemy : MonoBehaviour
         if(enemy_CurHP > 0 && !isdie && !ishurt)
         {
             ishurt = true;
-            Debug.Log(istracking);
             enemy_CurHP = enemy_CurHP - 1;
             StartCoroutine(enemyHpbar.HpUpdate());      // 2024-03-30 유재현 추가
             anim.SetBool("Move", false);
