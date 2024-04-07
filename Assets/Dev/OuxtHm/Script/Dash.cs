@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class Dash : MonoBehaviour
 {
+    public static Dash instance;
     public Image firstEnergy;
     public Image secondEnergy;
 
@@ -14,6 +15,7 @@ public class Dash : MonoBehaviour
 
     private void Awake()
     {
+        instance = this;
         firstEnergy = transform.GetChild(0).GetChild(0).GetComponent<Image>();
         secondEnergy = transform.GetChild(1).GetChild(0).GetComponent<Image>();
     }

@@ -5,6 +5,9 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public static Player instance;
+
+    Dash dashSc;
+    HpBar hpBar;
     public float maxHp = 100f;
     public float curHp = 100f;
     public bool isBoosted = false;
@@ -45,6 +48,8 @@ public class Player : MonoBehaviour
     }
     public void Start()
     {
+        dashSc = Dash.instance;
+        hpBar = HpBar.instance;
         originalSpeed = moveSpeed;
         currentJumpCount = maxJumpCount;
     }
@@ -152,42 +157,43 @@ public class Player : MonoBehaviour
         // 이동 상태에 따라 애니메이터 변수 설정
         animator.SetBool("isRun", move);
 
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !dashSc.isFillingFirst)
         {
             StartCoroutine(BoostSpeedForDuration(boostDuration, lastHorizontalInput)); // 여기에 lastHorizontalInput을 전달
             animator.SetTrigger("isDash");
         }
 
-        IEnumerator BoostSpeedForDuration(float duration, float direction) // 새로 추가된 메소드
-        {
-            if (!isBoosted)
-            {
-                isBoosted = true;
-                moveSpeed = boostedSpeed; // 이동 속도를 증가시킴
-
-                StartDash();
-
-                Vector2 dashDirection = new Vector2(direction, 0f); // 대쉬 방향 설정
-                rb.velocity = dashDirection.normalized * boostedSpeed;
- 
-                yield return new WaitForSeconds(duration); 
-              
-                moveSpeed = originalSpeed; 
-                isBoosted = false;
-
-                EndDash();
-            }
-        }       
     }
     public void Playerhurt(int damage)
     {
         animator.SetTrigger("isHit");
         curHp -= damage;
+        hpBar.ChangeHp((int)curHp);
         Debug.Log("입은 피해:" + damage);
 
         if (curHp <= 0)
         {
             animator.SetTrigger("isDie");
+        }
+    }
+    IEnumerator BoostSpeedForDuration(float duration, float direction) // 새로 추가된 메소드
+    {
+        if (!isBoosted)
+        {
+            isBoosted = true;
+            moveSpeed = boostedSpeed; // 이동 속도를 증가시킴
+
+            StartDash();
+
+            Vector2 dashDirection = new Vector2(direction, 0f); // 대쉬 방향 설정
+            rb.velocity = dashDirection.normalized * boostedSpeed;
+
+            yield return new WaitForSeconds(duration);
+
+            moveSpeed = originalSpeed;
+            isBoosted = false;
+
+            EndDash();
         }
     }
 

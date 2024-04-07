@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class HpBar : MonoBehaviour
 {
+    public static HpBar instance;
     public Player player;
     public Image hpBar;
     public TextMeshProUGUI hpText;
@@ -14,6 +15,7 @@ public class HpBar : MonoBehaviour
     public float testCurHp;
     private void Awake()
     {
+        instance = this;
         hpBar = GetComponent<Image>();
         hpText = GetComponentInChildren<TextMeshProUGUI>();
     }
@@ -41,9 +43,9 @@ public class HpBar : MonoBehaviour
         hpBar.fillAmount = hpRatio;
     }
 
-    public void ChangeHp()      // 위의 코루틴을 실행하기 위한 버튼용 함수, 추후 데미지 및 포션 등에 활용가능
+    public void ChangeHp(int changeHp)      // 위의 코루틴을 실행하기 위한 버튼용 함수, 추후 데미지 및 포션 등에 활용가능
     {
-        player.curHp = testCurHp;
+        player.curHp = changeHp;
         ShowHpText();
         StartCoroutine(HandleHp());
     }
