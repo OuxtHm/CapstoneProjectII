@@ -6,7 +6,7 @@ public class Ramses : Enemy
 {
     public override void InitSetting()
     {
-        enemy_Type = 1;
+        enemy_Type = 3;
         enemy_MaxHP = 10;
         enemy_CurHP = 10;
         enemy_Power = 2;

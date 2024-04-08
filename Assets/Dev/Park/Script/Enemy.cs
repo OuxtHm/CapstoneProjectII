@@ -56,7 +56,7 @@ public abstract class Enemy : MonoBehaviour
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.V))
-            StartCoroutine(Hurt(AttackBox));
+            StartCoroutine(Hurt(AttackBox, enemy_Power));
     }
 
     public virtual void Short_Monster(Transform target)
@@ -149,7 +149,7 @@ public abstract class Enemy : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision != null && collision.gameObject.CompareTag("Player"))
+        if(collision != null && collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             player = collision.gameObject.GetComponent<Player>();
             if (player != null)
@@ -196,6 +196,7 @@ public abstract class Enemy : MonoBehaviour
         {
             anim.SetBool("Move", false);
         }
+
     }
 
     IEnumerator NextMove()  // 몬스터가 다음 실행할 이동 방향
@@ -241,9 +242,9 @@ public abstract class Enemy : MonoBehaviour
 
     IEnumerator Attack()    //몬스터 공격 함수
     {
-        atkPattern = Random.Range(1, 3);
+        //atkPattern = Random.Range(1, 3);
         anim.SetTrigger("Attack");
-        anim.SetFloat("Attackpatten", atkPattern);
+        //anim.SetFloat("Attackpatten", atkPattern);
         enemy_OriginSpeed = enemy_Speed;
         isattack = true;
 
@@ -254,7 +255,7 @@ public abstract class Enemy : MonoBehaviour
 
         foreach (Collider2D collider in collider2D)
         {
-            if (collider.tag == "Player")
+            if (collider.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
                 collider.GetComponent<Player>().Playerhurt(enemy_Power);
             }
@@ -269,23 +270,26 @@ public abstract class Enemy : MonoBehaviour
         int dirx = 1;
         GameObject Explosion = Instantiate(ExplosionPb, AttackBox.position, AttackBox.rotation);
         Animator anim = Explosion.GetComponent<Animator>();
+
         if (DirX != 0)
             dirx = DirX;
-            Vector2 dir = new Vector2(dirx, 0);
+        Vector2 dir = new Vector2(dirx, 0);
         float DelTime = 2f;
         giveDmg = false;
-        while (DelTime >= 0)
+        while (DelTime >= 0 && !isdie)
         {
             DelTime -= Time.deltaTime;
-            if(!giveDmg)
+            if (!giveDmg)
                 ExplosionGiveDamage(Explosion);
-            Explosion.transform.Translate(dir * Time.deltaTime * 1); // 이동
+
+            Explosion.transform.Translate(dir * Time.deltaTime * 1); //DelTime 시간만큼 이동
             yield return new WaitForEndOfFrame();
         }
-        anim.SetBool("Explosion",true);
+
+        anim.SetBool("Explosion", true);
         yield return new WaitForSeconds(0.5f);
         anim.SetBool("Explosion", false);
-        Destroy(Explosion); 
+        Destroy(Explosion);
     }
 
     void ExplosionGiveDamage(GameObject explosion)  //투사체 대미지 기능 동작
@@ -294,7 +298,7 @@ public abstract class Enemy : MonoBehaviour
         Collider2D[] collider2D = Physics2D.OverlapBoxAll(explosion.transform.position, AttackBoxSize.size, 0);
         foreach (Collider2D collider in collider2D)
         {
-            if (collider.tag == "Player")
+            if (collider.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
                 collider.GetComponent<Player>().Playerhurt(enemy_Power);
                 giveDmg = true; //한 번만 대미지를 주기 위해 사용
@@ -303,21 +307,27 @@ public abstract class Enemy : MonoBehaviour
     }
 
 
-    IEnumerator Hurt(Transform target)  //플레이어에게 피격 받았을 때 실행
+    IEnumerator Hurt(Transform target, float damage)  //플레이어에게 피격 받았을 때 실행
     {
         if(enemy_CurHP > 0 && !isdie && !ishurt)
         {
             ishurt = true;
-            enemy_CurHP = enemy_CurHP - 1;
+            enemy_CurHP = enemy_CurHP - damage;
             StartCoroutine(enemyHpbar.HpUpdate());      // 2024-03-30 유재현 추가
             anim.SetBool("Move", false);
             anim.SetTrigger("Hurt");
-            if(enemy_Speed > 0)
-                enemy_OriginSpeed = enemy_Speed;
-            enemy_Speed = 0;
 
             StartCoroutine(Blink());
-            StartCoroutine(Knockback(target));
+            if (enemy_Type != 3) //충돌 몬스터는 넉백처리 안함
+            {
+                if (enemy_Speed > 0)
+                    enemy_OriginSpeed = enemy_Speed;
+                enemy_Speed = 0;
+                StartCoroutine(Knockback(target));
+                yield return new WaitForSeconds(0.2f);
+                enemy_Speed = enemy_OriginSpeed;
+            }
+            
             if (enemy_CurHP <= 0)
             {
                 isdie = true;
@@ -327,9 +337,6 @@ public abstract class Enemy : MonoBehaviour
                 Debug.Log("죽었음");
             }
         }
-
-        yield return new WaitForSeconds(0.3f);
-        enemy_Speed = enemy_OriginSpeed;
         ishurt = false;
     }
 
