@@ -16,6 +16,5 @@ public class Ranger_Boss : Boss
         boss_ThreePattenPower = 30;    //화살비 패턴 대미지
         boss_FourPattenPower = 40;   //레이져 패턴 대미지
 
-
     }
 }

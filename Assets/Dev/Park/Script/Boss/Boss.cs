@@ -131,7 +131,12 @@ public abstract class Boss : MonoBehaviour
                     bossMoving = false;
                     anim.SetTrigger("Attack");
                     anim.SetFloat("Attackpatten", 1);
-                    Ranger_Normalattack();
+                    if(boss_stage == 1)
+                        Ranger_Normalattack();
+                    else if(boss_stage == 2)
+                        Ranger_Normalattack();
+                    else
+                        Ranger_Normalattack();
                     atkPattern = 0;
                     break;
 

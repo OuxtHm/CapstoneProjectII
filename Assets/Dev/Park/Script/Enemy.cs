@@ -19,15 +19,13 @@ public abstract class Enemy : MonoBehaviour
     public GameObject ExplosionPb; //개구리 몬스터 독안개 프리펩
 
     int DirX;   //몬스터가 바라보는 방향값
+    int enemy_OriginSpeed;  //몬스터의 원래 속도
     public float detectionRange = 7f;  //몬스터의 타겟 인식 범위
     float distanceToTarget; // 몬스터와 타겟 사이의 거리
     bool istracking = false;    // 추적 가능 여부
-    int enemy_OriginSpeed;  //몬스터의 원래 속도
-    int atkPattern; //몬스터 공격 패턴
     bool isdie = false; //죽음 확인
     bool ishurt = false;    //피격 적용 확인
     bool isattack = false;  //공격 가능 확인
-    bool giveDmg = false;   //개구리 투사체 대미지 확인
 
     [Header("일반 몬스터 능력치")]
     protected int enemy_Type; // 몬스터 종류에 따른 분류 번호 1: 일반 몬스터, 2: 공중 몬스터, 3: 충돌 몬스터
@@ -147,7 +145,7 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    void OnCollisionEnter2D(Collision2D collision)  //충돌 대미지 주기
     {
         if(collision != null && collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
@@ -176,7 +174,7 @@ public abstract class Enemy : MonoBehaviour
     
     public void Move()  //몬스터 기본 이동 동작
     {
-        if (DirX != 0 && !isdie && !ishurt && !isattack)
+        if (DirX != 0 && !isdie && !ishurt && !isattack && !istracking)
         {
             anim.SetBool("Move", true);
             gameObject.transform.Translate(new Vector2(DirX, 0) * Time.deltaTime * enemy_Speed);
@@ -242,9 +240,7 @@ public abstract class Enemy : MonoBehaviour
 
     IEnumerator Attack()    //몬스터 공격 함수
     {
-        //atkPattern = Random.Range(1, 3);
         anim.SetTrigger("Attack");
-        //anim.SetFloat("Attackpatten", atkPattern);
         enemy_OriginSpeed = enemy_Speed;
         isattack = true;
 
@@ -265,45 +261,15 @@ public abstract class Enemy : MonoBehaviour
         isattack = false;
     }
 
-    IEnumerator FrogExplosion() //개구리 몬스터 투사체 패턴 - 애니메이션에서 실행됨
+    void FrogExplosion() //개구리 몬스터 투사체 패턴 - 애니메이션에서 실행됨
     {
-        int dirx = 1;
+        ExplosionPb ExPb = ExplosionPb.GetComponent<ExplosionPb>();
+        ExPb.Power = 10;
+        ExPb.Speed = 2;
+        ExPb.Dir = DirX;
+        ExPb.DelTime = 2f;
+
         GameObject Explosion = Instantiate(ExplosionPb, AttackBox.position, AttackBox.rotation);
-        Animator anim = Explosion.GetComponent<Animator>();
-
-        if (DirX != 0)
-            dirx = DirX;
-        Vector2 dir = new Vector2(dirx, 0);
-        float DelTime = 2f;
-        giveDmg = false;
-        while (DelTime >= 0 && !isdie)
-        {
-            DelTime -= Time.deltaTime;
-            if (!giveDmg)
-                ExplosionGiveDamage(Explosion);
-
-            Explosion.transform.Translate(dir * Time.deltaTime * 1); //DelTime 시간만큼 이동
-            yield return new WaitForEndOfFrame();
-        }
-
-        anim.SetBool("Explosion", true);
-        yield return new WaitForSeconds(0.5f);
-        anim.SetBool("Explosion", false);
-        Destroy(Explosion);
-    }
-
-    void ExplosionGiveDamage(GameObject explosion)  //투사체 대미지 기능 동작
-    {
-        AttackBoxSize = ExplosionPb.gameObject.transform.GetComponent<BoxCollider2D>();
-        Collider2D[] collider2D = Physics2D.OverlapBoxAll(explosion.transform.position, AttackBoxSize.size, 0);
-        foreach (Collider2D collider in collider2D)
-        {
-            if (collider.gameObject.layer == LayerMask.NameToLayer("Player"))
-            {
-                collider.GetComponent<Player>().Playerhurt(enemy_Power);
-                giveDmg = true; //한 번만 대미지를 주기 위해 사용
-            }
-        }
     }
 
 
