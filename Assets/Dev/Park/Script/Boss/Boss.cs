@@ -7,6 +7,7 @@ public abstract class Boss : MonoBehaviour
 {
     public static Boss Instance;
     Player player;
+    BossHpBar bossHpBar;        // 2024-04-10 유재현 추가
     SpriteRenderer spriteRenderer;
     Animator anim;
     Rigidbody2D rigid;
@@ -52,6 +53,7 @@ public abstract class Boss : MonoBehaviour
     private void Start()
     {
         player = Player.instance.GetComponent<Player>();
+        bossHpBar = BossHpBar.instance;     // 2024-04-10 유재현 추가
         spriteRenderer = this.GetComponent<SpriteRenderer>();
         anim = this.GetComponent<Animator>();
         AttackBox = this.gameObject.transform.GetChild(0).GetComponent<Transform>();
@@ -269,7 +271,7 @@ public abstract class Boss : MonoBehaviour
             boss_CurHP = boss_CurHP - 10;
             anim.SetBool("Move", false);
             anim.SetTrigger("Hurt");
-
+            StartCoroutine(bossHpBar.FrontHpUpdate());      // 2024-04-10 유재현 추가
             if (boss_Speed > 0)
                 boss_OriginSpeed = boss_Speed;
             boss_Speed = 0;
@@ -278,6 +280,7 @@ public abstract class Boss : MonoBehaviour
             {
                 isdie = true;
                 StopAllCoroutines();
+                StartCoroutine(bossHpBar.FrontHpUpdate());      // 2024-04-10 유재현 추가
                 StartCoroutine(Die());
                 Debug.Log("죽었음");
             }
