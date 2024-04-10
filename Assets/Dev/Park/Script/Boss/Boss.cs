@@ -272,6 +272,7 @@ public abstract class Boss : MonoBehaviour
             anim.SetBool("Move", false);
             anim.SetTrigger("Hurt");
             StartCoroutine(bossHpBar.FrontHpUpdate());      // 2024-04-10 유재현 추가
+            bossHpBar.anim.SetTrigger("Damage");
             if (boss_Speed > 0)
                 boss_OriginSpeed = boss_Speed;
             boss_Speed = 0;
@@ -281,6 +282,7 @@ public abstract class Boss : MonoBehaviour
                 isdie = true;
                 StopAllCoroutines();
                 StartCoroutine(bossHpBar.FrontHpUpdate());      // 2024-04-10 유재현 추가
+                bossHpBar.anim.SetTrigger("Remove");
                 StartCoroutine(Die());
                 Debug.Log("죽었음");
             }
