@@ -8,6 +8,7 @@ TagManager:
   - Boss
   - projectile
   - Wall
+  - wall
   layers:
   - Default
   - TransparentFX
@@ -29,7 +30,7 @@ TagManager:
   - 
   - 
   - Ground
-  - 
+  - Back ground
   - 
   - 
   - 
