@@ -11,6 +11,6 @@ public class PurpleFrog : Enemy
         enemy_CurHP = 10;
         enemy_Power = 2;
         enemy_Speed = 2;
-        enemy_AttackSensor = 4f;
+        enemy_AttackSensor = 6f;
     }
 }

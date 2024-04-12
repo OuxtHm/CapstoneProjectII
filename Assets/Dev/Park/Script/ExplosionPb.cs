@@ -5,6 +5,7 @@ using UnityEngine;
 public class ExplosionPb : MonoBehaviour
 {
     Enemy enemy;
+    Player player;
     Transform pos;
     public int Dir; // 날아가는 방향값
     public float DelTime;   //제거되는 시간
@@ -18,7 +19,7 @@ public class ExplosionPb : MonoBehaviour
     {
         enemy = GetComponent<Enemy>();
         anim = GetComponent<Animator>();
-
+        //player = Player.instance.GetComponent<Player>();
 
         if (Dir == 1)
         {
@@ -49,7 +50,8 @@ public class ExplosionPb : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            Player.instance.GetComponent<Player>().Playerhurt(Power);
+            player = collision.GetComponent<Player>();
+            collision.GetComponent<Player>().StartCoroutine(player.Playerhurt(Power));
         }
 
     }

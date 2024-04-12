@@ -179,7 +179,7 @@ public class Player : MonoBehaviour
             }
         }       
     }
-    public void Playerhurt(int damage)
+    public IEnumerator Playerhurt(int damage)
     {
         animator.SetTrigger("isHit");
         curHp -= damage;
@@ -189,6 +189,7 @@ public class Player : MonoBehaviour
         {
             animator.SetTrigger("isDie");
         }
+        yield return new WaitForSeconds(0);
     }
 
 }
