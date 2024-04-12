@@ -7,11 +7,16 @@ public class Teleport : MonoBehaviour
     public GameObject targetObj;
     public pade fadeScript;
     public GameObject toObj;
-
+    public GameObject keyX;
+    private void Awake()
+    {
+        keyX = this.transform.GetChild(0).gameObject;
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
+            keyX.SetActive(true);
             targetObj = collision.gameObject;
         }
     }
@@ -20,6 +25,7 @@ public class Teleport : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
+            keyX.SetActive(false);
             StartCoroutine(TelepotyRoutine());
         }
     }
