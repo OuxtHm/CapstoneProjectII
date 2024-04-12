@@ -8,10 +8,12 @@ public class GameManager : MonoBehaviour
     public GameObject optionUI;     // ¿É¼Ç Ã¢
     public GameObject btnArray;
     public GameObject soundOption;
+    public GameObject deadUiPrefab;
     public bool show;
     private void Awake()
     {
         instance = this;
+        deadUiPrefab = Resources.Load<GameObject>("Prefabs/PlayerDead_canvas");
         btnArray = optionUI.transform.GetChild(0).GetChild(1).gameObject;
         soundOption = optionUI.transform.GetChild(0).GetChild(2).gameObject;
     }
@@ -37,5 +39,10 @@ public class GameManager : MonoBehaviour
             btnArray.SetActive(true);
             soundOption.SetActive(false);
         }
+    }
+    public IEnumerator ShowDeadUI()
+    {
+        yield return new WaitForSeconds(0.2f);
+        GameObject deadUi = Instantiate(deadUiPrefab);
     }
 }
