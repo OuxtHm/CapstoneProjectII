@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
     HpBar hpBar;
     public float maxHp = 100f;
     public float curHp = 100f;
+    public float power;        // 플레이어 공격력      // 2024-04-14 유재현 추가
     public bool isBoosted = false;
     public float boostDuration = 0.1f;
     public float boostedSpeed = 20f; // 증가된 이동 속도 값
@@ -34,7 +35,9 @@ public class Player : MonoBehaviour
     GameObject holyArrowPrefab;         // 2024-04-13 유재현 추가 HolyArrow Skill Prefabs
     GameObject holyPillarPrefab;        // 2024-04-13 유재현 추가 HolyPillar Skill Prefabs 
     GameObject thunderPrefab;           // 2024-04-13 유재현 추가 Thunder Skill Prefabs
+    GameObject atkBuffPrefab;           // 2024-04-14 유재현 추가 atkBuff Skill Prefabs    
     public int money;           // 플레이어 골드 보유량
+    
 
     public void Awake()
     {
@@ -42,6 +45,7 @@ public class Player : MonoBehaviour
         holyArrowPrefab = Resources.Load<GameObject>("Prefabs/Skill/HolyArrow");
         holyPillarPrefab = Resources.Load<GameObject>("Prefabs/Skill/HolyPillar");
         thunderPrefab = Resources.Load<GameObject>("Prefabs/Skill/Thunder");
+        atkBuffPrefab = Resources.Load<GameObject>("Prefabs/Skill/AtkBuff");
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
@@ -107,18 +111,7 @@ public class Player : MonoBehaviour
         isGround = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
 
         float horizontalInput = Input.GetAxis("Horizontal");
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            StartCoroutine(HolyArrowSkill());
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            StartCoroutine(HolyPillarSkill());
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            StartCoroutine(ThunderSkill());
-        }
+        TestSkill();
 
         if (horizontalInput != 0)
         {
@@ -215,7 +208,25 @@ public class Player : MonoBehaviour
             EndDash();
         }
     }
-
+    void TestSkill()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            StartCoroutine(HolyArrowSkill());
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            StartCoroutine(HolyPillarSkill());
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            StartCoroutine(ThunderSkill());
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            StartCoroutine(AtkBuffSkill());
+        }
+    }
     public IEnumerator HolyArrowSkill() // HolyArrow 스킬 생성 함수 2024-04-13 유재현 추가
     {
         float direction = sr.flipX ? -3.5f : 3.5f;
@@ -257,5 +268,17 @@ public class Player : MonoBehaviour
             Instantiate(thunderPrefab, spawnPosition + (addPosition * i), Quaternion.identity);
             yield return new WaitForSeconds(0.1f);
         }
+    }
+    
+    public IEnumerator AtkBuffSkill()      // AtkBuff 스킬 생성 함수 2024-04-14 유재현 추가
+    {
+        float direction = sr.flipX ? 0.3f : -0.3f;
+        Vector3 spawnPosition = transform.position + new Vector3(direction, 0, 0);
+        GameObject atkBuff = Instantiate(atkBuffPrefab, spawnPosition, Quaternion.identity, transform);
+        power += 20f;
+        yield return new WaitForSeconds(0.8f);
+        Destroy(atkBuff);
+        yield return new WaitForSeconds(19.2f);
+        power -= 20f;
     }
 }
