@@ -27,7 +27,7 @@ public abstract class Boss : MonoBehaviour
     int countRange; //패턴 값 범위 조절
 
     [Header("보스 몬스터 능력치")]
-    public int boss_stage;
+    public int boss_stage;  //보스별 스테이지 구분
     public float boss_MaxHP; //보스 최대체력
     public float boss_CurHP; //보스 현재체력
     public int boss_Power; //보스 공격력
@@ -93,9 +93,19 @@ public abstract class Boss : MonoBehaviour
                 anim.SetBool("Move", false);
             }
         }
-        else
+        else if(boss_stage == 2)
         {
-            if (bossMoving && !isdie && distanceToTarget >= 5f)
+            if(playerLoc < bossLoc)
+            {
+                spriteRenderer.flipX = true;
+                DirX = -1;
+            }
+            else
+            {
+                spriteRenderer.flipX = false;
+                DirX = 1;
+            }
+            if (bossMoving && !isdie && !ishurt)
             {
                 gameObject.transform.Translate(new Vector2(DirX, 0) * Time.deltaTime * boss_Speed);
                 anim.SetBool("Move", true);
@@ -105,8 +115,6 @@ public abstract class Boss : MonoBehaviour
                 anim.SetBool("Move", false);
             }
         }
-        
-            
     }
     public void bossAttack()
     {
@@ -124,45 +132,74 @@ public abstract class Boss : MonoBehaviour
                 DirX = 1;
                 AttackBox.position = new Vector2(transform.position.x + 1.6f, transform.position.y - 3f);
             }
-
-            switch (atkPattern)
+            if(boss_stage == 1)
             {
-                case 1: //1은 근접공격으로 고정으로 가까울 때만 실행
-                    bossMoving = false;
-                    anim.SetTrigger("Attack");
-                    anim.SetFloat("Attackpatten", 1);
-                    if(boss_stage == 1)
+                switch (atkPattern)
+                {
+                    case 1: //1은 근접공격으로 고정으로 가까울 때만 실행
+                        bossMoving = false;
+                        anim.SetTrigger("Attack");
+                        anim.SetFloat("Attackpatten", 1);
                         Ranger_Normalattack();
-                    else if(boss_stage == 2)
-                        Ranger_Normalattack();
-                    else
-                        Ranger_Normalattack();
-                    atkPattern = 0;
-                    break;
+                        atkPattern = 0;
+                        break;
 
-                case 2:
-                    bossMoving = false;
-                    anim.SetTrigger("Attack");
-                    anim.SetFloat("Attackpatten", 2);
-                    //Ranger_Arrowattack(); 애니메이션에서 실행되게 설정함
-                    atkPattern = 0;
-                    break;
+                    case 2:
+                        bossMoving = false;
+                        anim.SetTrigger("Attack");
+                        anim.SetFloat("Attackpatten", 2);
+                        //Ranger_Arrowattack(); 애니메이션에서 실행되게 설정함
+                        atkPattern = 0;
+                        break;
 
-                case 3:
-                    bossMoving = false;
-                    anim.SetTrigger("Attack");
-                    anim.SetFloat("Attackpatten", 3);
-                    StartCoroutine(Ranger_Arrowrain());
-                    atkPattern = 0;
-                    break;
+                    case 3:
+                        bossMoving = false;
+                        anim.SetTrigger("Attack");
+                        anim.SetFloat("Attackpatten", 3);
+                        StartCoroutine(Ranger_Arrowrain());
+                        atkPattern = 0;
+                        break;
 
-                case 4:
-                    bossMoving = false;
-                    anim.SetTrigger("Attack");
-                    anim.SetFloat("Attackpatten", 4);
-                    StartCoroutine(Ranger_Laserattack());
-                    atkPattern = 0;
-                    break;
+                    case 4:
+                        bossMoving = false;
+                        anim.SetTrigger("Attack");
+                        anim.SetFloat("Attackpatten", 4);
+                        StartCoroutine(Ranger_Laserattack());
+                        atkPattern = 0;
+                        break;
+                }
+            }
+
+            if (boss_stage == 2)
+            {
+                switch (atkPattern)
+                {
+                    case 1: //1은 근접공격으로 고정으로 가까울 때만 실행
+                        bossMoving = false;
+                        anim.SetTrigger("Attack");
+                        //anim.SetFloat("Attackpatten", 1);
+                        Knight_Light();
+                        atkPattern = 0;
+                        break;
+
+                    case 2:
+                        //bossMoving = false;
+                        
+                        atkPattern = 0;
+                        break;
+
+                    case 3:
+                        //bossMoving = false;
+
+                        atkPattern = 0;
+                        break;
+
+                    case 4:
+                        //bossMoving = false;
+                        
+                        atkPattern = 0;
+                        break;
+                }
             }
         }
     }
@@ -265,6 +302,11 @@ public abstract class Boss : MonoBehaviour
 
         Invoke("MoveOn", 4f);
     }
+
+    void Knight_Light()
+    {
+        Invoke("MoveOn", 3f);
+    }
     
     IEnumerator Hurt(Transform target)  //플레이어에게 피격 받았을 때 실행
     {
@@ -309,6 +351,7 @@ public abstract class Boss : MonoBehaviour
     }
     void MoveOn()
     {
+        
         bossMoving = true;
     }
 

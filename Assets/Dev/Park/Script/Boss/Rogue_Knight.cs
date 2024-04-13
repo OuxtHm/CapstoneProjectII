@@ -9,7 +9,7 @@ public class Rogue_Knight : Boss
         boss_stage = 2;
         boss_MaxHP = 100;
         boss_CurHP = 100;
-        boss_Speed = 3;
+        boss_Speed = 4;
         boss_BumpPower = 5;    //충돌 대미지
         boss_OnePattenPower = 10;   //
         boss_TwoPattenPower = 20;   //

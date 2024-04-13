@@ -125,7 +125,7 @@ public abstract class Enemy : MonoBehaviour
                 Move();
             }  
         }
-        else if (enemy_Type == 2)  // 공중 몬스터 일때
+        else if (enemy_Type == 2 && !istracking)  // 공중 몬스터 일때
         {
             if (direction.x >= 0)   // 타겟이 오른쪽에 있을 때
             {
@@ -142,7 +142,7 @@ public abstract class Enemy : MonoBehaviour
             Vector2 targetDirection = (targetPosition - (Vector2)transform.position).normalized;
             transform.Translate(targetDirection * Time.deltaTime * enemy_Speed);
         }
-        else if(distanceToTarget >= detectionRange) // 타겟이 범위 밖에 있을 때 수행
+        else if(distanceToTarget >= detectionRange && enemy_Type != 2) // 타겟이 범위 밖에 있을 때 수행
         {
             istracking = false;
             Move();
