@@ -36,6 +36,7 @@ public class Player : MonoBehaviour
     GameObject holyPillarPrefab;        // 2024-04-13 유재현 추가 HolyPillar Skill Prefabs 
     GameObject thunderPrefab;           // 2024-04-13 유재현 추가 Thunder Skill Prefabs
     GameObject atkBuffPrefab;           // 2024-04-14 유재현 추가 atkBuff Skill Prefabs    
+    GameObject slashPrefab;            // 2024-04-14 유재현 추가 Slash1 Skill Prefabs    
     public int money;           // 플레이어 골드 보유량
     
 
@@ -46,6 +47,7 @@ public class Player : MonoBehaviour
         holyPillarPrefab = Resources.Load<GameObject>("Prefabs/Skill/HolyPillar");
         thunderPrefab = Resources.Load<GameObject>("Prefabs/Skill/Thunder");
         atkBuffPrefab = Resources.Load<GameObject>("Prefabs/Skill/AtkBuff");
+        slashPrefab = Resources.Load<GameObject>("Prefabs/Skill/Slash");
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
@@ -226,6 +228,10 @@ public class Player : MonoBehaviour
         {
             StartCoroutine(AtkBuffSkill());
         }
+        else if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            StartCoroutine(SlashSkill());
+        }
     }
     public IEnumerator HolyArrowSkill() // HolyArrow 스킬 생성 함수 2024-04-13 유재현 추가
     {
@@ -280,5 +286,18 @@ public class Player : MonoBehaviour
         Destroy(atkBuff);
         yield return new WaitForSeconds(19.2f);
         power -= 20f;
+    }
+
+    public IEnumerator SlashSkill()     // Slash 패시브 생성 함수 2024-04-14 유재현 추가
+    {
+        float direction = sr.flipX ? 1f : -1f;
+        Vector3 spawnPosition = transform.position + new Vector3(direction, -0.6f, 0);
+        animator.SetTrigger("isAttack");
+        GameObject slash = Instantiate(slashPrefab, spawnPosition, Quaternion.identity);
+        yield return new WaitForSeconds(0.7f);
+        direction = sr.flipX ? 0.3f : -0.3f;
+        slash.transform.position = new Vector2(direction, 0.8f);
+        yield return new WaitForSeconds(0.3f);
+        Destroy(slash);
     }
 }
