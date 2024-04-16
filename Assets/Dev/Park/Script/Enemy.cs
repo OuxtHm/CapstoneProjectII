@@ -157,10 +157,6 @@ public abstract class Enemy : MonoBehaviour
             if (player != null)
             {
                 player.Playerhurt(enemy_Power);
-                if (enemy_Type == 3)
-                {
-
-                }
             }
             else
                 Debug.Log("플레이어를 못 불러옴");

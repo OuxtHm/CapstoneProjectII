@@ -5,8 +5,6 @@ using TMPro;
 
 public class ArrowPb : MonoBehaviour
 {
-    Boss boss;
-    Rigidbody2D rigid;
     SpriteRenderer spriteRenderer;
     Transform pos;
     Vector3 moveDirection = Vector3.right; // 화살이 나가는 방향
@@ -19,9 +17,7 @@ public class ArrowPb : MonoBehaviour
 
     void Start()
     {
-        rigid = this.GetComponent<Rigidbody2D>();
         spriteRenderer = this.GetComponent<SpriteRenderer>();
-        boss = this.GetComponent<Boss>();
 
         if (Dir == 1)
         {

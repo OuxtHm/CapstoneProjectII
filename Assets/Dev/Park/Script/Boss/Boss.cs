@@ -45,6 +45,9 @@ public abstract class Boss : MonoBehaviour
     public GameObject LaserPb; // 1스테이지 보스 화살비 프리펩
     public GameObject WarringPb;  //공격 전 위험표시 프리펩
 
+    [Header("2스테이지 보스 프리펩")]
+    public GameObject SwordEffectPb; // 2스테이지 보스 가로베기 프리펩
+
     private void Awake()
     {
         Instance = this;
@@ -118,7 +121,7 @@ public abstract class Boss : MonoBehaviour
     {
         if(!isdie)
         {
-            if (playerLoc < bossLoc && !bossMoving)
+            if (playerLoc < bossLoc && bossMoving)
             {
                 spriteRenderer.flipX = true;
                 DirX = -1;
@@ -127,7 +130,7 @@ public abstract class Boss : MonoBehaviour
                 else
                     AttackBox.position = new Vector2(transform.position.x - 1.5f, transform.position.y);
             }
-            else if (playerLoc > bossLoc && !bossMoving)
+            else if (playerLoc > bossLoc && bossMoving)
             {
                 spriteRenderer.flipX = false;
                 DirX = 1;
@@ -184,15 +187,16 @@ public abstract class Boss : MonoBehaviour
                         atkPattern = 0;
                         break;
                     case 2:
-                        //bossMoving = false;
-                        Debug.Log(atkPattern);
+                        bossMoving = false;
+                        anim.SetTrigger("Attack");
+                        anim.SetFloat("Attackpatten", 2);
                         atkPattern = 0;
                         break;
 
                     case 3:
                         //bossMoving = false;
                         Debug.Log(atkPattern);
-                        atkPattern = 0;
+                        atkPattern = 2;
                         break;
 
                     case 4:
@@ -204,7 +208,6 @@ public abstract class Boss : MonoBehaviour
             }
         }
     }
-
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision != null && collision.gameObject.layer == LayerMask.NameToLayer("Player")) //충돌 대미지 처리
@@ -282,7 +285,7 @@ public abstract class Boss : MonoBehaviour
         LrPb.Arrowpatten = 3;
 
         yield return new WaitForSeconds(0.9f);
-        GameObject arrowrain = Instantiate(LaserPb, newPosition, PbSpawn.rotation);
+        GameObject arrowlaser = Instantiate(LaserPb, newPosition, PbSpawn.rotation);
 
         Invoke("MoveOn", 4f);
     }
@@ -304,9 +307,43 @@ public abstract class Boss : MonoBehaviour
         this.gameObject.transform.GetChild(0).GetComponent<BoxCollider2D>().enabled = false;
     }
 
+    IEnumerator Knight_Transparent()  //2stage 투명 공격 , SwordAttack 1
+    {
+        float fadeDuration = 0.8f;  // 변화에 걸리는 시간
+        float elapsedTime = 0f;
+        this.gameObject.layer = LayerMask.NameToLayer("DieEnemy");
+        while (elapsedTime < fadeDuration)
+        {
+            spriteRenderer.color = new Color(1, 1, 1, Mathf.Lerp(spriteRenderer.color.a, 0f, elapsedTime / fadeDuration));  // 알파값 서서히 변경
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        this.gameObject.transform.position = new Vector2(player.transform.position.x + (DirX > 0 ? -2 : 2), transform.position.y);
+        yield return new WaitForSeconds(2f);
+        this.gameObject.layer = LayerMask.NameToLayer("Enemy");
+        spriteRenderer.color = new Color(1, 1, 1, 1);
+        anim.SetTrigger("Attack");
+        anim.SetFloat("Attackpatten", 1);
+        totalDamage = boss_OnePattenPower;
+    }
+
+    IEnumerator Knight_SwordAttack2()  //2stage 가로베기 공격, SwordAttack 2
+    {
+        Vector2 Spownpos = new Vector2(this.transform.position.x , this.PbSpawn.position.y);
+        this.gameObject.transform.position = new Vector2(transform.position.x + (DirX > 0 ? 14 : -14), transform.position.y);
+
+        yield return new WaitForSeconds(0.6f);
+        EffectPb SEfPb = SwordEffectPb.GetComponent<EffectPb>();
+        SEfPb.dir = DirX;
+        SEfPb.Power = boss_TwoPattenPower;
+        SEfPb.DelTime = 0.6f;
+
+        GameObject effect = Instantiate(SwordEffectPb, Spownpos, PbSpawn.rotation);
+        Invoke("MoveOn", 4f);
+    }
     void Knight_Light()
     {
-        Invoke("MoveOn", 3f);
+        
     }
     
     IEnumerator Hurt(Transform target)  //플레이어에게 피격 받았을 때 실행
@@ -355,23 +392,7 @@ public abstract class Boss : MonoBehaviour
         bossMoving = true;
     }
 
-    IEnumerator Knight_fade()  //2stage 투명 공격
-    {
-        float fadeDuration = 0.8f;  // 변화에 걸리는 시간
-        float elapsedTime = 0f;
-        while (elapsedTime < fadeDuration)
-        {
-            spriteRenderer.color = new Color(1, 1, 1, Mathf.Lerp(spriteRenderer.color.a, 0f, elapsedTime / fadeDuration));  // 알파값 서서히 변경
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-        this.gameObject.transform.position = new Vector2(player.transform.position.x + (DirX > 0 ? -2 : 2), transform.position.y);
-        yield return new WaitForSeconds(2f);
-        spriteRenderer.color = new Color(1, 1, 1, 1);
-        anim.SetTrigger("Attack");
-        anim.SetFloat("Attackpatten", 1);
-        totalDamage = boss_OnePattenPower;
-    }
+    
 
     public abstract void BossInitSetting(); // 적의 기본 정보를 설정하는 함수(추상)
 }
