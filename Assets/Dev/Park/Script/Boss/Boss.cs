@@ -67,7 +67,7 @@ public abstract class Boss : MonoBehaviour
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.V))
-            StartCoroutine(Hurt(AttackBox));
+            StartCoroutine(Hurt(AttackBox, 30));
     }
 
     public virtual void BossUpdate(Transform target)  // boss용 Update문
@@ -105,15 +105,18 @@ public abstract class Boss : MonoBehaviour
         }
         else if(boss_stage == 2)
         {
-            if(playerLoc < bossLoc)
+            if(bossMoving)
             {
-                spriteRenderer.flipX = true;
-                DirX = -1;
-            }
-            else
-            {
-                spriteRenderer.flipX = false;
-                DirX = 1;
+                if (playerLoc < bossLoc)
+                {
+                    spriteRenderer.flipX = true;
+                    DirX = -1;
+                }
+                else
+                {
+                    spriteRenderer.flipX = false;
+                    DirX = 1;
+                }
             }
         }
     }
@@ -229,8 +232,9 @@ public abstract class Boss : MonoBehaviour
     public void randomAtk() // 공격 패턴 랜덤으로 정하기
     {
         atkPattern = Random.Range(1, countRange);    // 2 ~ (countRange - 1) 사이의 숫자 랜덤값을 받음
-        if (boss_stage == 1 && DirX == 1 && (playerLoc - bossLoc) <= 4f || (DirX == -1 && (playerLoc - bossLoc) >= -4f))    //보스와 플레이어의 거리가 4만큼 이내에 있으면 근접 공격 확정
-            atkPattern = 1;
+        if (boss_stage == 1)    //보스와 플레이어의 거리가 4만큼 이내에 있으면 근접 공격 확정
+            if(DirX == 1 && (playerLoc - bossLoc) <= 4f || (DirX == -1 && (playerLoc - bossLoc) >= -4f))
+                atkPattern = 1;
         if (!isdie && boss_CurHP > boss_MaxHP / 2)  // 1페이즈와 2페이즈의 패턴 실행 시간이 다름
         {
             Invoke("randomAtk", 5f);
@@ -332,7 +336,7 @@ public abstract class Boss : MonoBehaviour
         Vector2 Spownpos = new Vector2(this.transform.position.x , this.PbSpawn.position.y);
         this.gameObject.transform.position = new Vector2(transform.position.x + (DirX > 0 ? 14 : -14), transform.position.y);
 
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSeconds(0.4f);
         EffectPb SEfPb = SwordEffectPb.GetComponent<EffectPb>();
         SEfPb.dir = DirX;
         SEfPb.Power = boss_TwoPattenPower;
@@ -346,12 +350,12 @@ public abstract class Boss : MonoBehaviour
         
     }
     
-    IEnumerator Hurt(Transform target)  //플레이어에게 피격 받았을 때 실행
+    IEnumerator Hurt(Transform target, float Damage)  //플레이어에게 피격 받았을 때 실행
     {
         if (boss_CurHP > 0 && !ishurt)
         {
             ishurt = true;
-            boss_CurHP = boss_CurHP - 50;
+            boss_CurHP = boss_CurHP - Damage;
             anim.SetBool("Move", false);
             StartCoroutine(Blink());
 
@@ -380,6 +384,9 @@ public abstract class Boss : MonoBehaviour
 
     IEnumerator Die()  //보스가 죽었을 실행
     {
+        yield return new WaitForSeconds(0.2f);
+        spriteRenderer.color = new Color(1, 1, 1, 0.5f);
+        this.gameObject.layer = LayerMask.NameToLayer("DieEnemy");
         DirX = 0;
         bossMoving = false;
         anim.SetTrigger("Die");
@@ -389,7 +396,8 @@ public abstract class Boss : MonoBehaviour
     }
     void MoveOn()
     {
-        bossMoving = true;
+        if(!isdie)
+            bossMoving = true;
     }
 
     
