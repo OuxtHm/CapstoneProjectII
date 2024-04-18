@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class Hitbox : MonoBehaviour
 {   
-        public int damage = 10; // 입힐 데미지
-
-        void OnTriggerEnter2D(Collider2D collider)
+     public int damage = 10;
+     Enemy enemy;
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        
+        if (collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
-            if (collider.CompareTag("Enemy"))
-            {
-                // 적에게 데미지 입히기
-                //collider.GetComponent<Enemy>().TakeDamage(damage);
-            }
+            enemy = collider.GetComponent<Enemy>();
+            collider.GetComponent<Enemy>().StartCoroutine(enemy.Hurt(this.transform, damage));
         }
+    }
     
 }

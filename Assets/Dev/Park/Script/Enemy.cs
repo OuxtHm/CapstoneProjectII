@@ -53,12 +53,6 @@ public abstract class Enemy : MonoBehaviour
         StartCoroutine(NextMove());
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.V))
-            StartCoroutine(Hurt(AttackBox));
-    }
-
     public virtual void Short_Monster(Transform target)
     {
         TargetSensor(target);
@@ -285,8 +279,8 @@ public abstract class Enemy : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         Destroy(Explosion);
     }
-    
-    IEnumerator Hurt(Transform target)  //플레이어에게 피격 받았을 때 실행
+
+    public IEnumerator Hurt(Transform target, float damage)  //플레이어에게 피격 받았을 때 실행
     {
         if(enemy_CurHP > 0 && !isdie && !ishurt)
         {
