@@ -376,6 +376,7 @@ public class Player : MonoBehaviour
                 yield return new WaitForSeconds(0.4f); 
             }
         }
+        yield return new WaitForSeconds(0);
     }
 
     public IEnumerator HolyPillarSkill()    // HolyPillar 스킬 생성 함수 2024-04-13 유재현 추가

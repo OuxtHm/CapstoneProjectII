@@ -286,11 +286,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8da4a43c0562b544bfad80e29e53c83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArrowPb: {fileID: 7389849368303966876, guid: b6f1421886f64ac4399a7adf4899c989, type: 3}
-  ArrowrainPb: {fileID: 7000764193863456653, guid: bd7be2bd8d041814c9074920cd76a4a9, type: 3}
   playerLoc: 0
   bossLoc: 0
   atkPattern: 0
+  boss_stage: 0
   boss_MaxHP: 0
   boss_CurHP: 0
   boss_Power: 0
@@ -300,3 +299,7 @@ MonoBehaviour:
   boss_TwoPattenPower: 0
   boss_ThreePattenPower: 0
   boss_FourPattenPower: 0
+  ArrowPb: {fileID: 7389849368303966876, guid: b6f1421886f64ac4399a7adf4899c989, type: 3}
+  ArrowrainPb: {fileID: 7000764193863456653, guid: bd7be2bd8d041814c9074920cd76a4a9, type: 3}
+  LaserPb: {fileID: 4219622765080268290, guid: 8fdb73a49103fcf40935053c6388ee9a, type: 3}
+  WarringPb: {fileID: 3388303051624161897, guid: bf2da110c1a05fa4b8e5b253bfb3d6d3, type: 3}
