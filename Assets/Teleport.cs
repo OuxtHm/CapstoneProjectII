@@ -10,11 +10,17 @@ public class Teleport : MonoBehaviour
 
     Animator animator;
 
+    private void Awake()
+    {
+        keyX = this.transform.GetChild(0).gameObject;
+    }
     private void Start()
     {
         animator = GetComponent<Animator>();
     }
 
+    public GameObject keyX;
+    
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
@@ -23,6 +29,7 @@ public class Teleport : MonoBehaviour
             {
                 animator.SetBool("gate", true);
             }
+            keyX.SetActive(true);
             targetObj = collision.gameObject;
         }
     }
@@ -40,6 +47,8 @@ public class Teleport : MonoBehaviour
         if (animator != null) // Animator 컴포넌트가 존재하는지 확인
         {
             animator.SetBool("gate", false);
+            keyX.SetActive(false);
+            StartCoroutine(TelepotyRoutine());
         }
     }
 
