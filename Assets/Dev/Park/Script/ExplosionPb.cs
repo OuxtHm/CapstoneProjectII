@@ -50,12 +50,10 @@ public class ExplosionPb : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            player = collision.GetComponent<Player>();
-            collision.GetComponent<Player>().StartCoroutine(player.Playerhurt(Power));
+            Player player = collision.GetComponent<Player>();
+            player.Playerhurt(Power);
         }
-
     }
-
     public void DestoryObject()
     {
         Destroy(gameObject, DelTime);

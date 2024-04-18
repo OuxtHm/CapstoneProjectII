@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class skill1 : MonoBehaviour
+public class skill2 : MonoBehaviour
 {
     public float damage = 30;
     Enemy enemy;

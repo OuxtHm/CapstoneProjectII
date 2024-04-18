@@ -26,9 +26,8 @@ public class EffectPb : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             Player player = collision.GetComponent<Player>();
-            collision.GetComponent<Player>().StartCoroutine(player.Playerhurt(Power));
+            player.Playerhurt(Power);
         }
-
     }
     public void DestoryObject()
     {

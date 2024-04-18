@@ -255,7 +255,7 @@ public abstract class Enemy : MonoBehaviour
             if (collider.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
                 player = collider.GetComponent<Player>();
-                collider.GetComponent<Player>().StartCoroutine(player.Playerhurt(enemy_Power));
+                player.Playerhurt(enemy_Power);
             }
         }
         yield return new WaitForSeconds(1.5f);

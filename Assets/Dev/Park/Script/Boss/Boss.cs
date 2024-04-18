@@ -307,7 +307,7 @@ public abstract class Boss : MonoBehaviour
             if (collider.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
                 player = collider.GetComponent<Player>();
-                collider.GetComponent<Player>().StartCoroutine(player.Playerhurt(totalDamage));
+                player.Playerhurt(totalDamage);
             }
         }
         this.gameObject.transform.GetChild(0).GetComponent<BoxCollider2D>().enabled = false;
