@@ -16,6 +16,10 @@ MonoImporter:
   - frogDie: {fileID: 8300000, guid: 56f205767e3d896428de5375590a09fd, type: 3}
   - rabbitAttack: {fileID: 8300000, guid: 59a6662f3b0b18a4bb9770509815d62a, type: 3}
   - rabbitDie: {fileID: 8300000, guid: d218ca40bac41e644854688272e6ef8a, type: 3}
+  - ranger_Attack: {fileID: 8300000, guid: 091920fdf95b8d34eb151fb5bbddfe5c, type: 3}
+  - ranger_Arrow: {fileID: 8300000, guid: 7716ed06519a9574eb68684642eca840, type: 3}
+  - ranger_ArrowRain: {fileID: 8300000, guid: c5eb89b7197c2054e9bfe0d5f078fa9f, type: 3}
+  - ranger_SpAttack: {fileID: 8300000, guid: c129389820ae3244b95d85e0cfd53fe8, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

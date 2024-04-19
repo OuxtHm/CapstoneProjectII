@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5330045833064441030}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5, y: -2.5, z: 0}
+  m_LocalPosition: {x: 0.5, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -42,9 +42,9 @@ GameObject:
   - component: {fileID: 7076099497834112969}
   - component: {fileID: 7076099497834112974}
   - component: {fileID: 7076099497834112975}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: AttackBox
-  m_TagString: Enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -57,7 +57,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7076099497834112968}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.6, y: -3, z: 0}
+  m_LocalPosition: {x: 1.6, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -124,8 +124,10 @@ GameObject:
   - component: {fileID: 6546936237092612961}
   - component: {fileID: 7076099498882749972}
   - component: {fileID: 7076099498882749975}
+  - component: {fileID: 5066524427704860005}
   - component: {fileID: 7076099498882749976}
   - component: {fileID: 7076099498882749979}
+  - component: {fileID: 7120413284695932354}
   m_Layer: 12
   m_Name: Ranger_Boss
   m_TagString: Boss
@@ -141,7 +143,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7076099498882749969}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.71, y: 2.54, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -257,9 +259,105 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -3}
-  m_Size: {x: 1.8, y: 3}
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 2, y: 3}
   m_Direction: 0
+--- !u!82 &5066524427704860005
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7076099498882749969}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 609705711506708105, guid: 1d85359dba4aac74db27bbcc5b99e9be, type: 2}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!114 &7076099498882749976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -289,6 +387,7 @@ MonoBehaviour:
   playerLoc: 0
   bossLoc: 0
   atkPattern: 0
+  turnPoint: 1
   boss_stage: 0
   boss_MaxHP: 0
   boss_CurHP: 0
@@ -303,3 +402,32 @@ MonoBehaviour:
   ArrowrainPb: {fileID: 7000764193863456653, guid: bd7be2bd8d041814c9074920cd76a4a9, type: 3}
   LaserPb: {fileID: 4219622765080268290, guid: 8fdb73a49103fcf40935053c6388ee9a, type: 3}
   WarringPb: {fileID: 3388303051624161897, guid: bf2da110c1a05fa4b8e5b253bfb3d6d3, type: 3}
+  SwordEffectPb: {fileID: 0}
+--- !u!114 &7120413284695932354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7076099498882749969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12e673d8104497d4796a23c86f3d41b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSource: {fileID: 0}
+  slimeMove: {fileID: 8300000, guid: ba28ca72611ae0f4badab3b66889d0cb, type: 3}
+  slimeDie: {fileID: 8300000, guid: 1fa8f6829b0c82342871d8ef96a15e6e, type: 3}
+  canineAttack: {fileID: 8300000, guid: d9df8a3663b43ba4fa3ccdca64d75f0e, type: 3}
+  canineDie: {fileID: 8300000, guid: 2cf70ec505740ed419f37b0155aa913a, type: 3}
+  goblinAttack: {fileID: 8300000, guid: 14bd9d57f4a0c2e45b6d7e9a081b917a, type: 3}
+  goblinDie: {fileID: 8300000, guid: c8c116280e3dc664aa6cac605f68d944, type: 3}
+  frogAttack1: {fileID: 8300000, guid: 39ac38cb6e3432a49b95e9918c3b7619, type: 3}
+  frogIdle: {fileID: 8300000, guid: ad175c228875c7e498a3bb2bc61dd68a, type: 3}
+  frogDie: {fileID: 8300000, guid: 56f205767e3d896428de5375590a09fd, type: 3}
+  rabbitAttack: {fileID: 8300000, guid: 59a6662f3b0b18a4bb9770509815d62a, type: 3}
+  rabbitDie: {fileID: 8300000, guid: d218ca40bac41e644854688272e6ef8a, type: 3}
+  ranger_Attack: {fileID: 8300000, guid: 091920fdf95b8d34eb151fb5bbddfe5c, type: 3}
+  ranger_Arrow: {fileID: 8300000, guid: 7716ed06519a9574eb68684642eca840, type: 3}
+  ranger_ArrowRain: {fileID: 8300000, guid: c5eb89b7197c2054e9bfe0d5f078fa9f, type: 3}
+  ranger_SpAttack: {fileID: 8300000, guid: c129389820ae3244b95d85e0cfd53fe8, type: 3}

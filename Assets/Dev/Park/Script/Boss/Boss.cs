@@ -21,10 +21,10 @@ public abstract class Boss : MonoBehaviour
     int DirX;   //몬스터가 바라보는 방향값
     public float playerLoc; // player의 X좌표
     public float bossLoc;  // boss의 X좌표
-    public int atkPattern; //boss 공격 패턴
+    public int atkPattern = 0; //boss 공격 패턴
     int boss_OriginSpeed;   //몬스터의 이전 속도값 저장
     float distanceToTarget; //플레이어와 보스 사이의 거리
-    int turnPoint=1;    // 벽에 닿을 시 이동 방법 변경 조건
+    public int turnPoint = 1;    // 벽에 닿을 시 이동 방법 변경 조건
     int countRange; //패턴 값 범위 조절
     int totalDamage;    // 최종 대미지값
 
@@ -64,12 +64,6 @@ public abstract class Boss : MonoBehaviour
         PbSpawn = this.gameObject.transform.GetChild(1).GetComponent<Transform>();
         rigid = this.GetComponent<Rigidbody2D>();
         randomAtk();
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.V))
-            StartCoroutine(Hurt(AttackBox, 30));
     }
 
     public virtual void BossUpdate(Transform target)  // boss용 Update문
@@ -126,29 +120,31 @@ public abstract class Boss : MonoBehaviour
     {
         if(!isdie)
         {
-            if (playerLoc < bossLoc && bossMoving)
+            if (playerLoc < bossLoc && !bossMoving)
             {
                 spriteRenderer.flipX = true;
                 DirX = -1;
                 if(boss_stage == 1)
-                    AttackBox.position = new Vector2(transform.position.x - 1.6f, transform.position.y - 3f);
+                    AttackBox.position = new Vector2(transform.position.x - 1.6f, transform.position.y);
                 else
                     AttackBox.position = new Vector2(transform.position.x - 1.5f, transform.position.y);
             }
-            else if (playerLoc > bossLoc && bossMoving)
+            else if (playerLoc > bossLoc && !bossMoving)
             {
                 spriteRenderer.flipX = false;
                 DirX = 1;
                 if (boss_stage == 1)
-                    AttackBox.position = new Vector2(transform.position.x + 1.6f, transform.position.y - 3f);
+                    AttackBox.position = new Vector2(transform.position.x + 1.6f, transform.position.y);
                 else
                     AttackBox.position = new Vector2(transform.position.x + 1.5f, transform.position.y);
             }
             if(boss_stage == 1)
             {
+                if (atkPattern == 1)
+                    atkPattern = Random.Range(2, countRange);
                 switch (atkPattern)
                 {
-                    case 1: //1은 근접공격 고정으로 가까울 때만 실행
+                    case -1: //1은 근접공격 고정으로 가까울 때만 실행
                         bossMoving = false;
                         anim.SetTrigger("Attack");
                         anim.SetFloat("Attackpatten", 1);
@@ -236,7 +232,7 @@ public abstract class Boss : MonoBehaviour
         atkPattern = Random.Range(1, countRange);    // 2 ~ (countRange - 1) 사이의 숫자 랜덤값을 받음
         if (boss_stage == 1)    //보스와 플레이어의 거리가 4만큼 이내에 있으면 근접 공격 확정
             if(DirX == 1 && (playerLoc - bossLoc) <= 4f || (DirX == -1 && (playerLoc - bossLoc) >= -4f))
-                atkPattern = 1;
+                atkPattern = -1;
         if (!isdie && boss_CurHP > boss_MaxHP / 2)  // 1페이즈와 2페이즈의 패턴 실행 시간이 다름
         {
             Invoke("randomAtk", 5f);
@@ -283,7 +279,7 @@ public abstract class Boss : MonoBehaviour
 
     IEnumerator Ranger_Laserattack()    //1stage 레이져 공격
     {
-        Vector2 newPosition = new Vector2(PbSpawn.position.x + (DirX * 9.4f), PbSpawn.position.y - 0.07f);  //원래 있는 Pbspawn위치값을 수정해서 새로운 위치 선언
+        Vector2 newPosition = new Vector2(this.transform.position.x + (DirX * 9.8f), this.transform.position.y + 0.45f);  //원래 있는 Pbspawn위치값을 수정해서 새로운 위치 선언
         ArrowPb LrPb = LaserPb.GetComponent<ArrowPb>();
         LrPb.Power = boss_FourPattenPower;
         LrPb.Dir = DirX;
@@ -293,7 +289,7 @@ public abstract class Boss : MonoBehaviour
         yield return new WaitForSeconds(0.9f);
         GameObject arrowlaser = Instantiate(LaserPb, newPosition, PbSpawn.rotation);
 
-        Invoke("MoveOn", 4f);
+        Invoke("MoveOn", 5f);
     }
 
     void giveDamage()   //애니메이션에서 실행되는 대미지값 넘겨주는 함수
@@ -326,7 +322,7 @@ public abstract class Boss : MonoBehaviour
         }
         this.gameObject.transform.position = new Vector2(player.transform.position.x + (DirX > 0 ? -2 : 2), transform.position.y);
         yield return new WaitForSeconds(2f);
-        this.gameObject.layer = LayerMask.NameToLayer("Enemy");
+        this.gameObject.layer = LayerMask.NameToLayer("Boss");
         spriteRenderer.color = new Color(1, 1, 1, 1);
         anim.SetTrigger("Attack");
         anim.SetFloat("Attackpatten", 1);
@@ -352,7 +348,7 @@ public abstract class Boss : MonoBehaviour
         
     }
     
-    IEnumerator Hurt(Transform target, float Damage)  //플레이어에게 피격 받았을 때 실행
+    public IEnumerator Hurt(Transform target, int Damage)  //플레이어에게 피격 받았을 때 실행
     {
         if (boss_CurHP > 0 && !ishurt)
         {
@@ -360,8 +356,8 @@ public abstract class Boss : MonoBehaviour
             boss_CurHP = boss_CurHP - Damage;
             anim.SetBool("Move", false);
             anim.SetTrigger("Hurt");
-            StartCoroutine(bossHpBar.FrontHpUpdate());      // 2024-04-10 유재현 추가
-            bossHpBar.anim.SetTrigger("Damage");
+            //StartCoroutine(bossHpBar.FrontHpUpdate());      // 2024-04-10 유재현 추가
+            //bossHpBar.anim.SetTrigger("Damage");
             StartCoroutine(Blink());
 
             if (boss_Speed > 0)
@@ -372,8 +368,8 @@ public abstract class Boss : MonoBehaviour
             {
                 isdie = true;
                 StopAllCoroutines();
-                StartCoroutine(bossHpBar.FrontHpUpdate());      // 2024-04-10 유재현 추가
-                bossHpBar.anim.SetTrigger("Remove");
+                //StartCoroutine(bossHpBar.FrontHpUpdate());      // 2024-04-10 유재현 추가
+                //bossHpBar.anim.SetTrigger("Remove");
                 StartCoroutine(Die());
             }
         }
