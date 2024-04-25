@@ -18,6 +18,10 @@ public class EnemySound : MonoBehaviour
     public AudioClip frogDie;
     public AudioClip rabbitAttack;
     public AudioClip rabbitDie;
+    public AudioClip ranger_Attack;
+    public AudioClip ranger_Arrow;
+    public AudioClip ranger_ArrowRain;
+    public AudioClip ranger_SpAttack;
 
     //[Header("2스테이지")]
 
@@ -73,6 +77,22 @@ public class EnemySound : MonoBehaviour
     {
         Sounds("rabbitDie");
     }
+    public void Rnager_Attack()
+    {
+        Sounds("ranger_Attack");
+    }
+    public void Ranger_Arrow()
+    {
+        Sounds("ranger_Arrow");
+    }
+    public void Ranger_ArrowRain()
+    {
+        Sounds("ranger_ArrowRain");
+    }
+    public void Ranger_SpAttack()
+    {
+        Sounds("ranger_SpAttack");
+    }
 
     public void Sounds(string sounds)
     {
@@ -110,6 +130,18 @@ public class EnemySound : MonoBehaviour
                 break;
             case "rabbitDie":
                 audioSource.clip = rabbitDie;
+                break;
+            case "ranger_Attack":
+                audioSource.clip = ranger_Attack;
+                break;
+            case "ranger_Arrow":
+                audioSource.clip = ranger_Arrow;
+                break;
+            case "ranger_ArrowRain":
+                audioSource.clip = ranger_ArrowRain;
+                break;
+            case "ranger_SpAttack":
+                audioSource.clip = ranger_SpAttack;
                 break;
         }
 
