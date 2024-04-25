@@ -4,8 +4,14 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] float jumpforce = 500f;
+    float moveX;
+    public int JumpCount = 2;
+    public bool isGround = false;
     public static Player instance;
     GameManager gm;
+    Enemy enemy;
+    Boss boss;
     Dash dashSc;
     HpBar hpBar;
     public float maxHp = 100f;
@@ -29,10 +35,9 @@ public class Player : MonoBehaviour
     public SpriteRenderer sr;
     public Transform groundCheck;//점프
     public float groundCheckRadius = 0.2f;//점프
-    public int maxJumpCount = 1; //점프
     private int currentJumpCount;//점프
     public LayerMask whatIsGround;//점프
-    public bool isGround;//점프
+    //점프
     GameObject hitboxClone;//공격
     //public float knockbackStrength = 500f;//피격
     GameObject holyArrowPrefab;         // 2024-04-13 유재현 추가 HolyArrow Skill Prefabs
@@ -66,7 +71,7 @@ public class Player : MonoBehaviour
         dashSc = Dash.instance;
         hpBar = HpBar.instance;
         originalSpeed = moveSpeed;
-        currentJumpCount = maxJumpCount;
+        currentJumpCount = JumpCount;
     }
 
     void StartDash()
@@ -102,7 +107,7 @@ public class Player : MonoBehaviour
     public void Update()
     {
         isGround = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
-
+        Movement();
         float horizontalInput = Input.GetAxis("Horizontal");
         TestSkill();
 
@@ -121,40 +126,13 @@ public class Player : MonoBehaviour
         }
 
 
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            if (currentJumpCount > 0)
-            {
-                StartCoroutine(JumpToHeight(0.2f, 3f)); // 초, 높이
-                currentJumpCount--;
-            }
-        }
+  
 
         if (isGround)
         {
-            currentJumpCount = maxJumpCount; // 땅에 닿으면 점프 횟수 초기화
+            currentJumpCount = JumpCount; // 땅에 닿으면 점프 횟수 초기화
         }
-
-        IEnumerator JumpToHeight(float duration, float height)
-        {
-            animator.SetTrigger("isJump");
-            Vector3 startPosition = transform.position;
-            Vector3 endPosition = new Vector3(startPosition.x, startPosition.y + height, startPosition.z);
-
-            float elapsedTime = 0;
-            while (elapsedTime < duration)
-            {
-                // 좌우 이동 입력 감지
-                float moveInput = Input.GetAxis("Horizontal");
-                transform.position += new Vector3(moveInput * moveSpeed * Time.deltaTime, 0, 0);
-
-                // 점프 높이 계산
-                transform.position = Vector3.Lerp(startPosition, endPosition, (elapsedTime / duration));
-                elapsedTime += Time.deltaTime;
-                yield return null;
-            }
-        }
-
+        
         // 이동 상태 설정
         move = horizontalInput != 0;
          
@@ -169,9 +147,7 @@ public class Player : MonoBehaviour
             sr.flipX = false; // 오른쪽을 바라보게 함
             cc.offset = new Vector2(-Mathf.Abs(cc.offset.x), cc.offset.y);
         }
-
         
-
         // 이동 상태에 따라 애니메이터 변수 설정
         animator.SetBool("isRun", move);
 
@@ -304,7 +280,18 @@ public class Player : MonoBehaviour
             }
         }
     }
-
+    public void Movement()
+    {
+        if (currentJumpCount > 0)
+        {
+            if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                rb.AddForce(Vector2.up * jumpforce);
+                currentJumpCount--;
+            }
+        }
+        rb.velocity = new Vector2(moveX, rb.velocity.y);
+    }
     public void Playerhurt(int damage)//피격
     {
         animator.SetTrigger("isHit");

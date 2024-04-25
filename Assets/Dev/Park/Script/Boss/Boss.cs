@@ -348,7 +348,7 @@ public abstract class Boss : MonoBehaviour
         
     }
     
-    public IEnumerator Hurt(Transform target, int Damage)  //플레이어에게 피격 받았을 때 실행
+    public IEnumerator Hurt(Transform target, float Damage)  //플레이어에게 피격 받았을 때 실행
     {
         yield return new WaitForSeconds(0);
         if (boss_CurHP > 0 && !ishurt)
