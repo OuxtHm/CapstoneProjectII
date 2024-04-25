@@ -15,7 +15,7 @@ public abstract class Boss : MonoBehaviour
     Transform AttackBox;    // 근접 공격 범위 오브젝트
     BoxCollider2D BoxCollider2DSize;    //Attackbox 오브젝트의 boxcollider2D
 
-    bool ishurt = false;
+    public bool ishurt = false;
     bool bossMoving = true;
     bool isdie = false;
     int DirX;   //몬스터가 바라보는 방향값
@@ -350,6 +350,7 @@ public abstract class Boss : MonoBehaviour
     
     public IEnumerator Hurt(Transform target, int Damage)  //플레이어에게 피격 받았을 때 실행
     {
+        yield return new WaitForSeconds(0);
         if (boss_CurHP > 0 && !ishurt)
         {
             ishurt = true;
@@ -372,10 +373,8 @@ public abstract class Boss : MonoBehaviour
                 //bossHpBar.anim.SetTrigger("Remove");
                 StartCoroutine(Die());
             }
+            Invoke("OriginSpeed", 0.3f);
         }
-
-        yield return new WaitForSeconds(0.3f);
-        boss_Speed = boss_OriginSpeed;
         ishurt = false;
     }
     IEnumerator Blink() // 피격 효과
@@ -403,8 +402,12 @@ public abstract class Boss : MonoBehaviour
         if(!isdie)
             bossMoving = true;
     }
+    void OriginSpeed()  //몬스터 원래 이동속도로 변경하는 함수
+    {
+        boss_Speed = boss_OriginSpeed;
+    }
 
-    
+
 
     public abstract void BossInitSetting(); // 적의 기본 정보를 설정하는 함수(추상)
 }
