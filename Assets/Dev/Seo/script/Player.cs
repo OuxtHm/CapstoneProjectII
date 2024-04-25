@@ -421,7 +421,7 @@ public class Player : MonoBehaviour
         float direction = sr.flipX ? 1f : -1f;
         Vector3 spawnPosition = transform.position + new Vector3(direction, -0.6f, 0);
         animator.SetTrigger("isAttack");
-        GameObject slash = Instantiate(slashPrefab, spawnPosition, Quaternion.identity);
+        GameObject slash = Instantiate(slashPrefab, spawnPosition, Quaternion.identity, transform);
         yield return new WaitForSeconds(0.4f);
         BoxCollider2D boxCollider2D = slash.GetComponent<BoxCollider2D>();
         boxCollider2D.enabled = true;
