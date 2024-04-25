@@ -35,6 +35,28 @@ public class HolyPillar : MonoBehaviour
         Destroy(this.gameObject);
     }
 
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            Enemy enemy = collider.GetComponent<Enemy>();
+
+            if (enemy != null)
+            {
+                StartCoroutine(enemy.Hurt(this.transform, PillarDamage));
+            }
+        }
+
+        else if (collider.gameObject.layer == LayerMask.NameToLayer("Boss"))
+        {
+            Boss boss = collider.GetComponent<Boss>();
+
+            if (boss != null)
+            {
+                StartCoroutine(boss.Hurt(this.transform, PillarDamage));
+            }
+        }
+    }
     private void SetBoxColliderProperties(Vector2 offset, Vector2 size)
     {
         boxCollider2D.offset = offset;

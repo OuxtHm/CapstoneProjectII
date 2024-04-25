@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class HolyArrow : MonoBehaviour
-{
+{   
+    Enemy enemy;
+    Boss boss;
     public Player player;
     private SpriteRenderer sprite;
     private CapsuleCollider2D capsuleCollider;
-    public int arrowDamage = 10;
+    public float arrowDamage = 10;
     public float speed = 20f; // 속도
     public float duration = 0.5f; // 이동 시간
     public int direction;      // 방향
@@ -36,5 +38,4 @@ public class HolyArrow : MonoBehaviour
 
         Destroy(this.gameObject);
     }
-
 }
