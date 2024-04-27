@@ -224,6 +224,7 @@ GameObject:
   m_Component:
   - component: {fileID: 368410015433728723}
   - component: {fileID: 368410015433728722}
+  - component: {fileID: 926588465160400724}
   m_Layer: 0
   m_Name: SalesItem_arrey
   m_TagString: Untagged
@@ -281,6 +282,23 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &926588465160400724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 368410015433728724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4e8b4874d48172469b8717b0510d9c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillRect:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &368410015441376156
 GameObject:
   m_ObjectHideFlags: 0

@@ -52,12 +52,14 @@ public class ChangeSkill : MonoBehaviour
         readyskill = transform.GetChild(2).GetComponent<Transform>();   // 대기중인 스킬 Transform 설정
 
         skill_1 = nowskill.GetChild(0).GetComponent<Image>();       // 사용중인 스킬 Image 설정
-        skill_2 = readyskill.GetChild(0).GetComponent<Image>();     // 대기중인 스킬 Transform 설정
+        skill_2 = readyskill.GetChild(0).GetComponent<Image>();     // 대기중인 스킬 Image 설정
 
         skill_1.transform.SetParent(readyskill.transform, false);   // 대기중인 스킬 사용중 슬롯으로 이동
         skill_1.transform.SetAsFirstSibling();                          // 부모 오브젝트의 첫번째 자식으로 설정
+        skill_1.rectTransform.sizeDelta = new Vector2(30, 30);      // 사이즈 조절
 
         skill_2.transform.SetParent(nowskill.transform, false);     // 사용중인 스킬 대기중 슬롯으로 이동
         skill_2.transform.SetAsFirstSibling();                          // 부모 오브젝트의 첫번째 자식으로 설정
+        skill_2.rectTransform.sizeDelta = new Vector2(70, 70);      // 사이즈 조절
     }
 }
