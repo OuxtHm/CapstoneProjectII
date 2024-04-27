@@ -209,7 +209,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 10
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -244,7 +244,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -361,6 +361,10 @@ MonoBehaviour:
   frogDie: {fileID: 8300000, guid: 56f205767e3d896428de5375590a09fd, type: 3}
   rabbitAttack: {fileID: 8300000, guid: 59a6662f3b0b18a4bb9770509815d62a, type: 3}
   rabbitDie: {fileID: 8300000, guid: d218ca40bac41e644854688272e6ef8a, type: 3}
+  ranger_Attack: {fileID: 0}
+  ranger_Arrow: {fileID: 0}
+  ranger_ArrowRain: {fileID: 0}
+  ranger_SpAttack: {fileID: 0}
 --- !u!1001 &6557345348662110526
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -320,7 +320,7 @@ public abstract class Boss : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-        this.gameObject.transform.position = new Vector2(player.transform.position.x + (DirX > 0 ? -2 : 2), transform.position.y);
+        this.gameObject.transform.position = new Vector2(player.transform.position.x + (DirX > 0 ? -2 : 2), player.transform.position.y);
         yield return new WaitForSeconds(2f);
         this.gameObject.layer = LayerMask.NameToLayer("Boss");
         spriteRenderer.color = new Color(1, 1, 1, 1);
