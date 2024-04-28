@@ -126,7 +126,7 @@ public abstract class Enemy : MonoBehaviour
                     Move();
                 }
             }
-            else if (enemy_Type == 2 && istracking)  // 공중 몬스터 일때
+            else if (enemy_Type == 2 && !istracking)  // 공중 몬스터 일때
             {
                 if (direction.x >= 0)   // 타겟이 오른쪽에 있을 때
                 {
@@ -218,7 +218,7 @@ public abstract class Enemy : MonoBehaviour
 
         // Enemy의 한 칸 앞의 값을 얻기 위해 자기 자신의 위치 값에 (x)에 + DirX값을 더하고 1.2f를 곱한다.
         Vector2 frontVec = new Vector2(rigid.position.x + DirX * 1.2f, rigid.position.y);
-        Vector2 WallVec = new Vector2(rigid.position.x + DirX * 0.7f, rigid.position.y);
+        Vector2 WallVec = new Vector2(rigid.position.x + DirX * enemy_frontSensor, rigid.position.y);
 
         // 레이저를 씬창에서 눈으로 확인할 수 있게 그려줌
         Debug.DrawRay(frontVec, Vector3.down * 2.5f, new Color(0, 1, 0));

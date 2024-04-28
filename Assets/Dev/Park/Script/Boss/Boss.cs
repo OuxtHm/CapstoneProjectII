@@ -332,7 +332,7 @@ public abstract class Boss : MonoBehaviour
     IEnumerator Knight_SwordAttack2()  //2stage 가로베기 공격, SwordAttack 2
     {
         Vector2 Spownpos = new Vector2(this.transform.position.x , this.PbSpawn.position.y);
-        this.gameObject.transform.position = new Vector2(transform.position.x + (DirX > 0 ? 14 : -14), transform.position.y);
+        this.gameObject.transform.position = new Vector2(transform.position.x + (DirX > 0 ? 10 : -10), transform.position.y);
 
         yield return new WaitForSeconds(0.4f);
         EffectPb SEfPb = SwordEffectPb.GetComponent<EffectPb>();
