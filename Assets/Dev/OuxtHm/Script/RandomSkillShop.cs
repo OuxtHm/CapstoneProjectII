@@ -54,20 +54,29 @@ public class RandomSkillShop : MonoBehaviour
     private void RandomCommon()     // 랜덤 일반 스킬 생성
     {
         Object[] common = Resources.LoadAll(commonSkillPath, typeof(GameObject));
+        List<int> selectedIndexes = new List<int>(); // 이미 선택된 인덱스를 저장할 리스트
 
-        for(int i = 1; i < 4; i++)
+        for (int i = 1; i < 4; i++)
         {
             int randomIndex = Random.Range(0, common.Length);
+
+            // 이미 선택된 인덱스면 다시 추출
+            while (selectedIndexes.Contains(randomIndex))
+            {
+                randomIndex = Random.Range(0, common.Length);
+            }
+
+            // 선택된 인덱스를 리스트에 추가
+            selectedIndexes.Add(randomIndex);
+
             GameObject selectCommon = (GameObject)common[randomIndex];
             Instantiate(selectCommon, skillRect[i]);
-
             ConnectSkillText(selectCommon.name, skillTxt[i]);
 
             RectTransform commonRect = selectCommon.GetComponent<RectTransform>();
             commonRect.sizeDelta = new Vector2(100, 100);
         }
 
-        
     }
 
     private void SkillText()        // 스킬 설명 생성
