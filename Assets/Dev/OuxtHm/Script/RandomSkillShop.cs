@@ -9,6 +9,7 @@ public class RandomSkillShop : MonoBehaviour
 {
     public RectTransform[] skillRect = new RectTransform[4];
     public TextMeshProUGUI[] skillTxt = new TextMeshProUGUI[4];
+    public TextMeshProUGUI[] priceTxt = new TextMeshProUGUI[4];
     private string ultSkillPath = "Prefabs/SkillIcon/Ult";
     private string commonSkillPath = "Prefabs/SkillIcon/Common";
     string ult_Lightning;
@@ -18,13 +19,21 @@ public class RandomSkillShop : MonoBehaviour
     string common_AtkBuff;
     string common_Blood;
     string common_Reach;
+    int lightningPrice;
+    int beamPrice;
+    int arrowPrice;
+    int slashPrice;
+    int atkBuffPrice;
+    int bloodPrice;
+    int reachPrice;
     private void Awake()
     {
         SkillText();
         for (int i = 0; i < skillRect.Length; i++)
         {
             skillRect[i] = transform.GetChild(i).GetComponent<RectTransform>();
-            skillTxt[i] = skillRect[i].transform.GetChild(0).GetComponentInChildren<TextMeshProUGUI>();
+            skillTxt[i] = skillRect[i].transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
+            priceTxt[i] = skillRect[i].transform.GetChild(0).GetChild(2).GetComponent<TextMeshProUGUI>();   
         }
     }
 
@@ -45,7 +54,7 @@ public class RandomSkillShop : MonoBehaviour
         GameObject selectUlt = (GameObject)ult[randomIndex];
         Instantiate(selectUlt, skillRect[0]);
 
-        ConnectSkillText(selectUlt.name, skillTxt[0]);
+        ConnectSkillText(selectUlt.name, skillTxt[0], priceTxt[0]);
 
         RectTransform ultRect = selectUlt.GetComponent<RectTransform>();
         ultRect.sizeDelta = new Vector2(100, 100);
@@ -59,27 +68,23 @@ public class RandomSkillShop : MonoBehaviour
         for (int i = 1; i < 4; i++)
         {
             int randomIndex = Random.Range(0, common.Length);
-
-            // 이미 선택된 인덱스면 다시 추출
             while (selectedIndexes.Contains(randomIndex))
             {
                 randomIndex = Random.Range(0, common.Length);
             }
-
-            // 선택된 인덱스를 리스트에 추가
             selectedIndexes.Add(randomIndex);
 
             GameObject selectCommon = (GameObject)common[randomIndex];
             Instantiate(selectCommon, skillRect[i]);
-            ConnectSkillText(selectCommon.name, skillTxt[i]);
+            ConnectSkillText(selectCommon.name, skillTxt[i], priceTxt[i]);
 
             RectTransform commonRect = selectCommon.GetComponent<RectTransform>();
             commonRect.sizeDelta = new Vector2(100, 100);
         }
-
+        selectedIndexes.Clear();
     }
 
-    private void SkillText()        // 스킬 설명 생성
+    private void SkillText()        // 스킬 설명 및 가격 생성
     {
         ult_Lightning = "전방으로 번개를 세 번 내려칩니다.";
         ult_Beam = "전방으로 빛의 기둥을 소환합니다.";
@@ -87,20 +92,49 @@ public class RandomSkillShop : MonoBehaviour
         common_Slash = "전방으로 검기를 날립니다.";
         common_AtkBuff = "공격력을 잠시 소폭 상승시킵니다.";
         common_Blood = "피로 물들입니다.";
-        common_Reach = "사거리가 상승된 검기를 생성합니다.";
+        common_Reach = "사거리가 증가된 검기를 생성합니다.";
+
+        lightningPrice = 1000;
+        beamPrice = 1000;
+        arrowPrice = 200;
+        slashPrice = 200;
+        atkBuffPrice = 300;
+        bloodPrice = 400;
+        reachPrice = 400;
     }
 
-    private void ConnectSkillText(string skillName, TextMeshProUGUI skillTextMeshProUGUI)       // 스킬 이름에 따른 스킬 설명 출력 함수
+    private void ConnectSkillText(string skillName, TextMeshProUGUI skillTextMeshProUGUI, TextMeshProUGUI priceTextMeshProUGUI)       // 스킬 이름에 따른 스킬 설명 출력 함수
     {
         switch (skillName)
         {
-            case "Lightning_icon": skillTextMeshProUGUI.text = ult_Lightning; break;
-            case "Beam_icon": skillTextMeshProUGUI.text = ult_Beam; break;
-            case "Slash_icon": skillTextMeshProUGUI.text = common_Slash; break;
-            case "Arrow_icon": skillTextMeshProUGUI.text = common_Arrow; break;
-            case "AtkBuff_icon": skillTextMeshProUGUI.text = common_AtkBuff; break;
-            case "Blood_icon": skillTextMeshProUGUI.text = common_Blood; break;
-            case "Reach_icon": skillTextMeshProUGUI.text = common_Reach; break;
+            case "Lightning_icon": 
+                skillTextMeshProUGUI.text = ult_Lightning; 
+                priceTextMeshProUGUI.text = "-" + lightningPrice.ToString(); 
+                break;
+            case "Beam_icon": 
+                skillTextMeshProUGUI.text = ult_Beam; 
+                priceTextMeshProUGUI.text = "-" + beamPrice.ToString(); 
+                break;
+            case "Arrow_icon": 
+                skillTextMeshProUGUI.text = common_Arrow;
+                priceTextMeshProUGUI.text = "-" + arrowPrice.ToString();
+                break;
+            case "Slash_icon":
+                skillTextMeshProUGUI.text = common_Slash;
+                priceTextMeshProUGUI.text = "-" + slashPrice.ToString();
+                break;
+            case "AtkBuff_icon": 
+                skillTextMeshProUGUI.text = common_AtkBuff;
+                priceTextMeshProUGUI.text = "-" + atkBuffPrice.ToString();
+                break;
+            case "Blood_icon": 
+                skillTextMeshProUGUI.text = common_Blood;
+                priceTextMeshProUGUI.text = "-" + bloodPrice.ToString();
+                break;
+            case "Reach_icon": 
+                skillTextMeshProUGUI.text = common_Reach;
+                priceTextMeshProUGUI.text = "-" + reachPrice.ToString();
+                break;
         }
     }
 }

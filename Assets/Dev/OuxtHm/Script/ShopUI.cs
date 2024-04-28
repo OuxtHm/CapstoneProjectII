@@ -66,8 +66,8 @@ public class ShopUI : MonoBehaviour
 
     public void OffWindow()     // 창 닫기
     {
-        Destroy(this.gameObject);
         shop.uiOpen = false;
+        Destroy(this.gameObject);
     }
 
     public void Sell()      // 물품 판매
