@@ -7,9 +7,11 @@ using UnityEngine.UI;
 
 public class RandomSkillShop : MonoBehaviour
 {
+    public static RandomSkillShop instance;
     public RectTransform[] skillRect = new RectTransform[4];
     public TextMeshProUGUI[] skillTxt = new TextMeshProUGUI[4];
     public TextMeshProUGUI[] priceTxt = new TextMeshProUGUI[4];
+    public List<int> price = new List<int>();
     private string ultSkillPath = "Prefabs/SkillIcon/Ult";
     private string commonSkillPath = "Prefabs/SkillIcon/Common";
     string ult_Lightning;
@@ -28,6 +30,7 @@ public class RandomSkillShop : MonoBehaviour
     int reachPrice;
     private void Awake()
     {
+        instance = this;
         SkillText();
         for (int i = 0; i < skillRect.Length; i++)
         {
@@ -109,31 +112,38 @@ public class RandomSkillShop : MonoBehaviour
         {
             case "Lightning_icon": 
                 skillTextMeshProUGUI.text = ult_Lightning; 
-                priceTextMeshProUGUI.text = "-" + lightningPrice.ToString(); 
+                priceTextMeshProUGUI.text = lightningPrice.ToString();
+                price.Add(lightningPrice);
                 break;
             case "Beam_icon": 
                 skillTextMeshProUGUI.text = ult_Beam; 
-                priceTextMeshProUGUI.text = "-" + beamPrice.ToString(); 
+                priceTextMeshProUGUI.text = beamPrice.ToString(); 
+                price.Add(beamPrice);
                 break;
             case "Arrow_icon": 
                 skillTextMeshProUGUI.text = common_Arrow;
-                priceTextMeshProUGUI.text = "-" + arrowPrice.ToString();
+                priceTextMeshProUGUI.text = arrowPrice.ToString();
+                price.Add(arrowPrice);
                 break;
             case "Slash_icon":
                 skillTextMeshProUGUI.text = common_Slash;
-                priceTextMeshProUGUI.text = "-" + slashPrice.ToString();
+                priceTextMeshProUGUI.text = slashPrice.ToString();
+                price.Add(slashPrice);
                 break;
             case "AtkBuff_icon": 
                 skillTextMeshProUGUI.text = common_AtkBuff;
-                priceTextMeshProUGUI.text = "-" + atkBuffPrice.ToString();
+                priceTextMeshProUGUI.text = atkBuffPrice.ToString();
+                price.Add(atkBuffPrice);
                 break;
             case "Blood_icon": 
                 skillTextMeshProUGUI.text = common_Blood;
-                priceTextMeshProUGUI.text = "-" + bloodPrice.ToString();
+                priceTextMeshProUGUI.text = bloodPrice.ToString();
+                price.Add(bloodPrice);
                 break;
             case "Reach_icon": 
                 skillTextMeshProUGUI.text = common_Reach;
-                priceTextMeshProUGUI.text = "-" + reachPrice.ToString();
+                priceTextMeshProUGUI.text = reachPrice.ToString();
+                price.Add(reachPrice);
                 break;
         }
     }
