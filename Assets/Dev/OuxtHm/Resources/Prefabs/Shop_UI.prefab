@@ -294,6 +294,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4e8b4874d48172469b8717b0510d9c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skillCon:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   skillRect:
   - {fileID: 0}
   - {fileID: 0}
@@ -3856,6 +3861,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   money_txt: {fileID: 0}
+  grandObject: {fileID: 0}
   colleagueTabBtn: {fileID: 0}
   enhanceTabBtn: {fileID: 0}
   colleagueTabPage: {fileID: 0}
@@ -3869,7 +3875,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   checkingObj: {fileID: 0}
-  testPrice: 100
+  price: 0
 --- !u!1 &368410017073608560
 GameObject:
   m_ObjectHideFlags: 0
