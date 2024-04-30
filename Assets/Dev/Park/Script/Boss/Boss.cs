@@ -48,6 +48,7 @@ public abstract class Boss : MonoBehaviour
 
     [Header("2스테이지 보스 프리펩")]
     public GameObject SwordEffectPb; // 2스테이지 보스 가로베기 프리펩
+    public GameObject FireEffectPb; // 2스테이지 보스 파이어볼 프리펩
 
     private void Awake()
     {
@@ -195,9 +196,10 @@ public abstract class Boss : MonoBehaviour
                         break;
 
                     case 3:
-                        //bossMoving = false;
-                        Debug.Log(atkPattern);
-                        atkPattern = 2;
+                        bossMoving = false;
+                        anim.SetTrigger("Attack");
+                        anim.SetFloat("Attackpatten", 3);
+                        atkPattern = 0;
                         break;
 
                     case 4:
@@ -248,11 +250,12 @@ public abstract class Boss : MonoBehaviour
 
     void Ranger_Arrowattack()   //1stage 활 쏘는 공격
     {
-        ArrowPb APb = ArrowPb.GetComponent<ArrowPb>();
+        EffectPb APb = ArrowPb.GetComponent<EffectPb>();
         APb.Power = boss_TwoPattenPower;
-        APb.Dir = DirX;
+        APb.dir = DirX;
         APb.DelTime = 3f;
-        APb.Arrowpatten = 1;
+        APb.movecheck = 1;
+        APb.speed = 20;
 
         GameObject arrow = Instantiate(ArrowPb, PbSpawn.position, PbSpawn.rotation);
 
@@ -261,13 +264,13 @@ public abstract class Boss : MonoBehaviour
 
     IEnumerator Ranger_Arrowrain()  //1stage 화살비 공격
     {
-        ArrowPb ArPb = ArrowrainPb.GetComponent<ArrowPb>();
+        EffectPb ArPb = ArrowrainPb.GetComponent<EffectPb>();
         Vector2 Targetpos = new Vector2(player.transform.position.x, PbSpawn.position.y + 1.1f);  //원래 있는 Pbspawn위치값을 수정해서 새로운 위치 선언
         Vector2 Warringpos = new Vector2(player.transform.position.x, PbSpawn.position.y - 2.1f);  //위험 표시 생성 위치
         ArPb.Power = boss_ThreePattenPower;
-        ArPb.Dir = DirX;
+        ArPb.dir = DirX;
         ArPb.DelTime = 1.1f;
-        ArPb.Arrowpatten = 2;
+        ArPb.movecheck = 0;
 
         GameObject Warring = Instantiate(WarringPb, Warringpos, PbSpawn.rotation);  //위험 표시 생성
         yield return new WaitForSeconds(1.5f);
@@ -280,11 +283,11 @@ public abstract class Boss : MonoBehaviour
     IEnumerator Ranger_Laserattack()    //1stage 레이져 공격
     {
         Vector2 newPosition = new Vector2(this.transform.position.x + (DirX * 9.8f), this.transform.position.y + 0.45f);  //원래 있는 Pbspawn위치값을 수정해서 새로운 위치 선언
-        ArrowPb LrPb = LaserPb.GetComponent<ArrowPb>();
+        EffectPb LrPb = LaserPb.GetComponent<EffectPb>();
         LrPb.Power = boss_FourPattenPower;
-        LrPb.Dir = DirX;
+        LrPb.dir = DirX;
         LrPb.DelTime = 0.3f;
-        LrPb.Arrowpatten = 3;
+        LrPb.movecheck = 0;
 
         yield return new WaitForSeconds(0.9f);
         GameObject arrowlaser = Instantiate(LaserPb, newPosition, PbSpawn.rotation);
@@ -339,13 +342,25 @@ public abstract class Boss : MonoBehaviour
         SEfPb.dir = DirX;
         SEfPb.Power = boss_TwoPattenPower;
         SEfPb.DelTime = 0.6f;
+        SEfPb.movecheck = 0;
 
         GameObject effect = Instantiate(SwordEffectPb, Spownpos, PbSpawn.rotation);
-        Invoke("MoveOn", 4f);
+        Invoke("MoveOn", 3.5f);
     }
-    void Knight_Light()
+    IEnumerator Knight_Light()
     {
-        
+        Vector2 Spownpos = new Vector2(this.transform.position.x + DirX, this.PbSpawn.position.y);
+
+        yield return new WaitForSeconds(0.1f);
+        EffectPb FirePb = FireEffectPb.GetComponent<EffectPb>();
+        FirePb.dir = DirX;
+        FirePb.Power = boss_ThreePattenPower;
+        FirePb.DelTime = 1f;
+        FirePb.movecheck = 1;
+        FirePb.speed = 15;
+
+        GameObject effect = Instantiate(FireEffectPb, Spownpos, PbSpawn.rotation);
+        Invoke("MoveOn", 3.5f);
     }
     
     public IEnumerator Hurt(Transform target, float Damage)  //플레이어에게 피격 받았을 때 실행
