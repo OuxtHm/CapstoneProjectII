@@ -17,6 +17,10 @@ public class ChangeSkill : MonoBehaviour
     private void Awake()
     {
         changeCoolTime = transform.GetChild(0).GetComponent<Image>();
+        nowskill = transform.GetChild(1).GetComponent<Transform>();     // 현재 사용중인 스킬 Transform 설정
+        readyskill = transform.GetChild(2).GetComponent<Transform>();   // 대기중인 스킬 Transform 설정
+        skill_1 = nowskill.GetChild(0).GetComponent<Image>();       // 사용중인 스킬 Image 설정
+        skill_2 = readyskill.GetChild(0).GetComponent<Image>();     // 대기중인 스킬 Image 설정
         change = false;
     }
 

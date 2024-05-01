@@ -41,7 +41,7 @@ public class ShopUI : MonoBehaviour
             btn[i].onClick.AddListener(() =>
             {
                 
-                //price = randSkill.price[index];     
+                price = randSkill.skillCon[index].price;     
                 checkingObj.SetActive(true);
             });
         }
