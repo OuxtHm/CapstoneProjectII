@@ -347,7 +347,7 @@ public abstract class Boss : MonoBehaviour
         GameObject effect = Instantiate(SwordEffectPb, Spownpos, PbSpawn.rotation);
         Invoke("MoveOn", 3.5f);
     }
-    IEnumerator Knight_Light()
+    IEnumerator Knight_LightAttack()
     {
         Vector2 Spownpos = new Vector2(this.transform.position.x + DirX, this.PbSpawn.position.y);
 
