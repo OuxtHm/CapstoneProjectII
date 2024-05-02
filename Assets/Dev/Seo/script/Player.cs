@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] float jumpforce = 500f;
+    //private bool canChangeDirDuringDash = true;
+    [SerializeField] float jumpforce = 500f;   
+    //private float healingDuration = 5.0f;
     float moveX;
     public int JumpCount = 2;
     public bool isGround = false;
@@ -14,6 +16,7 @@ public class Player : MonoBehaviour
     Boss boss;
     Dash dashSc;
     HpBar hpBar;
+    public Hitbox hitbox;
     public float maxHp = 100f;
     public float curHp = 100f;
     public float power;        // 플레이어 공격력      // 2024-04-14 유재현 추가
@@ -25,6 +28,7 @@ public class Player : MonoBehaviour
     public GameObject hitboxPrefab;
     public GameObject effect1;
     public GameObject effect2;
+    public bool isHealingActive = false;
     public bool isAttacking = false;
     public bool move;
     private CapsuleCollider2D cc;
@@ -111,6 +115,16 @@ public class Player : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         TestSkill();
 
+        /*if (canChangeDirDuringDash)
+        {
+            lastHorizontalInput = Input.GetAxisRaw("Horizontal");
+        }
+        else
+        {
+            // 대쉬 중이 아닐 때는 방향 전환 불가
+            lastHorizontalInput = Mathf.Clamp(lastHorizontalInput, -1f, 1f);
+        }*/
+
         if (horizontalInput != 0)
         {
             lastHorizontalInput = horizontalInput;
@@ -125,8 +139,6 @@ public class Player : MonoBehaviour
             animator.SetBool("isCrawl", false);
         }
 
-
-  
 
         if (isGround)
         {
@@ -167,7 +179,7 @@ public class Player : MonoBehaviour
         {
             isAttacking = true;
             animator.SetTrigger("isAttack");
-            yield return new WaitForSeconds(duration);
+            yield return new WaitForSeconds(duration);           
 
             Vector3 direction = lastHorizontalInput < 0 ? Vector3.left : Vector3.right;
             Vector3 spawnPosition = transform.position + direction * 2.0f;
@@ -185,6 +197,14 @@ public class Player : MonoBehaviour
 
             yield return new WaitForSeconds(duration);
             hitboxPrefab.SetActive(false);
+
+
+            if (isHealingActive)
+            {
+                float healAmount = hitbox.damage * 0.1f;
+                curHp = Mathf.Clamp(curHp + healAmount, 0f, maxHp);
+            }
+
             isAttacking = false;
         }
 
@@ -252,10 +272,31 @@ public class Player : MonoBehaviour
             isAttacking = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !dashSc.isFillingFirst)//대쉬
+        if (Input.GetKey(KeyCode.Alpha6) && !isAttacking)//스킬3
+        {
+            StartCoroutine(BoostSpeedForDuration(boostDuration, lastHorizontalInput));
+            animator.SetTrigger("isSkill3");
+            gameObject.layer = LayerMask.NameToLayer("Enemy");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha7))//스킬4
+        {
+            isHealingActive = true;
+            StartCoroutine(StopHealing());
+        }
+
+        IEnumerator StopHealing()
+        {
+            yield return new WaitForSeconds(5f);
+            isHealingActive = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !dashSc.isFillingFirst) // 대쉬
         {
             StartCoroutine(BoostSpeedForDuration(boostDuration, lastHorizontalInput));
             animator.SetTrigger("isDash");
+            gameObject.layer = LayerMask.NameToLayer("Enemy");
+            //canChangeDirDuringDash = false;
         }
 
         IEnumerator BoostSpeedForDuration(float duration, float direction)
@@ -271,14 +312,20 @@ public class Player : MonoBehaviour
                 float elapsedTime = 0;
                 while (elapsedTime < duration)
                 {
+ 
+
                     transform.position = Vector3.Lerp(startPosition, endPosition, (elapsedTime / duration));
                     elapsedTime += Time.deltaTime;
                     yield return null;
                 }
 
+                gameObject.layer = LayerMask.NameToLayer("Player");
+       
+               
                 isBoosted = false;
+                //canChangeDirDuringDash = true;
             }
-        }
+        }     
     }
     public void Movement()
     {
@@ -288,8 +335,10 @@ public class Player : MonoBehaviour
             {
                 rb.AddForce(Vector2.up * jumpforce);
                 currentJumpCount--;
-            }
+                animator.SetTrigger("isJump"); // 점프 애니메이션 트리거 실행
+            }        
         }
+
         rb.velocity = new Vector2(moveX, rb.velocity.y);
     }
     public void Playerhurt(int damage)//피격
