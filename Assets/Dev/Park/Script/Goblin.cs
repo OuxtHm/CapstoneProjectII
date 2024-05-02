@@ -12,5 +12,6 @@ public class Goblin : Enemy
         enemy_Power = 3;
         enemy_Speed = 2;
         enemy_AttackSensor = 1.2f;
+        enemy_frontSensor = 1.2f;
     }
 }

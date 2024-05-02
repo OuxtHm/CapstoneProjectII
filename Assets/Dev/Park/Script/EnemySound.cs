@@ -23,7 +23,18 @@ public class EnemySound : MonoBehaviour
     public AudioClip ranger_ArrowRain;
     public AudioClip ranger_SpAttack;
 
-    //[Header("2스테이지")]
+    [Header("2스테이지")]
+    public AudioClip frog_Attack2;
+    public AudioClip bat_Die;
+    public AudioClip golem_Attack;
+    public AudioClip golem_Die;
+    public AudioClip skeleton_Attack;
+    public AudioClip skeleton_Die;
+    public AudioClip ramses_Move;
+    public AudioClip knight_Attack1;
+    public AudioClip knight_Attack2;
+    public AudioClip knight_After;
+    public AudioClip knight_Light;
 
 
     //[Header("3스테이지")]
@@ -33,6 +44,7 @@ public class EnemySound : MonoBehaviour
         audioSource = this.gameObject.GetComponentInParent<AudioSource>();
     }
 
+    //1스테이지
     public void SlimeMove()
     {
         Sounds("slimeMove");
@@ -94,11 +106,58 @@ public class EnemySound : MonoBehaviour
         Sounds("ranger_SpAttack");
     }
 
+    //2스테이지
+    public void Frog_Attack2()
+    {
+        Sounds("frog_Attack2");
+    }
+    public void Bat_Die()
+    {
+        Sounds("bat_Die");
+    }
+    public void Golem_Attack()
+    {
+        Sounds("golem_Attack");
+    }
+    public void Golem_Die()
+    {
+        Sounds("golem_Die");
+    }
+    public void Skeleton_Attack()
+    {
+        Sounds("skeleton_Attack");
+    }
+    public void Skeleton_Die()
+    {
+        Sounds("skeleton_Die");
+    }
+    public void Ramses_Move()
+    {
+        Sounds("ramses_Move");
+    }
+    public void Knight_Attack1()
+    {
+        Sounds("knight_Attack1");
+    }
+    public void Knight_Attack2()
+    {
+        Sounds("knight_Attack2");
+    }
+    public void Knight_After()
+    {
+        Sounds("knight_After");
+    }
+    public void Knight_Light()
+    {
+        Sounds("knight_Light");
+    }
+
+
     public void Sounds(string sounds)
     {
         switch (sounds)
         {
-            case "slimeMove":
+            case "slimeMove":   //1스테이지
                 audioSource.clip = slimeMove;
                 break;
             case "slimeDie":
@@ -142,6 +201,39 @@ public class EnemySound : MonoBehaviour
                 break;
             case "ranger_SpAttack":
                 audioSource.clip = ranger_SpAttack;
+                break;
+            case "frog_Attack2":    //2스테이지
+                audioSource.clip = frog_Attack2;
+                break;
+            case "bat_Die":
+                audioSource.clip = bat_Die;
+                break;
+            case "golem_Attack":
+                audioSource.clip = golem_Attack;
+                break;
+            case "golem_Die":
+                audioSource.clip = golem_Die;
+                break;
+            case "skeleton_Attack":
+                audioSource.clip = skeleton_Attack;
+                break;
+            case "skeleton_Die":
+                audioSource.clip = skeleton_Die;
+                break;
+            case "ramses_Move":
+                audioSource.clip = ramses_Move;
+                break;
+            case "knight_Attack1":
+                audioSource.clip = knight_Attack1;
+                break;
+            case "knight_Attack2":
+                audioSource.clip = knight_Attack2;
+                break;
+            case "knight_After":
+                audioSource.clip = knight_After;
+                break;
+            case "knight_Light":
+                audioSource.clip = knight_Light;
                 break;
         }
 

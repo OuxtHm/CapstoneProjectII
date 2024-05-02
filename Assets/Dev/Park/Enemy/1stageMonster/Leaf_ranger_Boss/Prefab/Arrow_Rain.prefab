@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7000764193863456371}
   - component: {fileID: 7000764193863456370}
   - component: {fileID: 7000764193863456369}
-  - component: {fileID: -478985828669829967}
+  - component: {fileID: 2908340846051493954}
   m_Layer: 0
   m_Name: Arrow_Rain
   m_TagString: Untagged
@@ -134,7 +134,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 3.5, y: 6.4}
   m_EdgeRadius: 0
---- !u!114 &-478985828669829967
+--- !u!114 &2908340846051493954
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,11 +143,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 7000764193863456653}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05ee2591838c96c45ae085869bbac7e5, type: 3}
+  m_Script: {fileID: 11500000, guid: 06fff4ab054dcde4a96472674089c8ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Dir: 0
   DelTime: 0
   Power: 0
-  speed: 10
-  Arrowpatten: 0
+  dir: 0
+  movecheck: 0
+  speed: 0

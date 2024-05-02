@@ -11,5 +11,6 @@ public class GreenSlime : Enemy
         enemy_CurHP = 10;
         enemy_Power = 1;
         enemy_Speed = 1;
+        enemy_frontSensor = 0.6f;
     }
 }

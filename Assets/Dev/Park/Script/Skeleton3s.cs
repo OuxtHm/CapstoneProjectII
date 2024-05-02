@@ -11,5 +11,6 @@ public class Skeleton3s : Enemy
         enemy_CurHP = 10;
         enemy_Power = 2;
         enemy_Speed = 1;
+        enemy_AttackSensor = 1.7f;
     }
 }

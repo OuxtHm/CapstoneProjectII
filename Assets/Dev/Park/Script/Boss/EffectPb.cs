@@ -4,22 +4,40 @@ using UnityEngine;
 
 public class EffectPb : MonoBehaviour
 {
+    SpriteRenderer spriteRenderer;
+    Transform pos;
+    Vector3 moveDirection = Vector3.right;  //나가는 방향
+
     public float DelTime;   //제거되는 시간
     public int Power;   // 투사체 대미지
-    public int dir;
+    public int dir; // 날아가는 방향값
+    public int movecheck;   // 움직이는 투사체 구분
+    public int speed;   // 투사체 속도
 
-    SpriteRenderer spriteRenderer;
+    
 
     void Start()
     {
         spriteRenderer = this.GetComponent<SpriteRenderer>();
-        DestoryObject();
-        
-        if(dir > 0)
-            spriteRenderer.flipX = true;
-        else
-            spriteRenderer.flipX = false;
 
+        if (dir == 1)
+        {
+            spriteRenderer.flipX = false;
+            moveDirection = Vector3.right;
+        }
+        else
+        {
+            spriteRenderer.flipX = true;
+            moveDirection = Vector3.left;
+        }
+
+        pos = transform;
+        DestoryObject();
+    }
+    public void Update()
+    {
+        if (movecheck == 1)
+            pos.position += moveDirection * speed * Time.deltaTime;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
