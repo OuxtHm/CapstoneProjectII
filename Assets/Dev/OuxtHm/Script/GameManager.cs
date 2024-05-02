@@ -5,6 +5,8 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+    public SkillUI skillUi;
+    public ChangeSkill changeSkill;
     public GameObject optionUI;     // ¿É¼Ç Ã¢
     public GameObject btnArray;
     public GameObject soundOption;
