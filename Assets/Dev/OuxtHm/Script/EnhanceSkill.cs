@@ -38,7 +38,6 @@ public class EnhanceSkill : MonoBehaviour
         }
     }
 
-    // 스킬 인스턴스화 및 RectTransform 설정
     private GameObject InstantiateSkill(GameObject skillPrefab, int index, int rectIndex, RectTransform[] skillRects)
     {
         GameObject skillInstance = Instantiate(skillPrefab.transform.gameObject, rect[rectIndex, index]); 
