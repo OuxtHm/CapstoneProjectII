@@ -1,9 +1,12 @@
 using TMPro;
+using Unity.VisualScripting;
+using UnityEditor.U2D.Path;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ShopUI : MonoBehaviour
 {
+    GameManager gm;
     Player player;
     Shop shop;
     RandomSkillShop randSkill;
@@ -19,12 +22,12 @@ public class ShopUI : MonoBehaviour
     public GameObject skillSlotUi;      // 스킬 슬롯 UI
     public Button purchaseY;
     public Button[] slot = new Button[2];
+    Transform[] playerSkillSlot = new Transform[2];
     public int price;
     private int selectSkillNum;
 
     private void Awake()
     {
-
         skillTabPage = transform.GetChild(0).GetChild(0).GetChild(2).gameObject;
         enhanceTabPage = transform.GetChild(0).GetChild(0).GetChild(3).gameObject;
         money_txt = transform.GetChild(0).GetChild(0).GetChild(4).GetChild(0).GetComponentInChildren<TextMeshProUGUI>();
@@ -37,13 +40,19 @@ public class ShopUI : MonoBehaviour
         {
             slot[i] = skillSlotUi.transform.GetChild(i).GetComponentInChildren<Button>();
         }
-        
     }
     void Start()
     {
+        gm = GameManager.instance;
         player = Player.instance;
         shop = Shop.instance;
         randSkill = RandomSkillShop.instance;
+
+        for (int i = 0; i < 2; i++)
+        {
+            playerSkillSlot[i] = gm.skillUi.transform.GetChild(1).GetChild(i + 1).GetComponent<Transform>();
+        }
+
         purchaseY.onClick.AddListener(() =>
         {
             Sell();
@@ -53,6 +62,8 @@ public class ShopUI : MonoBehaviour
         {
             int index = i;
             btn[i] = transform.GetChild(0).GetChild(0).GetChild(2).GetChild(0).GetChild(i).GetComponentInChildren<Button>();
+
+            // 상점 스킬 목록 버튼 기능
             btn[i].onClick.AddListener(() =>
             {
                 price = randSkill.skillCon[index].price;
@@ -63,14 +74,15 @@ public class ShopUI : MonoBehaviour
         for(int i = 0; i < slot.Length; i++)
         {
             int index = i;
+            
+            // 구매한 스킬을 넣을 슬롯 정하는 버튼 기능
             slot[i].onClick.AddListener(() =>
             {
-                Debug.Log(index);
-                Instantiate(randSkill.skillCon[selectSkillNum], slot[index].transform);
-                // 사이즈 정하기
-                // 스킬 채워진거 보여주고 1초뒤 창 닫기
-                // 실제 스킬 UI에 적용하기
-                // 상점 창 닫을 때 오브젝트만 끄고 상점맵 나갈 때 삭제하기
+                GameObject skillIcon = Instantiate(randSkill.skillCon[selectSkillNum].gameObject, slot[index].transform);
+                RectTransform iconRect = skillIcon.GetComponent<RectTransform>();
+                iconRect.sizeDelta = new Vector2(80, 80);
+                skillSlotUi.gameObject.SetActive(false);
+                CreateSkillUI(index, skillIcon);
             });
         }
 
@@ -79,11 +91,14 @@ public class ShopUI : MonoBehaviour
             btnEnhance[i] = transform.GetChild(0).GetChild(0).GetChild(3).GetChild(i).GetChild(0).GetComponent<Button>();
         }
 
+        // 스킬 구매 창으로 이동하는 버튼 기능
         skillTabBtn.onClick.AddListener(() =>
         {
             skillTabPage.SetActive(true);
             enhanceTabPage.SetActive(false);
         });
+
+        // 스킬 강화 창으로 이동하는 버튼 기능
         enhanceTabBtn.onClick.AddListener(() =>
         {
             skillTabPage.SetActive(false);
@@ -92,7 +107,13 @@ public class ShopUI : MonoBehaviour
 
         MoneyUpdate();
     }
-
+    void CreateSkillUI(int num, GameObject icon)        // 실제 Skill UI에 아이콘 적용하기 
+    {
+        GameObject orignSkill = playerSkillSlot[num].GetChild(0).gameObject;
+        Destroy(orignSkill);
+        GameObject newSkill = Instantiate(icon, playerSkillSlot[num]);
+        newSkill.transform.SetSiblingIndex(0);
+    }
     void MoneyUpdate()      // 플레이어 골드텍스트 업데이트
     {
         money_txt.text = player.money.ToString();
