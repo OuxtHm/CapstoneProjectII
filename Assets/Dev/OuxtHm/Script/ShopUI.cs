@@ -1,6 +1,4 @@
 using TMPro;
-using Unity.VisualScripting;
-using UnityEditor.U2D.Path;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -91,7 +89,7 @@ public class ShopUI : MonoBehaviour
             btnEnhance[i] = transform.GetChild(0).GetChild(0).GetChild(3).GetChild(i).GetChild(0).GetComponent<Button>();
         }
 
-        // 스킬 구매 창으로 이동하는 버튼 기능
+        // 스킬 구매 창으로 이동하는 버튼 기능 
         skillTabBtn.onClick.AddListener(() =>
         {
             skillTabPage.SetActive(true);
