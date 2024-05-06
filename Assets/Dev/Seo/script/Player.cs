@@ -50,7 +50,7 @@ public class Player : MonoBehaviour
     GameObject atkBuffPrefab;           // 2024-04-14 유재현 추가 atkBuff Skill Prefabs    
     GameObject slashPrefab;            // 2024-04-14 유재현 추가 Slash1 Skill Prefabs    
     public int money;       // 플레이어 골드 보유량
-
+    public bool isDead;     // 플레이어 사망 여부
 
     public void Awake()
     {
@@ -346,7 +346,7 @@ public class Player : MonoBehaviour
         animator.SetTrigger("isHit");
         curHp -= damage;
         hpBar.ChangeHp((int)curHp);
-
+        isDead = true;
         if (curHp <= 0)
         {
             animator.SetTrigger("isDie");
