@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: c7878cc107a1a5b44a77d39115e26892
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - ExplosionPb: {instanceID: 0}
+  - SmokePb: {instanceID: 0}
+  - SeedPb: {fileID: 7759879980485146417, guid: db749575e4b091c43a6397d59a0aea50, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

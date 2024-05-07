@@ -12,5 +12,6 @@ public class CultistPriest : Enemy
         enemy_Power = 2;
         enemy_Speed = 1;
         enemy_AttackSensor = 1.5f;
+        enemy_frontSensor = 1f;
     }
 }

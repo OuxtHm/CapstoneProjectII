@@ -146,8 +146,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.07999998, y: 0.0070638657}
-  m_Size: {x: 1.5, y: 2.1}
+  m_Offset: {x: -0.16460085, y: -0.05638647}
+  m_Size: {x: 2.1615963, y: 3.2808924}
   m_Direction: 0
 --- !u!114 &1059640508334848745
 MonoBehaviour:
@@ -176,6 +176,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ExplosionPb: {fileID: 4390872846123526793, guid: 7f769ab235ef15d469b8eafe58db7749, type: 3}
+  SmokePb: {fileID: 0}
   istracking: 0
   enemy_MaxHP: 0
   enemy_CurHP: 0
@@ -261,7 +262,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.09, y: 2.01}
+  m_Size: {x: 2.5, y: 3}
   m_EdgeRadius: 0
 --- !u!1001 &6874854657107941287
 PrefabInstance:
@@ -344,7 +345,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5317606563680401837, guid: 7761356fd6f073a42b020c98e5b97a97, type: 3}
       propertyPath: m_LocalScale.x
-      value: -0.010249999
+      value: -0.012499999
       objectReference: {fileID: 0}
     - target: {fileID: 5317606563680401837, guid: 7761356fd6f073a42b020c98e5b97a97, type: 3}
       propertyPath: m_LocalScale.y
@@ -384,7 +385,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5317606563680401837, guid: 7761356fd6f073a42b020c98e5b97a97, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 1.28
+      value: 1.8
       objectReference: {fileID: 0}
     - target: {fileID: 5317606563680401837, guid: 7761356fd6f073a42b020c98e5b97a97, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
