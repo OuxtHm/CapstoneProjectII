@@ -62,6 +62,8 @@ public abstract class Enemy : MonoBehaviour
     {
         TargetSensor(target);
         Sensor();
+        if (Input.GetKeyDown(KeyCode.V))
+            StartCoroutine(Hurt(this.transform, 10));
     }
 
     void TargetSensor(Transform target)  // 플레이어 추적

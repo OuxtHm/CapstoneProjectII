@@ -45,7 +45,6 @@ public class EffectPb : MonoBehaviour
         {
             Player player = collision.GetComponent<Player>();
             player.Playerhurt(Power);
-            Destroy(this.gameObject);
         }
     }
     public void DestoryObject()
