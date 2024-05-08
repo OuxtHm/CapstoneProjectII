@@ -6,10 +6,12 @@ using UnityEngine.UI;
 
 public class MainScene : MonoBehaviour
 {
+    public static MainScene instance;
     public Button[] btn = new Button[4];
     GameObject faedPrefab;      // ∆‰¿ÃµÂ æ∆øÙ «¡∏Æ∆È
     private void Awake()
     {
+        instance = this;
         faedPrefab = Resources.Load<GameObject>("Prefabs/FadeOut_canvas");
         for (int i = 0; i < btn.Length; i++)
         {
@@ -25,7 +27,7 @@ public class MainScene : MonoBehaviour
     {
         GameObject fade = Instantiate(faedPrefab);
         yield return new WaitForSeconds(0.7f);
-        SceneManager.LoadScene("Merge_2");
+        SceneManager.LoadScene("Merge_6");
     }
 
     void ClickContinueBtn()

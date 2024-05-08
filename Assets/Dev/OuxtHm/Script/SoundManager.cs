@@ -11,7 +11,15 @@ public class SoundManager : MonoBehaviour
     public AudioSource sfxPlayer;
     private void Awake()
     {
-        instance = this;
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else if (instance != this)
+        {
+            Destroy(instance.gameObject);
+        }
         bgmPlayer = transform.GetChild(0).GetComponent<AudioSource>();
         sfxPlayer = transform.GetChild(1).GetComponent<AudioSource>();
     }
