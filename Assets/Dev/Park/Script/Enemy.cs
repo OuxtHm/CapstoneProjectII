@@ -19,7 +19,7 @@ public abstract class Enemy : MonoBehaviour
     RaycastHit2D rayHitfront;   //벽 감지 센서
 
     public GameObject ExplosionPb; //2stage 개구리 몬스터 독안개 프리펩
-    public GameObject SmokePb;  //3stage 프리스트 공격 이펙트 프리펩
+    public GameObject RockPb;  //3stage 프리스트 공격 이펙트 프리펩
     public GameObject SeedPb;   //3stage 식물 씨앗공격 프리펩
 
     int DirX;   //몬스터가 바라보는 방향값
@@ -310,15 +310,15 @@ public abstract class Enemy : MonoBehaviour
         GameObject Explosion = Instantiate(ExplosionPb, AttackBox.position, AttackBox.rotation);
     }
 
-    void PriestSmoke()  // 3stage 프리스트 공격 이펙트
+    void PriestRock()  // 3stage 프리스트 공격 이펙트
     {
-        EffectPb SmPb = SmokePb.GetComponent<EffectPb>();
-        SmPb.Power = 10;
-        SmPb.dir = -1 * PBdir;
-        SmPb.DelTime = 0.5f;
-        Vector2 Pbpos = new Vector2(AttackBox.position.x + DirX, AttackBox.position.y - 1.5f);
+        EffectPb RkPb = RockPb.GetComponent<EffectPb>();
+        RkPb.Power = 10;
+        RkPb.dir = PBdir;
+        RkPb.DelTime = 0.7f;
+        Vector2 Pbpos = new Vector2(AttackBox.position.x + (DirX * 2.5f), AttackBox.position.y - 1.4f);
 
-        GameObject smoke = Instantiate(SmokePb, Pbpos, AttackBox.rotation);
+        GameObject Rock = Instantiate(RockPb, Pbpos, AttackBox.rotation);
     }
 
     void PlantSeed()    //3stage 식물 씨앗 투사체 이펙트

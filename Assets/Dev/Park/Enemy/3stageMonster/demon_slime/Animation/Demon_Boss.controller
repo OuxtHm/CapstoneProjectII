@@ -20,7 +20,7 @@ AnimatorStateTransition:
   m_TransitionDuration: 0
   m_TransitionOffset: 0
   m_ExitTime: 0.000000001947405
-  m_HasExitTime: 1
+  m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
@@ -213,7 +213,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Demon_Die
-  m_Speed: 0.8
+  m_Speed: 0.9
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 7263123000239381877}
@@ -249,9 +249,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 1.7587495
+  m_TransitionDuration: 1.7895615
   m_TransitionOffset: 0
-  m_ExitTime: 0.0000000024465534
+  m_ExitTime: 0.000000011090071
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0

@@ -147,7 +147,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.16460085, y: -0.05638647}
-  m_Size: {x: 2.1615963, y: 3.2808924}
+  m_Size: {x: 2.1615963, y: 3.16}
   m_Direction: 0
 --- !u!114 &1059640508334848745
 MonoBehaviour:
@@ -176,7 +176,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ExplosionPb: {fileID: 4390872846123526793, guid: 7f769ab235ef15d469b8eafe58db7749, type: 3}
-  SmokePb: {fileID: 0}
+  RockPb: {fileID: 3013461507330989107, guid: 14a66e67f03f89642aff9c2b0666066f, type: 3}
+  SeedPb: {fileID: 0}
   istracking: 0
   enemy_MaxHP: 0
   enemy_CurHP: 0

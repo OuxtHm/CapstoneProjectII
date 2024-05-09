@@ -289,7 +289,7 @@ public abstract class Boss : MonoBehaviour
     {
         atkPattern = Random.Range(1, countRange);    // 2 ~ (countRange - 1) 사이의 숫자 랜덤값을 받음
         if (boss_stage != 2)    //보스와 플레이어의 거리가 4만큼 이내에 있으면 근접 공격 확정
-            if(DirX == 1 && (playerLoc - bossLoc) <= 4f || (DirX == -1 && (playerLoc - bossLoc) >= -4f))
+            if(DirX == 1 && (playerLoc - bossLoc) <= 5f || (DirX == -1 && (playerLoc - bossLoc) >= -5f))
                 atkPattern = -1;
         if (!isdie && boss_CurHP > boss_MaxHP / 2)  // 1페이즈와 2페이즈의 패턴 실행 시간이 다름
         {
