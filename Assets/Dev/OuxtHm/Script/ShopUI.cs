@@ -4,10 +4,10 @@ using UnityEngine.UI;
 
 public class ShopUI : MonoBehaviour
 {
-    GameManager gm;
     Player player;
     Shop shop;
     RandomSkillShop randSkill;
+    SkillUI skillUI;
     public TextMeshProUGUI money_txt;
     public GameObject grandObject;
     public Button skillTabBtn;     // 스킬 구매 탭 활성화 버튼
@@ -41,14 +41,13 @@ public class ShopUI : MonoBehaviour
     }
     void Start()
     {
-        gm = GameManager.instance;
         player = Player.instance;
         shop = Shop.instance;
         randSkill = RandomSkillShop.instance;
-
+        skillUI = SkillUI.instance;
         for (int i = 0; i < 2; i++)
         {
-            playerSkillSlot[i] = gm.skillUi.transform.GetChild(1).GetChild(i + 1).GetComponent<Transform>();
+            playerSkillSlot[i] = skillUI.transform.GetChild(1).GetChild(i + 1).GetComponent<Transform>();
         }
 
         purchaseY.onClick.AddListener(() =>

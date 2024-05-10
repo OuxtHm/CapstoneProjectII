@@ -5,12 +5,14 @@ using UnityEngine.UI;
 
 public class SkillUI : MonoBehaviour
 {
+    public static SkillUI instance;
     public Image ultSkillCoolTime;      // ±Ã±Ø±â ½ºÅ³ ÄðÅ¸ÀÓ
     public Image basicSkillCoolTime;    // ±âº» ½ºÅ³ ÄðÅ¸ÀÓ
     public bool useUlt;
     public bool useBasic;
     private void Awake()
     {
+        instance = this;
         ultSkillCoolTime = transform.GetChild(0).GetChild(1).GetComponent<Image>();
         basicSkillCoolTime = transform.GetChild(1).GetChild(1).GetChild(1).GetComponent<Image>();
         useUlt = false;

@@ -31,8 +31,8 @@ public class GameManager : MonoBehaviour
             Destroy(instance.gameObject);
         }
         deadUiPrefab = Resources.Load<GameObject>("Prefabs/PlayerDead_canvas");
-
-        StartCoroutine(GetComponent());
+       
+        StartCoroutine(FindOpbject());
         
     }
     void Update()
@@ -61,15 +61,16 @@ public class GameManager : MonoBehaviour
     public IEnumerator ShowDeadUI()
     {
         yield return new WaitForSeconds(0.2f);
-        GameObject deadUi = Instantiate(deadUiPrefab);
+        Instantiate(deadUiPrefab);
     }
 
-    private IEnumerator GetComponent()
+    private IEnumerator GetComponent()      // 인게임씬에서 옵션 UI에 속한 컴포넌트 얻는 코루틴
     {
         if(SceneManager.GetActiveScene().name != "MainScene")
         {
             btnArray = optionUI.transform.GetChild(0).GetChild(1).gameObject;
             soundOption = optionUI.transform.GetChild(0).GetChild(2).gameObject;
+            optionUI.SetActive(false);
         }
         else
         {
@@ -78,4 +79,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public IEnumerator FindOpbject()        // 옵션 UI 찾는 코루틴
+    {
+        while(optionUI == null)
+        {
+            optionUI = GameObject.Find("Option_ui");
+            yield return null;
+        }
+        if(optionUI != null)
+        {
+            StartCoroutine(GetComponent());
+        }
+    }
 }

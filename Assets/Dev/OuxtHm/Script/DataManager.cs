@@ -92,7 +92,7 @@ public class DataManager : MonoBehaviour
     {
         gm = GameManager.instance;
         sm = SoundManager.instance;
-        player = Player.instance;
+        StartCoroutine(FindPlayer());
 
         if (!File.Exists(optionDataPath))
         {
@@ -101,7 +101,14 @@ public class DataManager : MonoBehaviour
         OptionLoad();
         StartCoroutine(FirstSaveFile());
     }
-
+    IEnumerator FindPlayer()
+    {
+        while(player == null)
+        {
+            player = Player.instance;
+            yield return null;
+        }
+    }
     public void SaveData()      // 플레이어 및 스킬 데이터 저장 함수
     {
         Debug.Log("데이터 저장 시작");
