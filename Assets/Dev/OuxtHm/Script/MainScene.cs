@@ -26,7 +26,7 @@ public class MainScene : MonoBehaviour
     IEnumerator  ClickGameStartBtn()
     {
         GameObject fade = Instantiate(faedPrefab);
-        yield return new WaitForSeconds(0.7f);
+        yield return new WaitForSeconds(1f);
         SceneManager.LoadScene("Merge_6");
     }
 

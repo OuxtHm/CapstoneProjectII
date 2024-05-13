@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class EnhanceSkill : MonoBehaviour
 {
-    GameManager gm;
+    ChangeSkill changeSkill;
     public SkillControler[] skill = new SkillControler[2];      // 플레이어의 스킬
     public RectTransform[,] rect = new RectTransform[2,2];      // 스킬 이미지를 띄울 RectTransform
     public TextMeshProUGUI[,] description = new TextMeshProUGUI[2,2];     // 강화 내용
@@ -25,7 +25,7 @@ public class EnhanceSkill : MonoBehaviour
 
     private void Start()
     {
-        gm = GameManager.instance;
+        changeSkill = ChangeSkill.instance;
 
         GameObject[] skill_1 = new GameObject[2];
         GameObject[] skill_2 = new GameObject[2];
@@ -34,11 +34,11 @@ public class EnhanceSkill : MonoBehaviour
 
         for (int i = 0; i < 2; i++)
         {
-            skill_1[i] = InstantiateSkill(gm.changeSkill.skill_1.gameObject, i, 0, skillRect1);
-            skill_2[i] = InstantiateSkill(gm.changeSkill.skill_2.gameObject, i, 1, skillRect2);
+            skill_1[i] = InstantiateSkill(changeSkill.skill_1.gameObject, i, 0, skillRect1);
+            skill_2[i] = InstantiateSkill(changeSkill.skill_2.gameObject, i, 1, skillRect2);
         }
-        skill[0] = gm.changeSkill.skill_1.GetComponent<SkillControler>();
-        skill[1] = gm.changeSkill.skill_2.GetComponent<SkillControler>();
+        skill[0] = changeSkill.skill_1.GetComponent<SkillControler>();
+        skill[1] = changeSkill.skill_2.GetComponent<SkillControler>();
 
         for (int i = 0; i < 2; i++)
         {

@@ -6,26 +6,26 @@ using UnityEngine.SceneManagement;
 
 public class PlayerData
 {
-    public float maxHpValue;
-    public float curHpValue;
-    public float atk;
-    public int money;
+    public float maxHpValue;        // 최대 체력
+    public float curHpValue;        // 현재 체력
+    public float atk;               // 공격력
+    public int money;               // 돈
 }
 
 public class OptionData
 {
-    public float masterValue;
-    public float bgmValue;
-    public float sfxValue;
+    public float masterValue;       // 마스터 볼륨
+    public float bgmValue;          // 배경음 볼륨
+    public float sfxValue;          // 효과음 볼륨
 }
 
 public class SkillData
 {
-    public int readySkill;
-    public int nowSkill;
-    public int ultSkill;
-    public int nowPassive;
-    public int readyPassive;
+    public int readySkill;          // 대기 중인 스킬
+    public int nowSkill;            // 사용 중인 스킬
+    public int ultSkill;            // 궁극기
+    public int nowPassive;          // 현재 패시브
+    public int readyPassive;        // 대기 중인 패시브
 }
 
 public class DataManager : MonoBehaviour
@@ -35,11 +35,10 @@ public class DataManager : MonoBehaviour
     public GameManager gm;
     public SoundManager sm;
     Player player;
-    SoundOption sound;
 
     public PlayerData playerData = new PlayerData()
     {
-        maxHpValue = 100,
+        maxHpValue = 100,  
         curHpValue = 100,
         atk = 10,
         money = 0
@@ -98,6 +97,11 @@ public class DataManager : MonoBehaviour
         {
             SaveOptionData();
         }
+        if(!File.Exists(playerDataPath))
+        {
+            SaveData();
+        }
+        PlayerLoad();
         OptionLoad();
         StartCoroutine(FirstSaveFile());
     }
@@ -132,6 +136,34 @@ public class DataManager : MonoBehaviour
         File.WriteAllText(optionDataPath, oData);
         Debug.Log("옵션 데이터 저장 완료");
     }
+    
+    public void PlayerLoad()    // 인게임씬에서 플레이어 데이터 로드하는 함수
+    {
+        Debug.Log("플레이어 데이터 및 스킬 데이터 로드 중....");
+        string playData = File.ReadAllText(playerDataPath);
+        string skData = File.ReadAllText(skillDataPath);
+
+        playerData = JsonUtility.FromJson<PlayerData>(playData);
+        skillData = JsonUtility.FromJson<SkillData>(skData);
+
+        StartCoroutine(LoadData());
+    }
+
+    public IEnumerator LoadData()
+    {
+        if (SceneManager.GetActiveScene().name != "MainScene")
+        {
+            player.maxHp = playerData.maxHpValue;
+            player.curHp = playerData.curHpValue;
+            player.power = playerData.atk;
+            player.money = playerData.money;
+        }
+        else
+        {
+            yield return null;
+            StartCoroutine(LoadData());
+        }
+    }
 
     public void OptionLoad()    // 타이틀씬에서 옵션 데이터 로드하는 함수
     {
@@ -142,12 +174,6 @@ public class DataManager : MonoBehaviour
         {
             OptionDataLoad();
         }
-    }
-    public void WriteOptionData()
-    {
-        optionData.masterValue = sound.masterSlider.value;
-        optionData.bgmValue = sound.bgmSlider.value;
-        optionData.sfxValue = sound.sfxSlider.value;
     }
     public void OptionDataLoad()
     {

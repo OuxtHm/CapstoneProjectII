@@ -1,17 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    [Header("연결된 스크립트")]
+    /*[Header("연결된 스크립트")]
     public SoundOption sound;
     public SkillUI skillUi;
-    public ChangeSkill changeSkill;
+    public ChangeSkill changeSkill;*/
 
     [Header("오브젝트")]
+    public GameObject playerUi;        // 플레이어 관련 UI
     public GameObject optionUI;     // 옵션 창
     public GameObject btnArray;
     public GameObject soundOption;
@@ -31,8 +33,9 @@ public class GameManager : MonoBehaviour
             Destroy(instance.gameObject);
         }
         deadUiPrefab = Resources.Load<GameObject>("Prefabs/PlayerDead_canvas");
-       
-        StartCoroutine(FindOpbject());
+
+        //StartCoroutine(FindPlayerUi());
+        StartCoroutine(FindOptionUiOpbject());
         
     }
     void Update()
@@ -79,7 +82,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public IEnumerator FindOpbject()        // 옵션 UI 찾는 코루틴
+    public IEnumerator FindOptionUiOpbject()        // 옵션 UI 찾는 코루틴
     {
         while(optionUI == null)
         {
@@ -91,4 +94,32 @@ public class GameManager : MonoBehaviour
             StartCoroutine(GetComponent());
         }
     }
+
+    /*public IEnumerator FindPlayerUi()       // 플레이어 UI 찾는 코루틴
+    {
+        while(playerUi == null)
+        {
+            playerUi = GameObject.Find("Player_ui");
+            yield return null;
+        }
+        if(playerUi != null)
+        {
+            StartCoroutine(FIndPlayerUIScript());
+        }
+
+    }
+    public IEnumerator FIndPlayerUIScript()     // 인게임 씬에서 플레이어 UI에 속한 스크립트 찾는 코루틴
+    {
+        if (SceneManager.GetActiveScene().name != "MainScene")
+        {
+            sound = playerUi.GetComponentInChildren<SoundOption>();
+            skillUi = playerUi.GetComponentInChildren<SkillUI>();
+            changeSkill = playerUi.GetComponentInChildren<ChangeSkill>();
+        }
+        else
+        {
+            yield return null;
+            StartCoroutine(FIndPlayerUIScript());
+        }
+    }*/
 }

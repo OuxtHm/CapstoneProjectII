@@ -1896,9 +1896,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0fac9e45788f8441b568b7f2b1a1690, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sound: {fileID: 0}
-  skillUi: {fileID: 0}
-  changeSkill: {fileID: 0}
+  playerUi: {fileID: 0}
   optionUI: {fileID: 0}
   btnArray: {fileID: 0}
   soundOption: {fileID: 0}

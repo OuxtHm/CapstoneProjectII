@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class ChangeSkill : MonoBehaviour
 {
+    public static ChangeSkill instance;
     public Image changeCoolTime;
 
     public Image skill_1;  // 스킬 오브젝트
@@ -16,6 +17,7 @@ public class ChangeSkill : MonoBehaviour
     public bool change;     // 스킬 변경 했는지 확인하는 변수
     private void Awake()
     {
+        instance = this;
         changeCoolTime = transform.GetChild(0).GetComponent<Image>();
         nowskill = transform.GetChild(1).GetComponent<Transform>();     // 현재 사용중인 스킬 Transform 설정
         readyskill = transform.GetChild(2).GetComponent<Transform>();   // 대기중인 스킬 Transform 설정
