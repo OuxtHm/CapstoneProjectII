@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class ChangeSkill : MonoBehaviour
 {
     public static ChangeSkill instance;
+    SkillUI skillUi;
     public Image changeCoolTime;
 
     public Image skill_1;  // 스킬 오브젝트
@@ -25,7 +26,10 @@ public class ChangeSkill : MonoBehaviour
         skill_2 = readyskill.GetChild(0).GetComponent<Image>();     // 대기중인 스킬 Image 설정
         change = false;
     }
-
+    private void Start()
+    {
+        skillUi = SkillUI.instance;
+    }
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.C) && !change)
@@ -65,5 +69,7 @@ public class ChangeSkill : MonoBehaviour
 
         skill_2.transform.SetParent(nowskill.transform, false);     // 사용중인 스킬 대기중 슬롯으로 이동
         skill_2.transform.SetAsFirstSibling();                          // 부모 오브젝트의 첫번째 자식으로 설정
+
+        skillUi.GetSkillComponent();
     }
 }

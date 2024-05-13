@@ -110,6 +110,15 @@ public class ShopUI : MonoBehaviour
         Destroy(orignSkill);
         GameObject newSkill = Instantiate(icon, playerSkillSlot[num]);
         newSkill.transform.SetSiblingIndex(0);
+        if(num == 0)
+        {
+            skillUI.GetSkillComponent();
+        }
+        else
+        {
+            skillUI.GetUltComponent();
+        }
+        
     }
     void MoneyUpdate()      // 플레이어 골드텍스트 업데이트
     {

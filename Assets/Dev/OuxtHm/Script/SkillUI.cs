@@ -6,6 +6,9 @@ using UnityEngine.UI;
 public class SkillUI : MonoBehaviour
 {
     public static SkillUI instance;
+    public ChangeSkill change;
+    public SkillControler nowSkill;
+    public SkillControler nowUlt;
     public Image ultSkillCoolTime;      // ±Ã±Ø±â ½ºÅ³ ÄðÅ¸ÀÓ
     public Image basicSkillCoolTime;    // ±âº» ½ºÅ³ ÄðÅ¸ÀÓ
     public bool useUlt;
@@ -18,7 +21,12 @@ public class SkillUI : MonoBehaviour
         useUlt = false;
         useBasic = false;
     }
-
+    private void Start()
+    {
+        change = ChangeSkill.instance;
+        GetSkillComponent();
+        GetUltComponent();
+    }
     void Update()
     {
         UseSkill();
@@ -28,16 +36,17 @@ public class SkillUI : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.D) && !useUlt)
         {
-            StartCoroutine(UltSkillUse(10f));
+            StartCoroutine(UltSkillUse(nowUlt.coolTime));
         }
-        if(Input.GetKeyDown(KeyCode.E) && !useBasic)
+        if (Input.GetKeyDown(KeyCode.E) && !useBasic)
         {
-            StartCoroutine(BasicSkillUse(5f));
+            StartCoroutine(BasicSkillUse(nowSkill.coolTime));
         }
     }
 
     public IEnumerator UltSkillUse(float duration)
     {
+        Debug.Log(duration);
         useUlt = true;
         float elapsedTime = 0f; // °æ°ú ½Ã°£
         ultSkillCoolTime.fillAmount = 1;
@@ -69,5 +78,12 @@ public class SkillUI : MonoBehaviour
         basicSkillCoolTime.fillAmount = 0f;
         useBasic = false;
     }
-
+    public void GetSkillComponent()
+    {
+        nowSkill = change.nowskill.GetChild(0).GetComponent<SkillControler>();
+    }
+    public void GetUltComponent()
+    {
+        nowUlt = transform.GetChild(0).GetComponentInChildren<SkillControler>();
+    }
 }
