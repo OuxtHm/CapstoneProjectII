@@ -50,6 +50,9 @@ public abstract class Boss : MonoBehaviour
     public GameObject SwordEffectPb; // 2스테이지 보스 가로베기 프리펩
     public GameObject FireEffectPb; // 2스테이지 보스 파이어볼 프리펩
 
+    [Header("3스테이지 보스 프리펩")]
+    public GameObject FireBarrierPb;  //3 스테이지 보스 불꽃 배리어 프리펩
+    public GameObject FireBoltPb;  //3 스테이지 보스 파이어볼트 프리펩
     private void Awake()
     {
         Instance = this;
@@ -87,7 +90,8 @@ public abstract class Boss : MonoBehaviour
     public void bossMove()  // boss의 움직이도록 하는 함수
     {
         if (Input.GetKeyDown(KeyCode.V))
-            StartCoroutine(Hurt(this.transform, 10));
+            anim.SetTrigger("Hurt");
+        //StartCoroutine(Hurt(this.transform, 10));
         if (boss_stage == 1)   //벽에 닿을 시 플레이어쪽으로 이동
         {
             if (bossMoving && !isdie && !ishurt)
@@ -418,7 +422,39 @@ public abstract class Boss : MonoBehaviour
         GameObject effect = Instantiate(FireEffectPb, Spownpos, PbSpawn.rotation);
         Invoke("MoveOn", 3.5f);
     }
-    
+
+    void Demon_FireBarrier()   //3stage 불꽃 배리어 생성
+    {
+        EffectPb FBPb = FireBarrierPb.GetComponent<EffectPb>();
+        FBPb.Power = boss_TwoPattenPower;
+        FBPb.dir = DirX;
+        FBPb.DelTime = 1.5f;
+        FBPb.movecheck = 0;
+
+        Vector2 Spownpos = new Vector2(this.transform.position.x, this.PbSpawn.position.y + 1);
+        GameObject FireBarrier = Instantiate(FireBarrierPb, Spownpos, transform.rotation);
+
+        Invoke("MoveOn", 3f);
+    }
+
+    void Demon_FireBolt()   //3stage 파이어볼트 생성
+    {
+        EffectPb FTPb = FireBoltPb.GetComponent<EffectPb>();
+        FTPb.Power = boss_ThreePattenPower;
+        FTPb.dir = DirX;
+        FTPb.DelTime = 2f;
+        FTPb.movecheck = 2;
+        FTPb.speed = 2;
+        FTPb.playerpos = player.transform;
+
+        Vector2 Spownpos = new Vector2(this.transform.position.x, this.transform.position.y + 3);
+        GameObject FireBolt = Instantiate(FireBoltPb, Spownpos, transform.rotation);
+
+        Invoke("MoveOn", 3f);
+    }
+
+
+
     public IEnumerator Hurt(Transform target, float Damage)  //플레이어에게 피격 받았을 때 실행
     {
         yield return new WaitForSeconds(0);

@@ -38,7 +38,7 @@ MonoImporter:
   - flyeye_Die: {fileID: 8300000, guid: 29cb5dbfb69968447a77fa4cf6910a6e, type: 3}
   - mushroom_Die: {fileID: 8300000, guid: 39cd010874a0a164ebea0ca2af25765c, type: 3}
   - plant_Shot: {fileID: 8300000, guid: b1995656243f2e24caab85d9788fab44, type: 3}
-  - plant_Slash: {instanceID: 0}
+  - plant_Slash: {fileID: 8300000, guid: 1f93e0b5ec74c5542b363ba424173cae, type: 3}
   - demon_Attack: {instanceID: 0}
   - demon_Die: {fileID: 8300000, guid: 3cafdebf4927a7e4bae9b7ebf1c64940, type: 3}
   executionOrder: 0

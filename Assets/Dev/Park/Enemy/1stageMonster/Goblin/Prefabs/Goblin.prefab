@@ -209,9 +209,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 10
+  MaxDistance: 12
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -332,11 +332,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ExplosionPb: {fileID: 4390872846123526793, guid: 7f769ab235ef15d469b8eafe58db7749, type: 3}
+  RockPb: {fileID: 0}
+  SeedPb: {fileID: 0}
+  istracking: 0
   enemy_MaxHP: 0
   enemy_CurHP: 0
   enemy_Power: 0
   enemy_Speed: 0
   enemy_AttackSensor: 0
+  enemy_frontSensor: 0
 --- !u!114 &8852800211987521178
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -365,6 +369,27 @@ MonoBehaviour:
   ranger_Arrow: {fileID: 0}
   ranger_ArrowRain: {fileID: 0}
   ranger_SpAttack: {fileID: 0}
+  frog_Attack2: {fileID: 0}
+  bat_Die: {fileID: 0}
+  golem_Attack: {fileID: 0}
+  golem_Die: {fileID: 0}
+  skeleton2s_Attack: {fileID: 0}
+  skeleton2s_Die: {fileID: 0}
+  ramses_Move: {fileID: 0}
+  knight_Attack1: {fileID: 0}
+  knight_Attack2: {fileID: 0}
+  knight_After: {fileID: 0}
+  knight_Light: {fileID: 0}
+  priest_Punch: {fileID: 0}
+  priest_Rock: {fileID: 0}
+  skeleton3s_Attack: {fileID: 0}
+  skeleton3s_Die: {fileID: 0}
+  flyeye_Die: {fileID: 0}
+  mushroom_Die: {fileID: 0}
+  plant_Shot: {fileID: 0}
+  plant_Slash: {fileID: 0}
+  demon_Attack: {fileID: 0}
+  demon_Die: {fileID: 0}
 --- !u!1001 &6557345348662110526
 PrefabInstance:
   m_ObjectHideFlags: 0

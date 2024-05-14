@@ -6,6 +6,7 @@ public class EffectPb : MonoBehaviour
 {
     SpriteRenderer spriteRenderer;
     Transform pos;
+    public Transform playerpos;
     Vector3 moveDirection = Vector3.right;  //나가는 방향
 
     public float DelTime;   //제거되는 시간
@@ -38,6 +39,16 @@ public class EffectPb : MonoBehaviour
     {
         if (movecheck == 1)
             pos.position += moveDirection * speed * Time.deltaTime;
+        if(movecheck == 2)
+        {
+            transform.position = Vector3.Lerp(transform.position, playerpos.position, Time.deltaTime * speed);
+
+            Vector3 direction = playerpos.position - transform.position;
+
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            targetRotation.eulerAngles = new Vector3(0, 0, transform.rotation.eulerAngles.z);  // x, y값 유지, z값 변경
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
+        }
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
