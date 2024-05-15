@@ -5,6 +5,7 @@ using UnityEngine;
 public class SkillControler : MonoBehaviour
 {
     public SkillScriptable skill;
+    public int num;
     public string _name;
     public string description;
     public int level;
@@ -13,6 +14,7 @@ public class SkillControler : MonoBehaviour
 
     private void Awake()
     {
+        num = skill.number;
         _name = skill.name;
         description = skill.description;
         level = skill.level[0];

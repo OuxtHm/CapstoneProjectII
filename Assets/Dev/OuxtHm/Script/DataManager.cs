@@ -10,6 +10,7 @@ public class PlayerData
     public float curHpValue;        // 현재 체력
     public float atk;               // 공격력
     public int money;               // 돈
+    public Vector2 nowPosition;     // 현재 위치
 }
 
 public class OptionData
@@ -34,14 +35,17 @@ public class DataManager : MonoBehaviour
 
     public GameManager gm;
     public SoundManager sm;
+    public SkillManager skillM;
+    SkillUI skillUi;
     Player player;
 
     public PlayerData playerData = new PlayerData()
     {
-        maxHpValue = 100,  
+        maxHpValue = 100,
         curHpValue = 100,
         atk = 10,
-        money = 0
+        money = 0,
+        nowPosition = new Vector2(0, 1)
     };
 
     public OptionData optionData = new OptionData()
@@ -91,8 +95,9 @@ public class DataManager : MonoBehaviour
     {
         gm = GameManager.instance;
         sm = SoundManager.instance;
+        
         StartCoroutine(FindPlayer());
-
+        StartCoroutine(FindInstance());
         if (!File.Exists(optionDataPath))
         {
             SaveOptionData();
@@ -110,6 +115,15 @@ public class DataManager : MonoBehaviour
         while(player == null)
         {
             player = Player.instance;
+            yield return null;
+        }
+    }
+    IEnumerator FindInstance()
+    {
+        while (skillM == null)
+        {
+            skillM = SkillManager.instance;
+            skillUi = SkillUI.instance;
             yield return null;
         }
     }
@@ -157,6 +171,15 @@ public class DataManager : MonoBehaviour
             player.curHp = playerData.curHpValue;
             player.power = playerData.atk;
             player.money = playerData.money;
+            player.transform.position = playerData.nowPosition;
+
+            skillM.commonSkillNum[0] = skillData.readySkill;
+            skillM.commonSkillNum[1] = skillData.nowSkill;
+            skillM.ultSkillNum = skillData.ultSkill;
+
+            skillM.CreateSkill(skillM.commonSkillNum[0], skillUi.change.readyskill);
+            skillM.CreateSkill(skillM.commonSkillNum[1], skillUi.change.nowskill);
+            skillM.CreateSkill(skillM.ultSkillNum, skillUi.ult);
         }
         else
         {

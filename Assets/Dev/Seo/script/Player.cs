@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     public bool isGround = false;
     public static Player instance;
     GameManager gm;
+    DataManager dm;
     Enemy enemy;
     Boss boss;
     Dash dashSc;
@@ -19,7 +20,7 @@ public class Player : MonoBehaviour
     public Hitbox hitbox;
     public float maxHp = 100f;
     public float curHp = 100f;
-    public float power;        // 플레이어 공격력      // 2024-04-14 유재현 추가
+    public float power;        // 플레이어 공격력      
     public bool isBoosted = false;
     public float boostDuration = 0.1f;
     public float boostedSpeed = 10f;
@@ -44,11 +45,11 @@ public class Player : MonoBehaviour
     //점프
     GameObject hitboxClone;//공격
     //public float knockbackStrength = 500f;//피격
-    GameObject holyArrowPrefab;         // 2024-04-13 유재현 추가 HolyArrow Skill Prefabs
-    GameObject holyPillarPrefab;        // 2024-04-13 유재현 추가 HolyPillar Skill Prefabs 
-    GameObject thunderPrefab;           // 2024-04-13 유재현 추가 Thunder Skill Prefabs
-    GameObject atkBuffPrefab;           // 2024-04-14 유재현 추가 atkBuff Skill Prefabs    
-    GameObject slashPrefab;            // 2024-04-14 유재현 추가 Slash1 Skill Prefabs    
+    GameObject holyArrowPrefab;         //  HolyArrow Skill Prefabs
+    GameObject holyPillarPrefab;        //  HolyPillar Skill Prefabs 
+    GameObject thunderPrefab;           //  Thunder Skill Prefabs
+    GameObject atkBuffPrefab;           //  atkBuff Skill Prefabs    
+    GameObject slashPrefab;            //  Slash1 Skill Prefabs    
     public int money;       // 플레이어 골드 보유량
     public bool isDead;     // 플레이어 사망 여부
 
@@ -72,6 +73,7 @@ public class Player : MonoBehaviour
     public void Start()
     {
         gm = GameManager.instance;
+        dm = DataManager.instance;
         dashSc = Dash.instance;
         hpBar = HpBar.instance;
         originalSpeed = moveSpeed;
@@ -345,12 +347,13 @@ public class Player : MonoBehaviour
     {
         animator.SetTrigger("isHit");
         curHp -= damage;
+        dm.playerData.curHpValue -= damage;     // 데이터 체력 변경
         hpBar.ChangeHp((int)curHp);
         isDead = true;
         if (curHp <= 0)
         {
             animator.SetTrigger("isDie");
-            StartCoroutine(gm.ShowDeadUI());        // 2024-04-13 유재현 추가 *******************************************
+            StartCoroutine(gm.ShowDeadUI());        
         }
     }
     IEnumerator BoostSpeedForDuration(float duration, float direction) // 새로 추가된 메소드
@@ -396,7 +399,7 @@ public class Player : MonoBehaviour
             StartCoroutine(SlashSkill());
         }
     }
-    public IEnumerator HolyArrowSkill() // HolyArrow 스킬 생성 함수 2024-04-13 유재현 추가
+    public IEnumerator HolyArrowSkill() // HolyArrow 스킬 생성 함수 
     {
         float direction = sr.flipX ? -3.5f : 3.5f;
         Vector3 spawnPosition = transform.position + new Vector3(direction, 0f, 0f);
@@ -415,7 +418,7 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(0);
     }
 
-    public IEnumerator HolyPillarSkill()    // HolyPillar 스킬 생성 함수 2024-04-13 유재현 추가
+    public IEnumerator HolyPillarSkill()    // HolyPillar 스킬 생성 함수 
     {
         float direction = sr.flipX ? -3.5f : 3.5f;
 
@@ -425,7 +428,7 @@ public class Player : MonoBehaviour
         Instantiate(holyPillarPrefab, spawnPosition, Quaternion.identity);
     }
 
-    public IEnumerator ThunderSkill()       // Thunder 스킬 생성 함수 2024-04-13 유재현 추가
+    public IEnumerator ThunderSkill()       // Thunder 스킬 생성 함수 
     {
         float direction = sr.flipX ? -3.5f : 3.5f;
         Vector3 spawnPosition = transform.position + new Vector3(direction, 0.4f, 0);
@@ -440,7 +443,7 @@ public class Player : MonoBehaviour
         }
     }
     
-    public IEnumerator AtkBuffSkill()      // AtkBuff 스킬 생성 함수 2024-04-14 유재현 추가
+    public IEnumerator AtkBuffSkill()      // AtkBuff 스킬 생성 함수 
     {
         float direction = sr.flipX ? 0.3f : -0.3f;
         Vector3 spawnPosition = transform.position + new Vector3(direction, 0, 0);
@@ -452,7 +455,7 @@ public class Player : MonoBehaviour
         power -= 20f;
     }
 
-    public IEnumerator SlashSkill()     // Slash 패시브 생성 함수 2024-04-14 유재현 추가
+    public IEnumerator SlashSkill()     // Slash 패시브 생성 함수 
     {
         float direction = sr.flipX ? 1f : -1f;
         Vector3 spawnPosition = transform.position + new Vector3(direction, -0.6f, 0);

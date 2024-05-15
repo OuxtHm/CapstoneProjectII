@@ -6,6 +6,7 @@ using TMPro;
 public abstract class Enemy : MonoBehaviour
 {
     public static Enemy Instance;
+    DataManager dm;
     Player player;
     Teleport teleport;
     EnemyHpBar enemyHpbar;
@@ -30,6 +31,7 @@ public abstract class Enemy : MonoBehaviour
     bool ishurt = false;    //피격 적용 확인
     bool isattack = false;  //공격 가능 확인
 
+
     [Header("일반 몬스터 능력치")]
     protected int enemy_Type; // 몬스터 종류에 따른 분류 번호 1: 일반 몬스터, 2: 공중 몬스터, 3: 충돌 몬스터
     public float enemy_MaxHP; //일반 몬스터 최대체력
@@ -38,6 +40,7 @@ public abstract class Enemy : MonoBehaviour
     public int enemy_Speed; //일반 몬스터 이동속도
     public float enemy_AttackSensor;  //일반 몬스터 플레이어 감지 범위
     public float enemy_frontSensor; //일반 몬스터 전방 감지 범위
+    public int enemyMoney;      // 몬스터 사망 시 플레이어에게 줄 돈 2024-05-15 유재현 추가
 
     private void Awake()
     {
@@ -48,6 +51,7 @@ public abstract class Enemy : MonoBehaviour
     private void Start()
     {
         player = Player.instance.GetComponent<Player>();
+        dm = DataManager.instance;
         teleport = Teleport.Instance.GetComponent<Teleport>();
         spriteRenderer = this.GetComponent<SpriteRenderer>();
         anim = this.GetComponent<Animator>();
@@ -328,6 +332,8 @@ public abstract class Enemy : MonoBehaviour
         anim.SetBool("Move", false);
         anim.SetTrigger("Die");
         this.gameObject.layer = LayerMask.NameToLayer("DieEnemy");
+        player.money += enemyMoney;
+        dm.playerData.money += enemyMoney;
         yield return new WaitForSeconds(1f);
         Destroy(gameObject);
     }

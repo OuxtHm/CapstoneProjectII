@@ -106,5 +106,5 @@ public class OptionUI : MonoBehaviour
         {
             SceneManager.LoadScene("MainScene");
         }
-    }
+    }    
 }

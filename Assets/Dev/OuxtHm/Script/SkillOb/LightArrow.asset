@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fca7c8178b52a1d4d850ef93f1495fa4, type: 3}
   m_Name: LightArrow
   m_EditorClassIdentifier: 
+  number: 2
   skillName: LightArrow
   description: "\uAC80\uC744 \uD718\uB450\uB974\uBA70 \uBE5B\uC758 \uD654\uC0B4\uC744
     \uC0DD\uC131\uD569\uB2C8\uB2E4."

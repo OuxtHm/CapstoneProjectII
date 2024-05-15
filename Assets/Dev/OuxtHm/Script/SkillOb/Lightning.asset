@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fca7c8178b52a1d4d850ef93f1495fa4, type: 3}
   m_Name: Lightning
   m_EditorClassIdentifier: 
+  number: 8
   skillName: Lightning
   description: "\uC804\uBC29\uC73C\uB85C \uBC88\uAC1C\uB97C \uC138 \uBC88 \uB0B4\uB824\uCE69\uB2C8\uB2E4."
   level: 010000000200000003000000

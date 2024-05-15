@@ -5,9 +5,11 @@ using UnityEngine;
 public class Teleport : MonoBehaviour
 {
     public static Teleport Instance;    // 04.28 박지우 추가
+    DataManager dm;     // 2024-05-14 유재현 추가
     public GameObject targetObj;
     public pade fadeScript; // 'pade'가 올바른 클래스 이름인지 확인하세요. 일반적으로 클래스 이름은 대문자로 시작합니다.
     public GameObject toObj;
+    GameObject keyX;
 
     Animator animator;
 
@@ -20,10 +22,9 @@ public class Teleport : MonoBehaviour
     }
     private void Start()
     {
+        dm = DataManager.instance;
         animator = GetComponent<Animator>();
     }
-
-    public GameObject keyX;
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -67,5 +68,6 @@ public class Teleport : MonoBehaviour
         targetObj.transform.position = toObj.transform.position;
         // 추가적인 대기 시간 없이 바로 페이드 아웃 시작
         isTelepo = false;   //04.28 박지우 추가
+        dm.SaveData();      // 텔레포트 시 세이브 2024-05-14 유재현 추가
     }
 }

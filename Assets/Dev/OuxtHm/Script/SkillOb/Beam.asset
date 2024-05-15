@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fca7c8178b52a1d4d850ef93f1495fa4, type: 3}
   m_Name: Beam
   m_EditorClassIdentifier: 
+  number: 7
   skillName: Beam
   description: "\uC804\uBC29\uC73C\uB85C \uBE5B\uC758 \uAE30\uB465\uC744 \uC18C\uD658\uD569\uB2C8\uB2E4."
   level: 010000000200000003000000

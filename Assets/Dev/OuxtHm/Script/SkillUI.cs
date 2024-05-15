@@ -6,9 +6,12 @@ using UnityEngine.UI;
 public class SkillUI : MonoBehaviour
 {
     public static SkillUI instance;
+    DataManager dm;
     public ChangeSkill change;
+    public SkillControler readySkill;
     public SkillControler nowSkill;
     public SkillControler nowUlt;
+    public Transform ult;
     public Image ultSkillCoolTime;      // 궁극기 스킬 쿨타임
     public Image basicSkillCoolTime;    // 기본 스킬 쿨타임
     public bool useUlt;
@@ -18,11 +21,13 @@ public class SkillUI : MonoBehaviour
         instance = this;
         ultSkillCoolTime = transform.GetChild(0).GetChild(1).GetComponent<Image>();
         basicSkillCoolTime = transform.GetChild(1).GetChild(1).GetChild(1).GetComponent<Image>();
+        ult = transform.GetChild(0).GetComponent<Transform>();
         useUlt = false;
         useBasic = false;
     }
     private void Start()
     {
+        dm = DataManager.instance;
         change = ChangeSkill.instance;
         GetSkillComponent();
         GetUltComponent();
@@ -36,54 +41,45 @@ public class SkillUI : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.D) && !useUlt)
         {
-            StartCoroutine(UltSkillUse(nowUlt.coolTime));
+            StartCoroutine(SkillUse(nowUlt.coolTime, ultSkillCoolTime, useUlt));
         }
         if (Input.GetKeyDown(KeyCode.E) && !useBasic)
         {
-            StartCoroutine(BasicSkillUse(nowSkill.coolTime));
+            StartCoroutine(SkillUse(nowSkill.coolTime, basicSkillCoolTime, useBasic));
         }
     }
 
-    public IEnumerator UltSkillUse(float duration)
+    public IEnumerator SkillUse(float duration, Image img, bool useSkill)
     {
-        Debug.Log(duration);
-        useUlt = true;
+        useSkill = true;
         float elapsedTime = 0f; // 경과 시간
-        ultSkillCoolTime.fillAmount = 1;
+        img.fillAmount = 1;
         while (elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
             float t = Mathf.Clamp01(elapsedTime / duration);
-            ultSkillCoolTime.fillAmount = Mathf.Lerp(1f, 0f, t);
+            img.fillAmount = Mathf.Lerp(1f, 0f, t);
             yield return null;
         }
 
-        ultSkillCoolTime.fillAmount = 0f;
-        useUlt = false;
+        img.fillAmount = 0f;
+        useSkill = false;
     }
 
-    public IEnumerator BasicSkillUse(float duration)
-    {
-        useBasic = true;
-        float elapsedTime = 0f; // 경과 시간
-        basicSkillCoolTime.fillAmount = 1;
-        while (elapsedTime < duration)
-        {
-            elapsedTime += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsedTime / duration);
-            basicSkillCoolTime.fillAmount = Mathf.Lerp(1f, 0f, t);
-            yield return null;
-        }
-
-        basicSkillCoolTime.fillAmount = 0f;
-        useBasic = false;
-    }
     public void GetSkillComponent()
     {
+        readySkill = change.readyskill.GetChild(0).GetComponent<SkillControler>();
         nowSkill = change.nowskill.GetChild(0).GetComponent<SkillControler>();
+
+        // 데이터 매니저에 스킬 저장
+        dm.skillData.readySkill = readySkill.num;
+        dm.skillData.nowSkill = nowSkill.num;
     }
     public void GetUltComponent()
     {
         nowUlt = transform.GetChild(0).GetComponentInChildren<SkillControler>();
+
+        // 데이터 매니저에 스킬 저장
+        dm.skillData.ultSkill = nowUlt.num;
     }
 }
