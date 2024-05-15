@@ -22,11 +22,11 @@ public abstract class Boss : MonoBehaviour
     public float playerLoc; // player의 X좌표
     public float bossLoc;  // boss의 X좌표
     public int atkPattern = 0; //boss 공격 패턴
-    int boss_OriginSpeed;   //몬스터의 이전 속도값 저장
     float distanceToTarget; //플레이어와 보스 사이의 거리
     public int turnPoint = 1;    // 벽에 닿을 시 이동 방법 변경 조건
     int countRange; //패턴 값 범위 조절
     int totalDamage;    // 최종 대미지값
+    float randomTime;
 
     [Header("보스 몬스터 능력치")]
     public int boss_stage;  //보스별 스테이지 구분
@@ -76,6 +76,7 @@ public abstract class Boss : MonoBehaviour
         Invoke("MoveOn",2f);
         atkPattern = 0;
         distanceToTarget = 0;
+        randomTime = 10;
     }
 
     public virtual void BossUpdate(Transform target)  // boss용 Update문
@@ -89,14 +90,11 @@ public abstract class Boss : MonoBehaviour
 
     public void bossMove()  // boss의 움직이도록 하는 함수
     {
-        if (Input.GetKeyDown(KeyCode.V))
-            anim.SetTrigger("Hurt");
-        //StartCoroutine(Hurt(this.transform, 10));
         if (boss_stage == 1)   //벽에 닿을 시 플레이어쪽으로 이동
         {
             if (bossMoving && !isdie && !ishurt)
             {
-                if(turnPoint == 1)
+                if (turnPoint == 1)
                 {
                     gameObject.transform.Translate(new Vector2(-DirX, 0) * Time.deltaTime * boss_Speed);
                     if (DirX == 1)
@@ -104,7 +102,7 @@ public abstract class Boss : MonoBehaviour
                     else
                         spriteRenderer.flipX = false;
                 }
-                else if(turnPoint == -1)
+                else if (turnPoint == -1)
                     gameObject.transform.Translate(new Vector2(DirX, 0) * Time.deltaTime * boss_Speed);
 
                 anim.SetBool("Move", true);
@@ -114,7 +112,7 @@ public abstract class Boss : MonoBehaviour
                 anim.SetBool("Move", false);
             }
         }
-        else if(boss_stage == 2)
+        else if (boss_stage == 2)
         {
             if (bossMoving && !isdie && !ishurt)
             {
@@ -130,17 +128,12 @@ public abstract class Boss : MonoBehaviour
                 }
             }
         }
-        else if(boss_stage == 3)
+        else if (boss_stage == 3)
         {
-            if (bossMoving &&!isdie && !ishurt)
+            if (bossMoving && !isdie && !ishurt)
             {
-                anim.SetBool("Move", true);
-                if (DirX == 1)
-                    spriteRenderer.flipX = false;
-                else
-                    spriteRenderer.flipX = true;
-
                 gameObject.transform.Translate(new Vector2(DirX, 0) * Time.deltaTime * boss_Speed);
+                anim.SetBool("Move", true);
             }
             else
                 anim.SetBool("Move", false);
@@ -268,6 +261,16 @@ public abstract class Boss : MonoBehaviour
                         atkPattern = 0;
                         break;
                 }
+
+                //3stage 파이어볼트 일정 시간마다 실행
+                if (randomTime <= 0)
+                {
+                    randomTime = Random.Range(10, 41);
+                    Demon_FireBolt();
+                    Debug.Log("파이어볼트 실행");
+                }
+                else
+                    randomTime -= Time.deltaTime;
             }
         }
     }
@@ -292,8 +295,11 @@ public abstract class Boss : MonoBehaviour
     public void randomAtk() // 공격 패턴 랜덤으로 정하기
     {
         atkPattern = Random.Range(1, countRange);    // 2 ~ (countRange - 1) 사이의 숫자 랜덤값을 받음
-        if (boss_stage != 2)    //보스와 플레이어의 거리가 4만큼 이내에 있으면 근접 공격 확정
+        if (boss_stage == 1)    //보스와 플레이어의 거리가 4만큼 이내에 있으면 근접 공격 확정
             if(DirX == 1 && (playerLoc - bossLoc) <= 5f || (DirX == -1 && (playerLoc - bossLoc) >= -5f))
+                atkPattern = -1;
+        if(boss_stage == 3)
+            if (DirX == 1 && (playerLoc - bossLoc) <= 7f || (DirX == -1 && (playerLoc - bossLoc) >= -7f))
                 atkPattern = -1;
         if (!isdie && boss_CurHP > boss_MaxHP / 2)  // 1페이즈와 2페이즈의 패턴 실행 시간이 다름
         {
@@ -305,7 +311,6 @@ public abstract class Boss : MonoBehaviour
             Invoke("randomAtk", 4f);
             countRange = 5;
         }
-            
     }
 
     void Ranger_Arrowattack()   //1stage 활 쏘는 공격
@@ -430,10 +435,10 @@ public abstract class Boss : MonoBehaviour
         FBPb.dir = DirX;
         FBPb.DelTime = 1.5f;
         FBPb.movecheck = 0;
+        FBPb.playerpos = player.transform;
 
         Vector2 Spownpos = new Vector2(this.transform.position.x, this.PbSpawn.position.y + 1);
         GameObject FireBarrier = Instantiate(FireBarrierPb, Spownpos, transform.rotation);
-
         Invoke("MoveOn", 3f);
     }
 
@@ -444,13 +449,13 @@ public abstract class Boss : MonoBehaviour
         FTPb.dir = DirX;
         FTPb.DelTime = 2f;
         FTPb.movecheck = 2;
-        FTPb.speed = 2;
+        FTPb.speed = 13;
         FTPb.playerpos = player.transform;
 
-        Vector2 Spownpos = new Vector2(this.transform.position.x, this.transform.position.y + 3);
-        GameObject FireBolt = Instantiate(FireBoltPb, Spownpos, transform.rotation);
-
-        Invoke("MoveOn", 3f);
+        Vector2 Spownpos1 = new Vector2(this.transform.position.x - 2, this.transform.position.y + 3);
+        Vector2 Spownpos2 = new Vector2(this.transform.position.x + 2, this.transform.position.y + 3);
+        GameObject FireBolt1 = Instantiate(FireBoltPb, Spownpos1, transform.rotation);
+        GameObject FireBolt2 = Instantiate(FireBoltPb, Spownpos2, transform.rotation);
     }
 
 
@@ -462,14 +467,9 @@ public abstract class Boss : MonoBehaviour
         {
             ishurt = true;
             boss_CurHP = boss_CurHP - Damage;
-            anim.SetBool("Move", false);
             //StartCoroutine(bossHpBar.FrontHpUpdate());      // 2024-04-10 유재현 추가
             //bossHpBar.anim.SetTrigger("Damage");
             StartCoroutine(Blink());
-
-            if (boss_Speed > 0)
-                boss_OriginSpeed = boss_Speed;
-            boss_Speed = 0;
 
             if (boss_CurHP <= 0)
             {
@@ -479,7 +479,6 @@ public abstract class Boss : MonoBehaviour
                 //bossHpBar.anim.SetTrigger("Remove");
                 StartCoroutine(Die());
             }
-            Invoke("OriginSpeed", 0.3f);
         }
         ishurt = false;
     }
@@ -508,12 +507,6 @@ public abstract class Boss : MonoBehaviour
         if(!isdie)
             bossMoving = true;
     }
-    void OriginSpeed()  //몬스터 원래 이동속도로 변경하는 함수
-    {
-        boss_Speed = boss_OriginSpeed;
-    }
-
-
 
     public abstract void BossInitSetting(); // 적의 기본 정보를 설정하는 함수(추상)
 }
