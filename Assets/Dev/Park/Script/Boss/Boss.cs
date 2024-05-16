@@ -53,6 +53,11 @@ public abstract class Boss : MonoBehaviour
     [Header("3스테이지 보스 프리펩")]
     public GameObject FireBarrierPb;  //3 스테이지 보스 불꽃 배리어 프리펩
     public GameObject FireBoltPb;  //3 스테이지 보스 파이어볼트 프리펩
+
+    /*[Header("보스 보상")]
+    public GameObject coinPrefab; // 코인 프리팹 참조를 위한 변수
+    public GameObject potionPrefab; // 포션 프리팹 참조를 위한 변수
+    public GameObject skillItemPrefab; // 스킬 아이템 프리팹 참조를 위한 변수*/
     private void Awake()
     {
         Instance = this;
