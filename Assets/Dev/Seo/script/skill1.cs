@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class skill1 : MonoBehaviour
 {
+    public SkillScriptable skillInfo;
     public float damage = 30;
     Enemy enemy;
     Boss boss;

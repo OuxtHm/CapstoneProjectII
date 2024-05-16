@@ -5,15 +5,17 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     //private bool canChangeDirDuringDash = true;
-    [SerializeField] float jumpforce = 500f;   
+    [SerializeField] float jumpforce = 500f;
+    //public float knockbackForce = 5f; // 넉백 힘
+    //public float knockbackDuration = 0.2f;
     //private float healingDuration = 5.0f;
     float moveX;
     public int JumpCount = 2;
     public bool isGround = false;
     public static Player instance;
     GameManager gm;
-    Enemy enemy;
-    Boss boss;
+    //Enemy enemy;
+    //Boss boss;
     Dash dashSc;
     HpBar hpBar;
     public Hitbox hitbox;
@@ -28,6 +30,7 @@ public class Player : MonoBehaviour
     public GameObject hitboxPrefab;
     public GameObject effect1;
     public GameObject effect2;
+    public GameObject effect3;
     public bool isHealingActive = false;
     public bool isAttacking = false;
     public bool move;
@@ -41,8 +44,6 @@ public class Player : MonoBehaviour
     public float groundCheckRadius = 0.2f;//점프
     private int currentJumpCount;//점프
     public LayerMask whatIsGround;//점프
-    //점프
-    GameObject hitboxClone;//공격
     //public float knockbackStrength = 500f;//피격
     GameObject holyArrowPrefab;         // 2024-04-13 유재현 추가 HolyArrow Skill Prefabs
     GameObject holyPillarPrefab;        // 2024-04-13 유재현 추가 HolyPillar Skill Prefabs 
@@ -175,7 +176,7 @@ public class Player : MonoBehaviour
             transform.Translate(movement);
         }
 
-        IEnumerator ShowHitboxForDuration(float duration)
+        IEnumerator ShowHitboxForDuration(float duration)//평타
         {
             isAttacking = true;
             animator.SetTrigger("isAttack");
@@ -213,68 +214,18 @@ public class Player : MonoBehaviour
             StartCoroutine(ShowEffect1ForDuration(1.0f));
         }
 
-        IEnumerator ShowEffect1ForDuration(float duration)
-        {
-            isAttacking = true;
-            animator.SetTrigger("isSkill1");
-            Vector3 direction = lastHorizontalInput < 0 ? Vector3.left : Vector3.right;
-            Vector3 spawnPosition = transform.position + direction * 2.0f;
-
-            if (lastHorizontalInput < 0)
-            {
-                effect1.transform.localScale = new Vector3(-Mathf.Abs(effect1.transform.localScale.x), effect1.transform.localScale.y, effect1.transform.localScale.z);
-            }           
-            else if (lastHorizontalInput > 0)
-            {
-                effect1.transform.localScale = new Vector3(Mathf.Abs(effect1.transform.localScale.x), effect1.transform.localScale.y, effect1.transform.localScale.z);
-            }
-            effect1.transform.position = spawnPosition;
-            effect1.SetActive(true);
-
-            yield return new WaitForSeconds(duration);
-            effect1.SetActive(false);
-            isAttacking = false;
-        }
+        
 
         if (Input.GetKey(KeyCode.D) && !isAttacking)//스킬2
         {
             StartCoroutine(ShowEffect2ForDuration(1.0f));
         }
 
-        IEnumerator ShowEffect2ForDuration(float duration)
-        {
-            isAttacking = true;
-            animator.SetTrigger("isSkill2");
-            Vector3 direction = lastHorizontalInput < 0 ? Vector3.left : Vector3.right;
-            Vector3 spawnPosition = transform.position + direction * 2.0f;
-
-            effect2.transform.position = spawnPosition;
-            effect2.SetActive(true);
-
-            if (lastHorizontalInput < 0)
-            {
-                effect2.transform.localScale = new Vector3(-Mathf.Abs(effect2.transform.localScale.x), effect2.transform.localScale.y, effect2.transform.localScale.z);
-            }
-            else if (lastHorizontalInput > 0)
-            {
-                effect2.transform.localScale = new Vector3(Mathf.Abs(effect2.transform.localScale.x), effect2.transform.localScale.y, effect2.transform.localScale.z);
-            }
-
-            float elapsedTime = 0;
-            while (elapsedTime < duration)
-            {
-                effect2.transform.position += direction * Time.deltaTime * 10.0f; 
-                elapsedTime += Time.deltaTime;
-                yield return null;
-            }
-
-            effect2.SetActive(false);
-            isAttacking = false;
-        }
+       
 
         if (Input.GetKey(KeyCode.Alpha6) && !isAttacking)//스킬3
         {
-            StartCoroutine(BoostSpeedForDuration(boostDuration, lastHorizontalInput));
+            StartCoroutine(BoostSpeedForDurationskill(boostDuration, lastHorizontalInput));
             animator.SetTrigger("isSkill3");
             gameObject.layer = LayerMask.NameToLayer("Enemy");
         }
@@ -299,6 +250,15 @@ public class Player : MonoBehaviour
             //canChangeDirDuringDash = false;
         }
 
+        /*if (effect3.gameObject.activeSelf)
+        {
+            Debug.Log("effect3 오브젝트가 활성화되어 있습니다.");
+        }
+        else
+        {
+            Debug.Log("effect3 오브젝트가 비활성화되어 있습니다.");
+        }*/
+
         IEnumerator BoostSpeedForDuration(float duration, float direction)
         {
             if (!isBoosted)
@@ -312,7 +272,16 @@ public class Player : MonoBehaviour
                 float elapsedTime = 0;
                 while (elapsedTime < duration)
                 {
- 
+                    // 대쉬 중 충돌 체크
+                    RaycastHit2D wallHit = Physics2D.Raycast(transform.position, dashDirection, dashDistance, LayerMask.GetMask("Wall"));
+                    RaycastHit2D groundHit = Physics2D.Raycast(transform.position, Vector2.down, 1f, LayerMask.GetMask("Ground"));
+
+                    if (wallHit.collider != null || groundHit.collider != null)
+                    {
+                        // 벽이나 바닥에 부딪히면 대쉬 중지
+                        transform.position = wallHit.collider != null ? wallHit.point : groundHit.point;
+                        break;
+                    }
 
                     transform.position = Vector3.Lerp(startPosition, endPosition, (elapsedTime / duration));
                     elapsedTime += Time.deltaTime;
@@ -320,12 +289,9 @@ public class Player : MonoBehaviour
                 }
 
                 gameObject.layer = LayerMask.NameToLayer("Player");
-       
-               
                 isBoosted = false;
-                //canChangeDirDuringDash = true;
             }
-        }     
+        }
     }
     public void Movement()
     {
@@ -341,36 +307,142 @@ public class Player : MonoBehaviour
 
         rb.velocity = new Vector2(moveX, rb.velocity.y);
     }
+    /*private IEnumerator Knockback(Vector3 direction)
+    {
+        float elapsedTime = 0f;
+        while (elapsedTime < knockbackDuration)
+        {
+            transform.Translate(-direction * knockbackForce * Time.deltaTime);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+    }*/
     public void Playerhurt(int damage)//피격
     {
         animator.SetTrigger("isHit");
         curHp -= damage;
+        gameObject.layer = LayerMask.NameToLayer("Enemy");
+        StartCoroutine(ChangeLayerToPlayer());
         hpBar.ChangeHp((int)curHp);
+
+       /* Vector3 knockbackDirection = (transform.position - damageSource.transform.position).normalized;
+        StartCoroutine(Knockback(knockbackDirection));*/
 
         if (curHp <= 0)
         {
             animator.SetTrigger("isDie");
+            gameObject.layer = LayerMask.NameToLayer("Enemy");
             StartCoroutine(gm.ShowDeadUI());        // 2024-04-13 유재현 추가 *******************************************
-        }
+        }     
     }
-    IEnumerator BoostSpeedForDuration(float duration, float direction) // 새로 추가된 메소드
+    private IEnumerator ChangeLayerToPlayer()
+    {
+        yield return new WaitForSeconds(1f);
+        gameObject.layer = LayerMask.NameToLayer("Player");
+    }
+    IEnumerator ShowEffect1ForDuration(float duration)//스킬1
+    {
+        isAttacking = true;
+        animator.SetTrigger("isSkill1");
+        Vector3 direction = lastHorizontalInput < 0 ? Vector3.left : Vector3.right;
+        Vector3 spawnPosition = transform.position + direction * 2.0f;
+
+        if (lastHorizontalInput < 0)
+        {
+            effect1.transform.localScale = new Vector3(-Mathf.Abs(effect1.transform.localScale.x), effect1.transform.localScale.y, effect1.transform.localScale.z);
+        }
+        else if (lastHorizontalInput > 0)
+        {
+            effect1.transform.localScale = new Vector3(Mathf.Abs(effect1.transform.localScale.x), effect1.transform.localScale.y, effect1.transform.localScale.z);
+        }
+        effect1.transform.position = spawnPosition;
+        effect1.SetActive(true);
+
+        yield return new WaitForSeconds(duration);
+        effect1.SetActive(false);
+        isAttacking = false;
+    }
+    IEnumerator ShowEffect2ForDuration(float duration)//스킬2
+    {
+        isAttacking = true;
+        animator.SetTrigger("isSkill2");
+        Vector3 direction = lastHorizontalInput < 0 ? Vector3.left : Vector3.right;
+        Vector3 spawnPosition = transform.position + direction * 2.0f;
+
+        effect2.transform.position = spawnPosition;
+        effect2.SetActive(true);
+
+        if (lastHorizontalInput < 0)
+        {
+            effect2.transform.localScale = new Vector3(-Mathf.Abs(effect2.transform.localScale.x), effect2.transform.localScale.y, effect2.transform.localScale.z);
+        }
+        else if (lastHorizontalInput > 0)
+        {
+            effect2.transform.localScale = new Vector3(Mathf.Abs(effect2.transform.localScale.x), effect2.transform.localScale.y, effect2.transform.localScale.z);
+        }
+
+        float elapsedTime = 0;
+        while (elapsedTime < duration)
+        {
+            effect2.transform.position += direction * Time.deltaTime * 10.0f;
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        effect2.SetActive(false);
+        isAttacking = false;
+    }
+    IEnumerator BoostSpeedForDurationskill(float duration, float direction)//스킬3
     {
         if (!isBoosted)
         {
             isBoosted = true;
-            moveSpeed = boostedSpeed; // 이동 속도를 증가시킴
+            moveSpeed = boostedSpeed;
 
-            StartDash();
+            // 대쉬 기능 추가
+            float dashDistance = 5f; // 대쉬할 거리
+            Vector2 dashDirection = new Vector2(direction, 0f).normalized; // 대쉬 방향
+            Vector3 startPosition = transform.position; // 시작 위치
+            Vector3 endPosition = startPosition + new Vector3(dashDirection.x, dashDirection.y, 0) * dashDistance; // 목표 위치
 
-            Vector2 dashDirection = new Vector2(direction, 0f); // 대쉬 방향 설정
-            rb.velocity = dashDirection.normalized * boostedSpeed;
+            float elapsedTime = 0;
+            while (elapsedTime < duration)
+            {
+                // 대쉬 중 충돌 체크
+                RaycastHit2D wallHit = Physics2D.Raycast(transform.position, dashDirection, dashDistance, LayerMask.GetMask("Wall"));
+                RaycastHit2D groundHit = Physics2D.Raycast(transform.position, Vector2.down, 1f, LayerMask.GetMask("Ground"));
 
-            yield return new WaitForSeconds(duration);
+                if (wallHit.collider != null || groundHit.collider != null)
+                {
+                    // 벽이나 바닥에 부딪히면 대쉬 중지
+                    transform.position = wallHit.collider != null ? wallHit.point : groundHit.point;
+                    break;
+                }
 
-            moveSpeed = originalSpeed;
+                transform.position = Vector3.Lerp(startPosition, endPosition, (elapsedTime / duration));
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
+            // effect3 오브젝트 활성화
+            effect3.gameObject.SetActive(true);
+            effect3.transform.position = transform.position;
+
+            float effect3Duration = 0.5f; // effect3의 지속시간을 1초로 설정
+            float effect3ElapsedTime = 0;
+            while (effect3ElapsedTime < effect3Duration)
+            {
+                effect3ElapsedTime += Time.deltaTime;
+                effect3.transform.position = transform.position; // effect3 오브젝트 위치 업데이트
+                yield return null;
+            }
+
+            // effect3 오브젝트 비활성화
+            effect3.gameObject.SetActive(false);
+
+            // 부스트 상태 초기화
             isBoosted = false;
-
-            EndDash();
+            moveSpeed = originalSpeed;
         }
     }
     void TestSkill()
@@ -398,10 +470,11 @@ public class Player : MonoBehaviour
     }
     public IEnumerator HolyArrowSkill() // HolyArrow 스킬 생성 함수 2024-04-13 유재현 추가
     {
+        isAttacking = true;
         float direction = sr.flipX ? -3.5f : 3.5f;
         Vector3 spawnPosition = transform.position + new Vector3(direction, 0f, 0f);
 
-        animator.SetTrigger("isAttack");
+        animator.SetTrigger("isArrow");
         yield return new WaitForSeconds(0.5f); 
 
         for (int i = 0; i < 2; i++)
@@ -413,31 +486,36 @@ public class Player : MonoBehaviour
             }
         }
         yield return new WaitForSeconds(0);
+        isAttacking = false;
     }
 
     public IEnumerator HolyPillarSkill()    // HolyPillar 스킬 생성 함수 2024-04-13 유재현 추가
     {
+        isAttacking = true;
         float direction = sr.flipX ? -3.5f : 3.5f;
 
         Vector3 spawnPosition = this.transform.position + new Vector3(direction, 1.5f, 0f);
-        animator.SetTrigger("isAttack");
+        animator.SetTrigger("isPillar");
         yield return new WaitForSeconds(0.5f);
         Instantiate(holyPillarPrefab, spawnPosition, Quaternion.identity);
+        isAttacking = false;
     }
 
     public IEnumerator ThunderSkill()       // Thunder 스킬 생성 함수 2024-04-13 유재현 추가
     {
+        isAttacking = true;
         float direction = sr.flipX ? -3.5f : 3.5f;
         Vector3 spawnPosition = transform.position + new Vector3(direction, 0.4f, 0);
         Vector3 addPosition = new Vector3(direction, 0, 0);
 
-        animator.SetTrigger("isAttack");
+        animator.SetTrigger("isThunder");
 
         for (int i = 0; i < 3; i++)
         {
             Instantiate(thunderPrefab, spawnPosition + (addPosition * i), Quaternion.identity);
             yield return new WaitForSeconds(0.1f);
         }
+        isAttacking = false;
     }
     
     public IEnumerator AtkBuffSkill()      // AtkBuff 스킬 생성 함수 2024-04-14 유재현 추가
@@ -453,7 +531,7 @@ public class Player : MonoBehaviour
     }
 
     public IEnumerator SlashSkill()     // Slash 패시브 생성 함수 2024-04-14 유재현 추가
-    {
+    {    
         float direction = sr.flipX ? 1f : -1f;
         Vector3 spawnPosition = transform.position + new Vector3(direction, -0.6f, 0);
         animator.SetTrigger("isAttack");
@@ -465,6 +543,6 @@ public class Player : MonoBehaviour
         direction = sr.flipX ? 0.3f : -0.3f;
         slash.transform.position = new Vector2(direction, 0.8f);
         yield return new WaitForSeconds(0.3f);
-        Destroy(slash);
+        Destroy(slash);       
     }
 }

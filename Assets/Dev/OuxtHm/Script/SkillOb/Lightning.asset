@@ -17,3 +17,4 @@ MonoBehaviour:
   level: 010000000200000003000000
   coolTime: 30
   price: 1000
+  coefficient: 1.25

@@ -10,4 +10,6 @@ public class SkillScriptable : ScriptableObject
     public int[] level =  {1, 2, 3};
     public float coolTime;
     public int price;
+    public float coefficient;
 }
+ 
