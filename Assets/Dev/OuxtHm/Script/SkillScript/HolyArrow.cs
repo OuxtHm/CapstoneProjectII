@@ -29,11 +29,31 @@ public class HolyArrow : MonoBehaviour
 
     public IEnumerator MoveProjectile()
     {
-        float startTime = Time.time; 
+        float startTime = Time.time;
         while (Time.time - startTime < duration)
         {
             transform.Translate(new Vector2(direction, 0) * speed * Time.deltaTime);
-            yield return null; 
+
+            // 적과 보스에게 데미지 주기
+            if (capsuleCollider.IsTouchingLayers(LayerMask.GetMask("Enemy")))
+            {
+                enemy = capsuleCollider.GetComponent<Enemy>();
+                if (enemy != null)
+                {
+                    StartCoroutine(enemy.Hurt(this.transform, arrowDamage));
+                }
+            }
+
+            if (capsuleCollider.IsTouchingLayers(LayerMask.GetMask("Boss")))
+            {
+                boss = capsuleCollider.GetComponent<Boss>();
+                if (boss != null)
+                {
+                    StartCoroutine(boss.Hurt(this.transform, arrowDamage));
+                }
+            }
+
+            yield return null;
         }
 
         Destroy(this.gameObject);

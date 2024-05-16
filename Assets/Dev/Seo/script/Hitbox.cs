@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Hitbox : MonoBehaviour
-{   
+{
+    public SkillScriptable skillInfo;
     public float damage = 10;
     Enemy enemy;
     Boss boss;
