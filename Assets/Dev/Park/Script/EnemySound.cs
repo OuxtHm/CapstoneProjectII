@@ -46,7 +46,11 @@ public class EnemySound : MonoBehaviour
     public AudioClip mushroom_Die;
     public AudioClip plant_Shot;
     public AudioClip plant_Slash;
+    public AudioClip demon_Move1;
+    public AudioClip demon_Move2;
     public AudioClip demon_Attack;
+    public AudioClip demon_FireBarrier;
+    public AudioClip demon_FireBolt;
     public AudioClip demon_Die;
 
 
@@ -196,13 +200,29 @@ public class EnemySound : MonoBehaviour
     {
         Sounds("plant_Slash");
     }
+    public void Demon_Move1()
+    {
+        Sounds("demon_Move1");
+    }
+    public void Demon_Move2()
+    {
+        Sounds("demon_Move2");
+    }
     public void Demon_Attack()
     {
         Sounds("demon_Attack");
     }
+    public void Demon_FireBarrier()
+    {
+        Sounds("demon_FireBarrier");
+    }
+    public void Demon_FireBolt()
+    {
+        Sounds("demon_FireBolt");
+    }
     public void Demon_Die()
     {
-        Sounds("demon_Attack");
+        Sounds("demon_Die");
     }
 
     public void Sounds(string sounds)
@@ -311,11 +331,23 @@ public class EnemySound : MonoBehaviour
             case "plant_Slash":
                 audioSource.clip = plant_Slash;
                 break;
+            case "demon_Move1":
+                audioSource.clip = demon_Move1;
+                break;
+            case "demon_Move2":
+                audioSource.clip = demon_Move2;
+                break;
             case "demon_Attack":
                 audioSource.clip = demon_Attack;
                 break;
+            case "demon_FireBarrier":
+                audioSource.clip = demon_FireBarrier;
+                break;
+            case "demon_FireBolt":
+                audioSource.clip = demon_FireBolt;
+                break;
             case "demon_Die":
-                audioSource.clip = demon_Attack;
+                audioSource.clip = demon_Die;
                 break;
         }
 

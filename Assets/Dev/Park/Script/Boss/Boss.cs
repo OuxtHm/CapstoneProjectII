@@ -167,8 +167,6 @@ public abstract class Boss : MonoBehaviour
             }
             if(boss_stage == 1)
             {
-                if (atkPattern == 1)
-                    atkPattern = Random.Range(2, countRange);
                 switch (atkPattern)
                 {
                     case -1: //1은 근접공격 고정으로 가까울 때만 실행
@@ -179,7 +177,7 @@ public abstract class Boss : MonoBehaviour
                         atkPattern = 0;
                         break;
 
-                    case 2:
+                    case 1:
                         bossMoving = false;
                         anim.SetTrigger("Attack");
                         anim.SetFloat("Attackpatten", 2);
@@ -187,7 +185,7 @@ public abstract class Boss : MonoBehaviour
                         atkPattern = 0;
                         break;
 
-                    case 3:
+                    case 2:
                         bossMoving = false;
                         anim.SetTrigger("Attack");
                         anim.SetFloat("Attackpatten", 3);
@@ -195,7 +193,7 @@ public abstract class Boss : MonoBehaviour
                         atkPattern = 0;
                         break;
 
-                    case 4:
+                    case 3:
                         bossMoving = false;
                         anim.SetTrigger("Attack");
                         anim.SetFloat("Attackpatten", 4);
@@ -242,21 +240,24 @@ public abstract class Boss : MonoBehaviour
                     case -1:
                         bossMoving = false;
                         anim.SetTrigger("Attack");
-                        Invoke("MoveOn", 5f);
+                        anim.SetFloat("Attackpatten", 1);
+                        Invoke("MoveOn", 3f);
                         totalDamage = boss_OnePattenPower;
                         atkPattern = 0;
                         break;
-                    case 2:
-                        //bossMoving = false;
-                        //atkPattern = 0;
+                    case 1:
+                        bossMoving = false;
+                        anim.SetTrigger("Attack");
+                        anim.SetFloat("Attackpatten", 2);
+                        atkPattern = 0;
                         break;
 
-                    case 3:
+                    case 2:
                         //bossMoving = false;
                         atkPattern = 0;
                         break;
 
-                    case 4:
+                    case 3:
                         //bossMoving = false;
                         atkPattern = 0;
                         break;
@@ -294,23 +295,14 @@ public abstract class Boss : MonoBehaviour
     
     public void randomAtk() // 공격 패턴 랜덤으로 정하기
     {
-        atkPattern = Random.Range(1, countRange);    // 2 ~ (countRange - 1) 사이의 숫자 랜덤값을 받음
+        atkPattern = Random.Range(1, 4);    // 1 ~ 3 사이의 숫자 랜덤값을 받음
         if (boss_stage == 1)    //보스와 플레이어의 거리가 4만큼 이내에 있으면 근접 공격 확정
             if(DirX == 1 && (playerLoc - bossLoc) <= 5f || (DirX == -1 && (playerLoc - bossLoc) >= -5f))
                 atkPattern = -1;
         if(boss_stage == 3)
             if (DirX == 1 && (playerLoc - bossLoc) <= 7f || (DirX == -1 && (playerLoc - bossLoc) >= -7f))
-                atkPattern = -1;
-        if (!isdie && boss_CurHP > boss_MaxHP / 2)  // 1페이즈와 2페이즈의 패턴 실행 시간이 다름
-        {
-            Invoke("randomAtk", 5f);
-            countRange = 4;
-        }  
-        else
-        {
-            Invoke("randomAtk", 4f);
-            countRange = 5;
-        }
+                atkPattern = (Random.Range(0, 2) == 0) ? -1 : 1;
+        Invoke("randomAtk", 4f);
     }
 
     void Ranger_Arrowattack()   //1stage 활 쏘는 공격
@@ -439,14 +431,17 @@ public abstract class Boss : MonoBehaviour
 
         Vector2 Spownpos = new Vector2(this.transform.position.x, this.PbSpawn.position.y + 1);
         GameObject FireBarrier = Instantiate(FireBarrierPb, Spownpos, transform.rotation);
-        Invoke("MoveOn", 3f);
+        Invoke("MoveOn", 4f);
     }
 
     void Demon_FireBolt()   //3stage 파이어볼트 생성
     {
         EffectPb FTPb = FireBoltPb.GetComponent<EffectPb>();
+        if(playerLoc < bossLoc)
+            FTPb.dir = -DirX;
+        else
+            FTPb.dir = DirX;
         FTPb.Power = boss_ThreePattenPower;
-        FTPb.dir = DirX;
         FTPb.DelTime = 2f;
         FTPb.movecheck = 2;
         FTPb.speed = 13;
