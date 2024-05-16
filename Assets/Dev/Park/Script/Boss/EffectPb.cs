@@ -6,7 +6,9 @@ public class EffectPb : MonoBehaviour
 {
     SpriteRenderer spriteRenderer;
     Transform pos;
+    public Transform playerpos;
     Vector3 moveDirection = Vector3.right;  //나가는 방향
+    Vector3 target;
 
     public float DelTime;   //제거되는 시간
     public int Power;   // 투사체 대미지
@@ -30,14 +32,18 @@ public class EffectPb : MonoBehaviour
             spriteRenderer.flipX = true;
             moveDirection = Vector3.left;
         }
-
         pos = transform;
+        target = (playerpos.position - transform.position).normalized;  // 목표 지점 방향 벡터
         DestoryObject();
     }
     public void Update()
     {
         if (movecheck == 1)
             pos.position += moveDirection * speed * Time.deltaTime;
+        if(movecheck == 2)
+        {
+            transform.Translate(target * speed * Time.deltaTime);  // 이동
+        }
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -45,6 +51,8 @@ public class EffectPb : MonoBehaviour
         {
             Player player = collision.GetComponent<Player>();
             player.Playerhurt(Power);
+            if (movecheck == 2)
+                Destroy(gameObject);
         }
     }
     public void DestoryObject()

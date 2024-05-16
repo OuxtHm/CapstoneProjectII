@@ -28,8 +28,8 @@ public class EnemySound : MonoBehaviour
     public AudioClip bat_Die;
     public AudioClip golem_Attack;
     public AudioClip golem_Die;
-    public AudioClip skeleton_Attack;
-    public AudioClip skeleton_Die;
+    public AudioClip skeleton2s_Attack;
+    public AudioClip skeleton2s_Die;
     public AudioClip ramses_Move;
     public AudioClip knight_Attack1;
     public AudioClip knight_Attack2;
@@ -37,7 +37,22 @@ public class EnemySound : MonoBehaviour
     public AudioClip knight_Light;
 
 
-    //[Header("3스테이지")]
+    [Header("3스테이지")]
+    public AudioClip priest_Punch;
+    public AudioClip priest_Rock;
+    public AudioClip skeleton3s_Attack;
+    public AudioClip skeleton3s_Die;
+    public AudioClip flyeye_Die;
+    public AudioClip mushroom_Die;
+    public AudioClip plant_Shot;
+    public AudioClip plant_Slash;
+    public AudioClip demon_Move1;
+    public AudioClip demon_Move2;
+    public AudioClip demon_Attack;
+    public AudioClip demon_FireBarrier;
+    public AudioClip demon_FireBolt;
+    public AudioClip demon_Die;
+
 
     private void Awake()
     {
@@ -123,13 +138,13 @@ public class EnemySound : MonoBehaviour
     {
         Sounds("golem_Die");
     }
-    public void Skeleton_Attack()
+    public void Skeleton2s_Attack()
     {
-        Sounds("skeleton_Attack");
+        Sounds("skeleton2_Attack");
     }
-    public void Skeleton_Die()
+    public void Skeleton2s_Die()
     {
-        Sounds("skeleton_Die");
+        Sounds("skeleton2_Die");
     }
     public void Ramses_Move()
     {
@@ -152,6 +167,63 @@ public class EnemySound : MonoBehaviour
         Sounds("knight_Light");
     }
 
+    //3스테이지
+    public void Priest_PunchAttack()
+    {
+        Sounds("priest_Punch");
+    }
+    public void Priest_RockAttack()
+    {
+        Sounds("priest_Rock");
+    }
+    public void Skeleton3s_Attack()
+    {
+        Sounds("skeleton3s_Attack");
+    }
+    public void Skeleton3s_Die()
+    {
+        Sounds("skeleton3s_Die");
+    }
+    public void FlyEye_Die()
+    {
+        Sounds("flyeye_Die");
+    }
+    public void Mushroom_Die()
+    {
+        Sounds("mushroom_Die");
+    }
+    public void ShotPlant_Attack()
+    {
+        Sounds("plant_Shot");
+    }
+    public void SlashPlant_Attack()
+    {
+        Sounds("plant_Slash");
+    }
+    public void Demon_Move1()
+    {
+        Sounds("demon_Move1");
+    }
+    public void Demon_Move2()
+    {
+        Sounds("demon_Move2");
+    }
+    public void Demon_Attack()
+    {
+        Sounds("demon_Attack");
+    }
+    public void Demon_FireBarrier()
+    {
+        Sounds("demon_FireBarrier");
+    }
+    public void Demon_FireBolt()
+    {
+        Sounds("demon_FireBolt");
+    }
+    public void Demon_Die()
+    {
+        Sounds("demon_Die");
+    }
 
     public void Sounds(string sounds)
     {
@@ -214,11 +286,11 @@ public class EnemySound : MonoBehaviour
             case "golem_Die":
                 audioSource.clip = golem_Die;
                 break;
-            case "skeleton_Attack":
-                audioSource.clip = skeleton_Attack;
+            case "skeleton2s_Attack":
+                audioSource.clip = skeleton2s_Attack;
                 break;
-            case "skeleton_Die":
-                audioSource.clip = skeleton_Die;
+            case "skeleton2s_Die":
+                audioSource.clip = skeleton2s_Die;
                 break;
             case "ramses_Move":
                 audioSource.clip = ramses_Move;
@@ -234,6 +306,48 @@ public class EnemySound : MonoBehaviour
                 break;
             case "knight_Light":
                 audioSource.clip = knight_Light;
+                break;
+            case "priest_Punch":    //3스테이지
+                audioSource.clip = priest_Punch;
+                break;
+            case "priest_Rock":
+                audioSource.clip = priest_Rock;
+                break;
+            case "skeleton3s_Attack":
+                audioSource.clip = skeleton3s_Attack;
+                break;
+            case "skeleton3s_Die":
+                audioSource.clip = skeleton3s_Die;
+                break;
+            case "flyeye_Die":
+                audioSource.clip = flyeye_Die;
+                break;
+            case "mushroom_Die":
+                audioSource.clip = mushroom_Die;
+                break;
+            case "plant_Shot":
+                audioSource.clip = plant_Shot;
+                break;
+            case "plant_Slash":
+                audioSource.clip = plant_Slash;
+                break;
+            case "demon_Move1":
+                audioSource.clip = demon_Move1;
+                break;
+            case "demon_Move2":
+                audioSource.clip = demon_Move2;
+                break;
+            case "demon_Attack":
+                audioSource.clip = demon_Attack;
+                break;
+            case "demon_FireBarrier":
+                audioSource.clip = demon_FireBarrier;
+                break;
+            case "demon_FireBolt":
+                audioSource.clip = demon_FireBolt;
+                break;
+            case "demon_Die":
+                audioSource.clip = demon_Die;
                 break;
         }
 

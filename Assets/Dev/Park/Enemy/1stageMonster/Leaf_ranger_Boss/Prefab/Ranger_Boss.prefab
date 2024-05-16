@@ -283,9 +283,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 30
+  MaxDistance: 12
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -384,7 +384,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8da4a43c0562b544bfad80e29e53c83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ishurt: 0
+  bossMoving: 0
   playerLoc: 0
   bossLoc: 0
   atkPattern: 0
@@ -404,6 +404,7 @@ MonoBehaviour:
   LaserPb: {fileID: 4219622765080268290, guid: 8fdb73a49103fcf40935053c6388ee9a, type: 3}
   WarringPb: {fileID: 3388303051624161897, guid: bf2da110c1a05fa4b8e5b253bfb3d6d3, type: 3}
   SwordEffectPb: {fileID: 0}
+  FireEffectPb: {fileID: 0}
 --- !u!114 &7120413284695932354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -432,3 +433,24 @@ MonoBehaviour:
   ranger_Arrow: {fileID: 8300000, guid: 7716ed06519a9574eb68684642eca840, type: 3}
   ranger_ArrowRain: {fileID: 8300000, guid: c5eb89b7197c2054e9bfe0d5f078fa9f, type: 3}
   ranger_SpAttack: {fileID: 8300000, guid: c129389820ae3244b95d85e0cfd53fe8, type: 3}
+  frog_Attack2: {fileID: 0}
+  bat_Die: {fileID: 0}
+  golem_Attack: {fileID: 0}
+  golem_Die: {fileID: 0}
+  skeleton2s_Attack: {fileID: 0}
+  skeleton2s_Die: {fileID: 0}
+  ramses_Move: {fileID: 0}
+  knight_Attack1: {fileID: 0}
+  knight_Attack2: {fileID: 0}
+  knight_After: {fileID: 0}
+  knight_Light: {fileID: 0}
+  priest_Punch: {fileID: 0}
+  priest_Rock: {fileID: 0}
+  skeleton3s_Attack: {fileID: 0}
+  skeleton3s_Die: {fileID: 0}
+  flyeye_Die: {fileID: 0}
+  mushroom_Die: {fileID: 0}
+  plant_Shot: {fileID: 0}
+  plant_Slash: {fileID: 0}
+  demon_Attack: {fileID: 0}
+  demon_Die: {fileID: 0}

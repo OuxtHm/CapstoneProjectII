@@ -19,11 +19,13 @@ public abstract class Enemy : MonoBehaviour
     RaycastHit2D rayHitAtk; // 공격 범위 센서
     RaycastHit2D rayHitfront;   //벽 감지 센서
 
-    public GameObject ExplosionPb; //개구리 몬스터 독안개 프리펩
+    public GameObject ExplosionPb; //2stage 개구리 몬스터 독안개 프리펩
+    public GameObject RockPb;  //3stage 프리스트 공격 이펙트 프리펩
+    public GameObject SeedPb;   //3stage 식물 씨앗공격 프리펩
 
     int DirX;   //몬스터가 바라보는 방향값
     int enemy_OriginSpeed;  //몬스터의 원래 속도
-    int Exdir;  //투사체 방향값
+    int PBdir;  //투사체 방향값
     float detectionRange = 7f;  //몬스터의 타겟 인식 범위
     float distanceToTarget; // 몬스터와 타겟 사이의 거리
     public bool istracking = false;    // 추적 가능 여부
@@ -33,7 +35,7 @@ public abstract class Enemy : MonoBehaviour
 
 
     [Header("일반 몬스터 능력치")]
-    protected int enemy_Type; // 몬스터 종류에 따른 분류 번호 1: 일반 몬스터, 2: 공중 몬스터, 3: 충돌 몬스터
+    protected int enemy_Type; // 몬스터 종류에 따른 분류 번호 1: 일반 몬스터, 2: 공중 몬스터, 3: 충돌 몬스터, 4: 고정 몬스터
     public float enemy_MaxHP; //일반 몬스터 최대체력
     public float enemy_CurHP; //일반 몬스터 현재체력
     public int enemy_Power; //일반 몬스터 공격력
@@ -64,6 +66,8 @@ public abstract class Enemy : MonoBehaviour
     {
         TargetSensor(target);
         Sensor();
+        if (Input.GetKeyDown(KeyCode.V))
+            StartCoroutine(Hurt(this.transform, 10));
     }
 
     void TargetSensor(Transform target)  // 플레이어 추적
@@ -81,7 +85,7 @@ public abstract class Enemy : MonoBehaviour
 
         if (teleport.isTelepo == false) //플레이어가 포탈을 사용중일시 이동 제어
         {
-            if (distanceToTarget <= detectionRange && !ishurt && !isdie && enemy_Type != 2) //공중 몬스터 이외의 몬스터가 타겟이 범위 안에 있을 때 수행
+            if (distanceToTarget <= detectionRange && !ishurt && !isdie && enemy_Type == 1 || enemy_Type == 3) //공중 몬스터 이외의 몬스터가 타겟이 범위 안에 있을 때 수행
             {
                 istracking = true;
                 if (rayHit.collider != null && istracking && !isattack)
@@ -91,14 +95,14 @@ public abstract class Enemy : MonoBehaviour
                     if (direction.x >= 0)   // 타겟이 오른쪽에 있을 때
                     {
                         DirX = 1;
-                        Exdir = 1;
+                        PBdir = 1;
                         spriteRenderer.flipX = false;
                         AttackBox.position = new Vector2(transform.position.x + 1, transform.position.y);
                     }
                     else
                     {
                         DirX = -1;
-                        Exdir = -1;
+                        PBdir = -1;
                         spriteRenderer.flipX = true;
                         AttackBox.position = new Vector2(transform.position.x - 1, transform.position.y);
                     }
@@ -152,6 +156,27 @@ public abstract class Enemy : MonoBehaviour
                 istracking = false;
                 Move();
             }
+            else if(enemy_Type == 4)
+            {
+                if (direction.x >= 0)   // 타겟이 오른쪽에 있을 때
+                {
+                    DirX = 1;
+                    spriteRenderer.flipX = false;
+                    AttackBox.position = new Vector2(transform.position.x + 1.5f, transform.position.y);
+                }
+                else
+                {
+                    DirX = -1;
+                    spriteRenderer.flipX = true;
+                    AttackBox.position = new Vector2(transform.position.x - 1.5f, transform.position.y);
+                }
+
+                if (rayHitAtk.collider != null && !isattack)
+                {
+                    if (player.curHp > 0)
+                        StartCoroutine(Attack());
+                }
+            }
         }
     }
 
@@ -182,7 +207,7 @@ public abstract class Enemy : MonoBehaviour
     
     public void Move()  //몬스터 기본 이동 동작
     {
-        if (teleport.isTelepo == false)
+        if (teleport.isTelepo == false && enemy_Type != 4)
         {
             if (DirX != 0 && !isdie && !ishurt && !isattack && !istracking)
             {
@@ -278,18 +303,41 @@ public abstract class Enemy : MonoBehaviour
         this.gameObject.transform.GetChild(0).GetComponent<BoxCollider2D>().enabled = false;
         isattack = false;
     }
-
-    void FrogExplosion() //개구리 몬스터 투사체 패턴 - 애니메이션에서 실행됨
+    void FrogExplosion() //개구리 몬스터 투사체 패턴
     {
         ExplosionPb ExPb = ExplosionPb.GetComponent<ExplosionPb>();
         ExPb.Power = 10;
         ExPb.Speed = 4;
-        ExPb.Dir = Exdir;
+        ExPb.Dir = PBdir;
         ExPb.DelTime = 2f;
 
         GameObject Explosion = Instantiate(ExplosionPb, AttackBox.position, AttackBox.rotation);
     }
 
+    void PriestRock()  // 3stage 프리스트 공격 이펙트
+    {
+        EffectPb RkPb = RockPb.GetComponent<EffectPb>();
+        RkPb.Power = 10;
+        RkPb.dir = PBdir;
+        RkPb.DelTime = 0.7f;
+        RkPb.playerpos = player.transform;
+        Vector2 Pbpos = new Vector2(AttackBox.position.x + (DirX * 2.5f), AttackBox.position.y - 1.4f);
+
+        GameObject Rock = Instantiate(RockPb, Pbpos, AttackBox.rotation);
+    }
+
+    void PlantSeed()    //3stage 식물 씨앗 투사체 이펙트
+    {
+        EffectPb SEPb = SeedPb.GetComponent<EffectPb>();
+        SEPb.movecheck = 1;
+        SEPb.Power = 10;
+        SEPb.speed = 7;
+        SEPb.dir = DirX;
+        SEPb.DelTime = 1f;
+        SEPb.playerpos = player.transform;
+
+        GameObject Seed = Instantiate(SeedPb, AttackBox.position, AttackBox.rotation);
+    }
 
     public IEnumerator Hurt(Transform target, float damage)  //플레이어에게 피격 받았을 때 실행
     {

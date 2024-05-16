@@ -15,18 +15,18 @@ public abstract class Boss : MonoBehaviour
     Transform AttackBox;    // 근접 공격 범위 오브젝트
     BoxCollider2D BoxCollider2DSize;    //Attackbox 오브젝트의 boxcollider2D
 
-    public bool ishurt = false;
-    bool bossMoving = true;
+    bool ishurt = false;
+    public bool bossMoving = false;
     bool isdie = false;
     int DirX;   //몬스터가 바라보는 방향값
     public float playerLoc; // player의 X좌표
     public float bossLoc;  // boss의 X좌표
     public int atkPattern = 0; //boss 공격 패턴
-    int boss_OriginSpeed;   //몬스터의 이전 속도값 저장
     float distanceToTarget; //플레이어와 보스 사이의 거리
     public int turnPoint = 1;    // 벽에 닿을 시 이동 방법 변경 조건
     int countRange; //패턴 값 범위 조절
     int totalDamage;    // 최종 대미지값
+    float randomTime;
 
     [Header("보스 몬스터 능력치")]
     public int boss_stage;  //보스별 스테이지 구분
@@ -50,6 +50,9 @@ public abstract class Boss : MonoBehaviour
     public GameObject SwordEffectPb; // 2스테이지 보스 가로베기 프리펩
     public GameObject FireEffectPb; // 2스테이지 보스 파이어볼 프리펩
 
+    [Header("3스테이지 보스 프리펩")]
+    public GameObject FireBarrierPb;  //3 스테이지 보스 불꽃 배리어 프리펩
+    public GameObject FireBoltPb;  //3 스테이지 보스 파이어볼트 프리펩
     private void Awake()
     {
         Instance = this;
@@ -65,6 +68,15 @@ public abstract class Boss : MonoBehaviour
         PbSpawn = this.gameObject.transform.GetChild(1).GetComponent<Transform>();
         rigid = this.GetComponent<Rigidbody2D>();
         randomAtk();
+        OneTime();
+    }
+
+    void OneTime()
+    {
+        Invoke("MoveOn",2f);
+        atkPattern = 0;
+        distanceToTarget = 0;
+        randomTime = 10;
     }
 
     public virtual void BossUpdate(Transform target)  // boss용 Update문
@@ -78,11 +90,11 @@ public abstract class Boss : MonoBehaviour
 
     public void bossMove()  // boss의 움직이도록 하는 함수
     {
-        if(boss_stage == 1)   //벽에 닿을 시 플레이어쪽으로 이동
+        if (boss_stage == 1)   //벽에 닿을 시 플레이어쪽으로 이동
         {
             if (bossMoving && !isdie && !ishurt)
             {
-                if(turnPoint == 1 && distanceToTarget <= 15f)
+                if (turnPoint == 1)
                 {
                     gameObject.transform.Translate(new Vector2(-DirX, 0) * Time.deltaTime * boss_Speed);
                     if (DirX == 1)
@@ -90,7 +102,7 @@ public abstract class Boss : MonoBehaviour
                     else
                         spriteRenderer.flipX = false;
                 }
-                else if(turnPoint == -1)
+                else if (turnPoint == -1)
                     gameObject.transform.Translate(new Vector2(DirX, 0) * Time.deltaTime * boss_Speed);
 
                 anim.SetBool("Move", true);
@@ -100,9 +112,9 @@ public abstract class Boss : MonoBehaviour
                 anim.SetBool("Move", false);
             }
         }
-        else if(boss_stage == 2)
+        else if (boss_stage == 2)
         {
-            if(bossMoving)
+            if (bossMoving && !isdie && !ishurt)
             {
                 if (playerLoc < bossLoc)
                 {
@@ -116,6 +128,16 @@ public abstract class Boss : MonoBehaviour
                 }
             }
         }
+        else if (boss_stage == 3)
+        {
+            if (bossMoving && !isdie && !ishurt)
+            {
+                gameObject.transform.Translate(new Vector2(DirX, 0) * Time.deltaTime * boss_Speed);
+                anim.SetBool("Move", true);
+            }
+            else
+                anim.SetBool("Move", false);
+        }
     }
     public void bossAttack()
     {
@@ -127,8 +149,10 @@ public abstract class Boss : MonoBehaviour
                 DirX = -1;
                 if(boss_stage == 1)
                     AttackBox.position = new Vector2(transform.position.x - 1.6f, transform.position.y);
-                else
+                else if(boss_stage == 2)
                     AttackBox.position = new Vector2(transform.position.x - 1.5f, transform.position.y);
+                else
+                    AttackBox.position = new Vector2(transform.position.x - 5f, transform.position.y - 1);
             }
             else if (playerLoc > bossLoc && !bossMoving)
             {
@@ -136,13 +160,13 @@ public abstract class Boss : MonoBehaviour
                 DirX = 1;
                 if (boss_stage == 1)
                     AttackBox.position = new Vector2(transform.position.x + 1.6f, transform.position.y);
-                else
+                else if (boss_stage == 2)
                     AttackBox.position = new Vector2(transform.position.x + 1.5f, transform.position.y);
+                else
+                    AttackBox.position = new Vector2(transform.position.x + 5f, transform.position.y - 1);
             }
             if(boss_stage == 1)
             {
-                if (atkPattern == 1)
-                    atkPattern = Random.Range(2, countRange);
                 switch (atkPattern)
                 {
                     case -1: //1은 근접공격 고정으로 가까울 때만 실행
@@ -153,7 +177,7 @@ public abstract class Boss : MonoBehaviour
                         atkPattern = 0;
                         break;
 
-                    case 2:
+                    case 1:
                         bossMoving = false;
                         anim.SetTrigger("Attack");
                         anim.SetFloat("Attackpatten", 2);
@@ -161,7 +185,7 @@ public abstract class Boss : MonoBehaviour
                         atkPattern = 0;
                         break;
 
-                    case 3:
+                    case 2:
                         bossMoving = false;
                         anim.SetTrigger("Attack");
                         anim.SetFloat("Attackpatten", 3);
@@ -169,7 +193,7 @@ public abstract class Boss : MonoBehaviour
                         atkPattern = 0;
                         break;
 
-                    case 4:
+                    case 3:
                         bossMoving = false;
                         anim.SetTrigger("Attack");
                         anim.SetFloat("Attackpatten", 4);
@@ -209,6 +233,46 @@ public abstract class Boss : MonoBehaviour
                         break;
                 }
             }
+            if (boss_stage == 3)
+            {
+                switch (atkPattern)
+                {
+                    case -1:
+                        bossMoving = false;
+                        anim.SetTrigger("Attack");
+                        anim.SetFloat("Attackpatten", 1);
+                        Invoke("MoveOn", 3f);
+                        totalDamage = boss_OnePattenPower;
+                        atkPattern = 0;
+                        break;
+                    case 1:
+                        bossMoving = false;
+                        anim.SetTrigger("Attack");
+                        anim.SetFloat("Attackpatten", 2);
+                        atkPattern = 0;
+                        break;
+
+                    case 2:
+                        //bossMoving = false;
+                        atkPattern = 0;
+                        break;
+
+                    case 3:
+                        //bossMoving = false;
+                        atkPattern = 0;
+                        break;
+                }
+
+                //3stage 파이어볼트 일정 시간마다 실행
+                if (randomTime <= 0)
+                {
+                    randomTime = Random.Range(10, 41);
+                    Demon_FireBolt();
+                    Debug.Log("파이어볼트 실행");
+                }
+                else
+                    randomTime -= Time.deltaTime;
+            }
         }
     }
     void OnCollisionEnter2D(Collision2D collision)
@@ -231,21 +295,14 @@ public abstract class Boss : MonoBehaviour
     
     public void randomAtk() // 공격 패턴 랜덤으로 정하기
     {
-        atkPattern = Random.Range(1, countRange);    // 2 ~ (countRange - 1) 사이의 숫자 랜덤값을 받음
+        atkPattern = Random.Range(1, 4);    // 1 ~ 3 사이의 숫자 랜덤값을 받음
         if (boss_stage == 1)    //보스와 플레이어의 거리가 4만큼 이내에 있으면 근접 공격 확정
-            if(DirX == 1 && (playerLoc - bossLoc) <= 4f || (DirX == -1 && (playerLoc - bossLoc) >= -4f))
+            if(DirX == 1 && (playerLoc - bossLoc) <= 5f || (DirX == -1 && (playerLoc - bossLoc) >= -5f))
                 atkPattern = -1;
-        if (!isdie && boss_CurHP > boss_MaxHP / 2)  // 1페이즈와 2페이즈의 패턴 실행 시간이 다름
-        {
-            Invoke("randomAtk", 5f);
-            countRange = 4;
-        }  
-        else
-        {
-            Invoke("randomAtk", 4f);
-            countRange = 5;
-        }
-            
+        if(boss_stage == 3)
+            if (DirX == 1 && (playerLoc - bossLoc) <= 7f || (DirX == -1 && (playerLoc - bossLoc) >= -7f))
+                atkPattern = (Random.Range(0, 2) == 0) ? -1 : 1;
+        Invoke("randomAtk", 4f);
     }
 
     void Ranger_Arrowattack()   //1stage 활 쏘는 공격
@@ -347,7 +404,7 @@ public abstract class Boss : MonoBehaviour
         GameObject effect = Instantiate(SwordEffectPb, Spownpos, PbSpawn.rotation);
         Invoke("MoveOn", 3.5f);
     }
-    IEnumerator Knight_LightAttack()
+    IEnumerator Knight_LightAttack()    //2stage 불꽃 투사체 공격
     {
         Vector2 Spownpos = new Vector2(this.transform.position.x + DirX, this.PbSpawn.position.y);
 
@@ -362,7 +419,42 @@ public abstract class Boss : MonoBehaviour
         GameObject effect = Instantiate(FireEffectPb, Spownpos, PbSpawn.rotation);
         Invoke("MoveOn", 3.5f);
     }
-    
+
+    void Demon_FireBarrier()   //3stage 불꽃 배리어 생성
+    {
+        EffectPb FBPb = FireBarrierPb.GetComponent<EffectPb>();
+        FBPb.Power = boss_TwoPattenPower;
+        FBPb.dir = DirX;
+        FBPb.DelTime = 1.5f;
+        FBPb.movecheck = 0;
+        FBPb.playerpos = player.transform;
+
+        Vector2 Spownpos = new Vector2(this.transform.position.x, this.PbSpawn.position.y + 1);
+        GameObject FireBarrier = Instantiate(FireBarrierPb, Spownpos, transform.rotation);
+        Invoke("MoveOn", 4f);
+    }
+
+    void Demon_FireBolt()   //3stage 파이어볼트 생성
+    {
+        EffectPb FTPb = FireBoltPb.GetComponent<EffectPb>();
+        if(playerLoc < bossLoc)
+            FTPb.dir = -DirX;
+        else
+            FTPb.dir = DirX;
+        FTPb.Power = boss_ThreePattenPower;
+        FTPb.DelTime = 2f;
+        FTPb.movecheck = 2;
+        FTPb.speed = 13;
+        FTPb.playerpos = player.transform;
+
+        Vector2 Spownpos1 = new Vector2(this.transform.position.x - 2, this.transform.position.y + 3);
+        Vector2 Spownpos2 = new Vector2(this.transform.position.x + 2, this.transform.position.y + 3);
+        GameObject FireBolt1 = Instantiate(FireBoltPb, Spownpos1, transform.rotation);
+        GameObject FireBolt2 = Instantiate(FireBoltPb, Spownpos2, transform.rotation);
+    }
+
+
+
     public IEnumerator Hurt(Transform target, float Damage)  //플레이어에게 피격 받았을 때 실행
     {
         yield return new WaitForSeconds(0);
@@ -370,15 +462,9 @@ public abstract class Boss : MonoBehaviour
         {
             ishurt = true;
             boss_CurHP = boss_CurHP - Damage;
-            anim.SetBool("Move", false);
-            anim.SetTrigger("Hurt");
             //StartCoroutine(bossHpBar.FrontHpUpdate());      // 2024-04-10 유재현 추가
             //bossHpBar.anim.SetTrigger("Damage");
             StartCoroutine(Blink());
-
-            if (boss_Speed > 0)
-                boss_OriginSpeed = boss_Speed;
-            boss_Speed = 0;
 
             if (boss_CurHP <= 0)
             {
@@ -388,7 +474,6 @@ public abstract class Boss : MonoBehaviour
                 //bossHpBar.anim.SetTrigger("Remove");
                 StartCoroutine(Die());
             }
-            Invoke("OriginSpeed", 0.3f);
         }
         ishurt = false;
     }
@@ -417,12 +502,6 @@ public abstract class Boss : MonoBehaviour
         if(!isdie)
             bossMoving = true;
     }
-    void OriginSpeed()  //몬스터 원래 이동속도로 변경하는 함수
-    {
-        boss_Speed = boss_OriginSpeed;
-    }
-
-
 
     public abstract void BossInitSetting(); // 적의 기본 정보를 설정하는 함수(추상)
 }
