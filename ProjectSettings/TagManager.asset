@@ -7,8 +7,8 @@ TagManager:
   - Enemy
   - Boss
   - projectile
-  - Wall
   - wall
+  - Item
   layers:
   - Default
   - TransparentFX
@@ -37,7 +37,7 @@ TagManager:
   - 
   - 
   - Wall
-  - 
+  - Item
   - 
   - 
   - 
