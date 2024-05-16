@@ -316,6 +316,7 @@ public abstract class Enemy : MonoBehaviour
         RkPb.Power = 10;
         RkPb.dir = PBdir;
         RkPb.DelTime = 0.7f;
+        RkPb.playerpos = player.transform;
         Vector2 Pbpos = new Vector2(AttackBox.position.x + (DirX * 2.5f), AttackBox.position.y - 1.4f);
 
         GameObject Rock = Instantiate(RockPb, Pbpos, AttackBox.rotation);
@@ -329,6 +330,7 @@ public abstract class Enemy : MonoBehaviour
         SEPb.speed = 7;
         SEPb.dir = DirX;
         SEPb.DelTime = 1f;
+        SEPb.playerpos = player.transform;
 
         GameObject Seed = Instantiate(SeedPb, AttackBox.position, AttackBox.rotation);
     }
