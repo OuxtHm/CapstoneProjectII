@@ -24,9 +24,9 @@ public abstract class Boss : MonoBehaviour
     public int atkPattern = 0; //boss 공격 패턴
     float distanceToTarget; //플레이어와 보스 사이의 거리
     public int turnPoint = 1;    // 벽에 닿을 시 이동 방법 변경 조건
-    int countRange; //패턴 값 범위 조절
     int totalDamage;    // 최종 대미지값
-    float randomTime;
+    float randomTime;   //파이어볼트 패턴 시간
+    float gatePos;
 
     [Header("보스 몬스터 능력치")]
     public int boss_stage;  //보스별 스테이지 구분
@@ -53,6 +53,9 @@ public abstract class Boss : MonoBehaviour
     [Header("3스테이지 보스 프리펩")]
     public GameObject FireBarrierPb;  //3 스테이지 보스 불꽃 배리어 프리펩
     public GameObject FireBoltPb;  //3 스테이지 보스 파이어볼트 프리펩
+    public GameObject FireGatePb;  //3 스테이지 보스 브레스게이트 프리펩
+    public GameObject FireBreathPb;  //3 스테이지 보스 파이어브레스 프리펩
+
 
     /*[Header("보스 보상")]
     public GameObject coinPrefab; // 코인 프리팹 참조를 위한 변수
@@ -148,7 +151,7 @@ public abstract class Boss : MonoBehaviour
     {
         if(!isdie)
         {
-            if (playerLoc < bossLoc && !bossMoving)
+            if (playerLoc < bossLoc && !bossMoving) //플레이어가 왼쪽에 있을 때
             {
                 spriteRenderer.flipX = true;
                 DirX = -1;
@@ -159,7 +162,7 @@ public abstract class Boss : MonoBehaviour
                 else
                     AttackBox.position = new Vector2(transform.position.x - 5f, transform.position.y - 1);
             }
-            else if (playerLoc > bossLoc && !bossMoving)
+            else if (playerLoc > bossLoc && !bossMoving) //플레이어가 오른쪽에 있을 때
             {
                 spriteRenderer.flipX = false;
                 DirX = 1;
@@ -230,12 +233,6 @@ public abstract class Boss : MonoBehaviour
                         anim.SetFloat("Attackpatten", 3);
                         atkPattern = 0;
                         break;
-
-                    case 4:
-                        //bossMoving = false;
-                        Debug.Log(atkPattern);
-                        atkPattern = 0;
-                        break;
                 }
             }
             if (boss_stage == 3)
@@ -258,7 +255,10 @@ public abstract class Boss : MonoBehaviour
                         break;
 
                     case 2:
-                        //bossMoving = false;
+                        bossMoving = false;
+                        anim.SetTrigger("Attack");
+                        anim.SetFloat("Attackpatten", 3);
+                        Invoke("MoveOn", 2f);
                         atkPattern = 0;
                         break;
 
@@ -456,6 +456,33 @@ public abstract class Boss : MonoBehaviour
         Vector2 Spownpos2 = new Vector2(this.transform.position.x + 2, this.transform.position.y + 3);
         GameObject FireBolt1 = Instantiate(FireBoltPb, Spownpos1, transform.rotation);
         GameObject FireBolt2 = Instantiate(FireBoltPb, Spownpos2, transform.rotation);
+    }
+    void Demon_BreathGate()   //3stage 불꽃 브레스 생성 게이트
+    {
+        EffectPb BGPb = FireGatePb.GetComponent<EffectPb>();
+        BGPb.dir = -DirX;
+        BGPb.DelTime = 2f;
+        BGPb.movecheck = 0;
+        BGPb.playerpos = player.transform;
+
+        Vector2 Spownpos = new Vector2(playerLoc + (DirX > 0 ? 5 : -5), this.transform.position.y - 1f);
+        GameObject FireBreath = Instantiate(FireGatePb, Spownpos, transform.rotation);
+        gatePos = playerLoc + (DirX > 0 ? 5 : -5);
+        Invoke("MoveOn", 3f);
+        Invoke("Demon_FireBreath", 1f);
+    }
+
+    void Demon_FireBreath()   //3stage 불꽃 브레스 생성
+    {
+        EffectPb FHPb = FireBreathPb.GetComponent<EffectPb>();
+        FHPb.Power = boss_FourPattenPower;
+        FHPb.dir = -DirX;
+        FHPb.DelTime = 1f;
+        FHPb.movecheck = 0;
+        FHPb.playerpos = player.transform;
+
+        Vector2 Spownpos = new Vector2(gatePos + (DirX > 0 ? -3 : 3), this.transform.position.y - 1f);
+        GameObject FireBreath = Instantiate(FireBreathPb, Spownpos, transform.rotation);
     }
 
 
