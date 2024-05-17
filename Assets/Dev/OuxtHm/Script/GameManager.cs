@@ -7,10 +7,6 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    /*[Header("연결된 스크립트")]
-    public SoundOption sound;
-    public SkillUI skillUi;
-    public ChangeSkill changeSkill;*/
 
     [Header("오브젝트")]
     public GameObject playerUi;        // 플레이어 관련 UI
@@ -30,13 +26,10 @@ public class GameManager : MonoBehaviour
         }
         else if (instance != this)
         {
-            Destroy(instance.gameObject);
+            Destroy(this.gameObject);
         }
+        SceneManager.sceneLoaded += FindOptionUiOpbject;        // 씬을 불러 올 때마다 실행이 되도록 함수 추가
         deadUiPrefab = Resources.Load<GameObject>("Prefabs/PlayerDead_canvas");
-
-        //StartCoroutine(FindPlayerUi());
-        StartCoroutine(FindOptionUiOpbject());
-        
     }
     void Update()
     {
@@ -45,7 +38,10 @@ public class GameManager : MonoBehaviour
             ShowOptionUI();
         }    
     }
-
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= FindOptionUiOpbject;       
+    }
     public void ShowOptionUI()
     {
         if (show)
@@ -67,59 +63,27 @@ public class GameManager : MonoBehaviour
         Instantiate(deadUiPrefab);
     }
 
-    private IEnumerator GetComponent()      // 인게임씬에서 옵션 UI에 속한 컴포넌트 얻는 코루틴
-    {
-        if(SceneManager.GetActiveScene().name != "MainScene")
-        {
-            btnArray = optionUI.transform.GetChild(0).GetChild(1).gameObject;
-            soundOption = optionUI.transform.GetChild(0).GetChild(2).gameObject;
-            optionUI.SetActive(false);
-        }
-        else
-        {
-            yield return null;
-            StartCoroutine(GetComponent());
-        }
-    }
 
-    public IEnumerator FindOptionUiOpbject()        // 옵션 UI 찾는 코루틴
+    public void FindOptionUiOpbject(Scene scene, LoadSceneMode mode)
     {
-        while(optionUI == null)
+        if (scene.name != "MainScene")
         {
             optionUI = GameObject.Find("Option_ui");
-            yield return null;
-        }
-        if(optionUI != null)
-        {
-            StartCoroutine(GetComponent());
+            if (optionUI != null) 
+            {
+                GetComponent();
+            }
+            else
+            {
+                Debug.LogError("Option_ui 오브젝트를 찾을 수 없습니다.");
+            }
         }
     }
 
-    /*public IEnumerator FindPlayerUi()       // 플레이어 UI 찾는 코루틴
+    private void GetComponent()      // 인게임씬에서 옵션 UI에 속한 컴포넌트 얻는 코루틴
     {
-        while(playerUi == null)
-        {
-            playerUi = GameObject.Find("Player_ui");
-            yield return null;
-        }
-        if(playerUi != null)
-        {
-            StartCoroutine(FIndPlayerUIScript());
-        }
-
+        btnArray = optionUI.transform.GetChild(0).GetChild(1).gameObject;
+        soundOption = optionUI.transform.GetChild(0).GetChild(2).gameObject;
+        optionUI.SetActive(false);
     }
-    public IEnumerator FIndPlayerUIScript()     // 인게임 씬에서 플레이어 UI에 속한 스크립트 찾는 코루틴
-    {
-        if (SceneManager.GetActiveScene().name != "MainScene")
-        {
-            sound = playerUi.GetComponentInChildren<SoundOption>();
-            skillUi = playerUi.GetComponentInChildren<SkillUI>();
-            changeSkill = playerUi.GetComponentInChildren<ChangeSkill>();
-        }
-        else
-        {
-            yield return null;
-            StartCoroutine(FIndPlayerUIScript());
-        }
-    }*/
 }

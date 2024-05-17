@@ -82,8 +82,9 @@ public class DataManager : MonoBehaviour
         }
         else if (instance != this)
         {
-            Destroy(instance.gameObject);
+            Destroy(this.gameObject);
         }
+        SceneManager.sceneLoaded += FindInstance;
 
         dataFolderPath = Path.Combine(Application.persistentDataPath + "/Resources");  // 유니티가 알아서 폴더 생성
         Directory.CreateDirectory(dataFolderPath);    // 디렉토리 생성
@@ -95,9 +96,7 @@ public class DataManager : MonoBehaviour
     {
         gm = GameManager.instance;
         sm = SoundManager.instance;
-        
-        StartCoroutine(FindPlayer());
-        StartCoroutine(FindInstance());
+
         if (!File.Exists(optionDataPath))
         {
             SaveOptionData();
@@ -110,36 +109,30 @@ public class DataManager : MonoBehaviour
         OptionLoad();
         StartCoroutine(FirstSaveFile());
     }
-    IEnumerator FindPlayer()
+
+    void FindInstance(Scene scene, LoadSceneMode mode)
     {
-        while(player == null)
+        if(scene.name != "MainScene")
         {
             player = Player.instance;
-            yield return null;
-        }
-    }
-    IEnumerator FindInstance()
-    {
-        while (skillM == null)
-        {
             skillM = SkillManager.instance;
             skillUi = SkillUI.instance;
-            yield return null;
         }
+    }
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= FindInstance;
     }
     public void SaveData()      // 플레이어 및 스킬 데이터 저장 함수
     {
         Debug.Log("데이터 저장 시작");
-        if (!player.isDead)
-        {
-            string pData = JsonUtility.ToJson(playerData, true);     // 플레이어 데이터 세이브
-            string sData = JsonUtility.ToJson(skillData, true);     // 스킬 데이터 세이브
+        string pData = JsonUtility.ToJson(playerData, true);     // 플레이어 데이터 세이브
+        string sData = JsonUtility.ToJson(skillData, true);     // 스킬 데이터 세이브
 
-            // Json 파일 쓰기
-            File.WriteAllText(playerDataPath, pData);
-            File.WriteAllText(skillDataPath, sData);
-            Debug.Log("저장 완료");
-        }
+        // Json 파일 쓰기
+        File.WriteAllText(playerDataPath, pData);
+        File.WriteAllText(skillDataPath, sData);
+        Debug.Log("저장 완료");
     }
 
     public void SaveOptionData()    // 옵션 데이터 저장 함수

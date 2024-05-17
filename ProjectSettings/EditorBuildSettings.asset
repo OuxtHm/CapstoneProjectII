@@ -14,7 +14,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Dev/Park/Scenes/Merge_7.unity
     guid: 938393c281038014cbfde77720c753c9
-  - enabled: 0
+  - enabled: 1
     path: Assets/Dev/OuxtHm/Scenes/Merge_7.unity
     guid: 937e15feb43d2cc4595e861e5a3af81c
   - enabled: 0
