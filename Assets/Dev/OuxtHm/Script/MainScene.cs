@@ -21,8 +21,8 @@ public class MainScene : MonoBehaviour
         {
             btn[i] = transform.GetChild(0).GetChild(0).GetChild(i).GetComponent<Button>();
         }
-        btn[0].onClick.AddListener(() => StartCoroutine(ClickNewGameBtn()));
-        btn[1].onClick.AddListener(() => ClickContinueBtn());
+        btn[0].onClick.AddListener(() => StartCoroutine(ClickGameStartBtn()));
+        btn[1].onClick.AddListener(() => StartCoroutine(ClickGameStartBtn()));
         btn[2].onClick.AddListener(() => ClickOptionBtn());
         btn[3].onClick.AddListener(() => ClickGameOverBtn());
     }
@@ -32,16 +32,11 @@ public class MainScene : MonoBehaviour
         savePath = dm.playerDataPath;
         FileExistence(SceneManager.GetActiveScene(), LoadSceneMode.Single);
     }
-    IEnumerator ClickNewGameBtn()
+    IEnumerator ClickGameStartBtn()
     {
         GameObject fade = Instantiate(fadePrefab);
         yield return new WaitForSeconds(1f);
         SceneManager.LoadScene("Merge_7");
-    }
-
-    void ClickContinueBtn()
-    {
-        Debug.Log("이어하기");
     }
 
     void ClickOptionBtn()

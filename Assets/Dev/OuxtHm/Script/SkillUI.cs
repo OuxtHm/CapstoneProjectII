@@ -19,8 +19,8 @@ public class SkillUI : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        ultSkillCoolTime = transform.GetChild(0).GetChild(1).GetComponent<Image>();
-        basicSkillCoolTime = transform.GetChild(1).GetChild(1).GetChild(1).GetComponent<Image>();
+        ultSkillCoolTime = transform.GetChild(0).GetChild(0).GetComponent<Image>();
+        basicSkillCoolTime = transform.GetChild(1).GetChild(1).GetChild(0).GetComponent<Image>();
         ult = transform.GetChild(0).GetComponent<Transform>();
         useUlt = false;
         useBasic = false;
@@ -29,8 +29,8 @@ public class SkillUI : MonoBehaviour
     {
         dm = DataManager.instance;
         change = ChangeSkill.instance;
-        GetSkillComponent();
-        GetUltComponent();
+        /*GetSkillComponent();
+        GetUltComponent();*/
     }
     void Update()
     {

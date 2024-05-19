@@ -69,14 +69,7 @@ public class GameManager : MonoBehaviour
         if (scene.name != "MainScene")
         {
             optionUI = GameObject.Find("Option_ui");
-            if (optionUI != null) 
-            {
-                GetComponent();
-            }
-            else
-            {
-                Debug.LogError("Option_ui 오브젝트를 찾을 수 없습니다.");
-            }
+            GetComponent();
         }
     }
 

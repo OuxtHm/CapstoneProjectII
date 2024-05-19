@@ -11,6 +11,8 @@ public class PlayerData
     public float atk;               // 공격력
     public int money;               // 돈
     public Vector2 nowPosition;     // 현재 위치
+    public int nowStage;            // 현재 스테이지
+    public int nowStageLV;          // 현재 스테이지 레벨
 }
 
 public class OptionData
@@ -162,14 +164,17 @@ public class DataManager : MonoBehaviour
 
     public IEnumerator LoadData()
     {
+        Debug.Log(" 데이터 불러오기");
         if (SceneManager.GetActiveScene().name != "MainScene")
         {
+            // 플레이어 정보 불러오기
             player.maxHp = playerData.maxHpValue;
             player.curHp = playerData.curHpValue;
             player.power = playerData.atk;
             player.money = playerData.money;
             player.transform.position = playerData.nowPosition;
 
+            // 스킬 정보 불러오기
             skillM.commonSkillNum[0] = skillData.readySkill;
             skillM.commonSkillNum[1] = skillData.nowSkill;
             skillM.ultSkillNum = skillData.ultSkill;
@@ -178,9 +183,17 @@ public class DataManager : MonoBehaviour
             //-----------------------------------------------
             // 스킬 데이터 -1 값이 없어서 현재 오류 발생 중
             //-----------------------------------------------
+            
+            // 스킬 아이콘 생성
             skillM.CreateSkill(skillM.commonSkillNum[0], skillUi.change.readyskill);
             skillM.CreateSkill(skillM.commonSkillNum[1], skillUi.change.nowskill);
             skillM.CreateSkill(skillM.ultSkillNum, skillUi.ult);
+
+            // 스킬 아이콘 컴포넌트 받기
+            skillUi.GetSkillComponent();
+            skillUi.GetUltComponent();
+            skillUi.change.ImageGetComponent();
+
         }
         else
         {
