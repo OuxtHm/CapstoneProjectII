@@ -13,7 +13,8 @@ public class GameManager : MonoBehaviour
     public GameObject optionUI;     // 옵션 창
     public GameObject btnArray;
     public GameObject soundOption;
-    public GameObject deadUiPrefab;
+    public GameObject deadUiPrefab;     // 플레이어 사망 UI
+    public GameObject fadeInPrefab;     // Fade In  UI
 
     [Header("변수")]
     public bool show;
@@ -30,6 +31,7 @@ public class GameManager : MonoBehaviour
         }
         SceneManager.sceneLoaded += FindOptionUiOpbject;        // 씬을 불러 올 때마다 실행이 되도록 함수 추가
         deadUiPrefab = Resources.Load<GameObject>("Prefabs/PlayerDead_canvas");
+        fadeInPrefab = Resources.Load<GameObject>("Prefabs/FadeIn_canvas");
     }
     void Update()
     {
@@ -66,6 +68,8 @@ public class GameManager : MonoBehaviour
 
     public void FindOptionUiOpbject(Scene scene, LoadSceneMode mode)
     {
+        StartCoroutine(CreateFadeIn());
+
         if (scene.name != "MainScene")
         {
             optionUI = GameObject.Find("Option_ui");
@@ -78,5 +82,11 @@ public class GameManager : MonoBehaviour
         btnArray = optionUI.transform.GetChild(0).GetChild(1).gameObject;
         soundOption = optionUI.transform.GetChild(0).GetChild(2).gameObject;
         optionUI.SetActive(false);
+    }
+    IEnumerator CreateFadeIn()
+    {
+        GameObject fadeIn = Instantiate(fadeInPrefab);
+        yield return new WaitForSeconds(0.7f);
+        Destroy(fadeIn);
     }
 }
