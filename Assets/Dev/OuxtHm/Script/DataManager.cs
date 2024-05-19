@@ -85,6 +85,7 @@ public class DataManager : MonoBehaviour
             Destroy(this.gameObject);
         }
         SceneManager.sceneLoaded += FindInstance;
+        SceneManager.sceneLoaded += PlayerLoad;
 
         dataFolderPath = Path.Combine(Application.persistentDataPath + "/Resources");  // 유니티가 알아서 폴더 생성
         Directory.CreateDirectory(dataFolderPath);    // 디렉토리 생성
@@ -97,17 +98,16 @@ public class DataManager : MonoBehaviour
         gm = GameManager.instance;
         sm = SoundManager.instance;
 
-        if (!File.Exists(optionDataPath))
+        if (!File.Exists(optionDataPath))       // 옵션 데이터가 없다면 생성
         {
             SaveOptionData();
         }
-        if(!File.Exists(playerDataPath))
+        if(!File.Exists(playerDataPath))        // 플레이 데이터가 없다면 생성
         {
             SaveData();
         }
-        PlayerLoad();
-        OptionLoad();
-        StartCoroutine(FirstSaveFile());
+        OptionLoad();       // 옵션 데이터 불러오기
+        //StartCoroutine(FirstSaveFile());
     }
 
     void FindInstance(Scene scene, LoadSceneMode mode)
@@ -122,6 +122,7 @@ public class DataManager : MonoBehaviour
     private void OnDestroy()
     {
         SceneManager.sceneLoaded -= FindInstance;
+        SceneManager.sceneLoaded -= PlayerLoad;
     }
     public void SaveData()      // 플레이어 및 스킬 데이터 저장 함수
     {
@@ -144,16 +145,19 @@ public class DataManager : MonoBehaviour
         Debug.Log("옵션 데이터 저장 완료");
     }
     
-    public void PlayerLoad()    // 인게임씬에서 플레이어 데이터 로드하는 함수
+    public void PlayerLoad(Scene scene, LoadSceneMode mode)    // 인게임씬에서 플레이어 데이터 로드하는 함수
     {
-        Debug.Log("플레이어 데이터 및 스킬 데이터 로드 중....");
-        string playData = File.ReadAllText(playerDataPath);
-        string skData = File.ReadAllText(skillDataPath);
+        if (scene.name != "MainScene" && File.Exists(playerDataPath))
+        {
+            Debug.Log("플레이어 데이터 및 스킬 데이터 로드 중....");
+            string playData = File.ReadAllText(playerDataPath);
+            string skData = File.ReadAllText(skillDataPath);
 
-        playerData = JsonUtility.FromJson<PlayerData>(playData);
-        skillData = JsonUtility.FromJson<SkillData>(skData);
+            playerData = JsonUtility.FromJson<PlayerData>(playData);
+            skillData = JsonUtility.FromJson<SkillData>(skData);
 
-        StartCoroutine(LoadData());
+            StartCoroutine(LoadData());
+        }
     }
 
     public IEnumerator LoadData()
@@ -170,6 +174,10 @@ public class DataManager : MonoBehaviour
             skillM.commonSkillNum[1] = skillData.nowSkill;
             skillM.ultSkillNum = skillData.ultSkill;
 
+            yield return null;
+            //-----------------------------------------------
+            // 스킬 데이터 -1 값이 없어서 현재 오류 발생 중
+            //-----------------------------------------------
             skillM.CreateSkill(skillM.commonSkillNum[0], skillUi.change.readyskill);
             skillM.CreateSkill(skillM.commonSkillNum[1], skillUi.change.nowskill);
             skillM.CreateSkill(skillM.ultSkillNum, skillUi.ult);
@@ -197,7 +205,7 @@ public class DataManager : MonoBehaviour
         sm.BGMVolume(optionData.bgmValue);
         sm.SFXVolume(optionData.sfxValue);
     }
-    public IEnumerator FirstSaveFile()
+    /*public IEnumerator FirstSaveFile()
     {
         if(SceneManager.GetActiveScene().name != "MainScene")
         {
@@ -208,6 +216,21 @@ public class DataManager : MonoBehaviour
             yield return null;
             StartCoroutine(FirstSaveFile());
         }
+    }*/
+    public void NewGame()       // 새 게임 버튼 클릭시 실행하는 함수
+    {
+        Debug.Log("데이터 파일 삭제");
+        File.Delete(playerDataPath);
+        File.Delete(skillDataPath);
+        Debug.Log(playerDataPath);
+        string pData = JsonUtility.ToJson(playerData, true);     // 플레이어 데이터 세이브
+        string sData = JsonUtility.ToJson(skillData, true);     // 스킬 데이터 세이브
+
+        // Json 파일 쓰기
+        File.WriteAllText(playerDataPath, pData);
+        File.WriteAllText(skillDataPath, sData);
+        Debug.Log("새 게임");
+        //SceneManager.LoadScene("V7_Dev");
     }
 
 }

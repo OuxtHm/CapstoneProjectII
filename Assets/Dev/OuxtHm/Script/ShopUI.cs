@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class ShopUI : MonoBehaviour
 {
+    public static ShopUI instance;
     Player player;
     Shop shop;
     RandomSkillShop randSkill;
@@ -26,6 +27,7 @@ public class ShopUI : MonoBehaviour
 
     private void Awake()
     {
+        instance = this;
         skillTabPage = transform.GetChild(0).GetChild(0).GetChild(2).gameObject;
         enhanceTabPage = transform.GetChild(0).GetChild(0).GetChild(3).gameObject;
         money_txt = transform.GetChild(0).GetChild(0).GetChild(4).GetChild(0).GetComponentInChildren<TextMeshProUGUI>();
@@ -128,7 +130,7 @@ public class ShopUI : MonoBehaviour
     public void OffWindow()     // 창 닫기
     {
         shop.uiOpen = false;
-        Destroy(this.gameObject);
+        this.gameObject.SetActive(false);
     }
 
     public void Sell()      // 물품 판매

@@ -9,7 +9,6 @@ public class StageManager : MonoBehaviour
     public static StageManager instance;
     [SerializeField] public GameObject[] stage = new GameObject[3];
 
-
     private void Awake()
     {
         instance = this;

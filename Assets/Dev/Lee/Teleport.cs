@@ -62,8 +62,11 @@ public class Teleport : MonoBehaviour
         // 현재 스테이지 레벨이 5일 경우, 다음 스테이지로 이동
         if (stageManager.nowStageLv == 5)
         {
+            ShopUI shopUi = ShopUI.instance;
+            Destroy(shopUi);
             // 다음 스테이지 번호 계산
             int nextStage = stageManager.nowStage + 1;
+
             // 스테이지 배열 범위를 초과하지 않는 경우, 스테이지 변경
             if (nextStage - 1 < stageManager.stage.Length)
             {
@@ -80,6 +83,12 @@ public class Teleport : MonoBehaviour
         {
             // 현재 스테이지 레벨이 5가 아닐 경우, 레벨을 1 증가
             stageManager.nowStageLv++;
+            if(stageManager.nowStageLv == 5)        // 2024-05-19 유재현 추가
+            {
+                Debug.Log("상점 UI 지우기");
+                ShopUI shopUi = ShopUI.instance;
+                Destroy(shopUi.gameObject);
+            }
         }
 
         // 현재 스테이지와 레벨 출력

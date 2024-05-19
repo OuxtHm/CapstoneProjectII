@@ -1,31 +1,40 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.IO;
 using UnityEngine.UI;
 
 public class MainScene : MonoBehaviour
 {
     public static MainScene instance;
+    public DataManager dm;
     public Button[] btn = new Button[4];
-    GameObject faedPrefab;      // 페이드 아웃 프리펩
+    GameObject fadePrefab;      // 페이드 아웃 프리펩
+    GameObject optionUi;        // 옵션 UI
+    string savePath;        // 데이터 저장 경로
     private void Awake()
     {
         instance = this;
-        faedPrefab = Resources.Load<GameObject>("Prefabs/FadeOut_canvas");
+        fadePrefab = Resources.Load<GameObject>("Prefabs/FadeOut_canvas");
+        optionUi = transform.GetChild(1).gameObject;
         for (int i = 0; i < btn.Length; i++)
         {
             btn[i] = transform.GetChild(0).GetChild(0).GetChild(i).GetComponent<Button>();
         }
-        btn[0].onClick.AddListener(() => StartCoroutine(ClickGameStartBtn()));
+        btn[0].onClick.AddListener(() => StartCoroutine(ClickNewGameBtn()));
         btn[1].onClick.AddListener(() => ClickContinueBtn());
         btn[2].onClick.AddListener(() => ClickOptionBtn());
         btn[3].onClick.AddListener(() => ClickGameOverBtn());
     }
-
-    IEnumerator  ClickGameStartBtn()
+    private void Start()
     {
-        GameObject fade = Instantiate(faedPrefab);
+        dm = DataManager.instance;
+        savePath = dm.playerDataPath;
+        FileExistence(SceneManager.GetActiveScene(), LoadSceneMode.Single);
+    }
+    IEnumerator ClickNewGameBtn()
+    {
+        GameObject fade = Instantiate(fadePrefab);
         yield return new WaitForSeconds(1f);
         SceneManager.LoadScene("Merge_7");
     }
@@ -37,7 +46,7 @@ public class MainScene : MonoBehaviour
 
     void ClickOptionBtn()
     {
-
+        optionUi.SetActive(true);
     }
 
     void ClickGameOverBtn()
@@ -51,4 +60,22 @@ public class MainScene : MonoBehaviour
         #endif
 
     }
+
+    public void FileExistence(Scene scene, LoadSceneMode mode)        // 이어하기 버튼 유무 결정
+    {
+        
+        if (scene.name == "MainScene")
+        {
+            if (btn[1] != null)
+            {
+                bool active = File.Exists(savePath) ? true : false;
+                btn[1].gameObject.SetActive(active);
+            }
+            else
+            {
+                Debug.LogError("Continue 버튼이 null입니다.");
+            }
+        }
+    }
+
 }

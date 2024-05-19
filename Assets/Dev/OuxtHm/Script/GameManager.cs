@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-
+    
     [Header("오브젝트")]
     public GameObject playerUi;        // 플레이어 관련 UI
     public GameObject optionUI;     // 옵션 창
