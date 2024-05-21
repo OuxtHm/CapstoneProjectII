@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class ShopUI : MonoBehaviour
 {
     public static ShopUI instance;
+    SoundManager sm;
     Player player;
     Shop shop;
     RandomSkillShop randSkill;
@@ -24,7 +25,7 @@ public class ShopUI : MonoBehaviour
     Transform[] playerSkillSlot = new Transform[2];
     public int price;
     private int selectSkillNum;
-
+    public AudioClip clickSounds;      // 버튼 클릭 사운드
     private void Awake()
     {
         instance = this;
@@ -44,6 +45,7 @@ public class ShopUI : MonoBehaviour
     void Start()
     {
         player = Player.instance;
+        sm = SoundManager.instance;
         shop = Shop.instance;
         randSkill = RandomSkillShop.instance;
         skillUI = SkillUI.instance;
@@ -54,6 +56,7 @@ public class ShopUI : MonoBehaviour
 
         purchaseY.onClick.AddListener(() =>
         {
+            sm.SFXPlay(clickSounds);
             Sell();
             checkingObj.SetActive(false);
         });
@@ -65,6 +68,7 @@ public class ShopUI : MonoBehaviour
             // 상점 스킬 목록 버튼 기능
             btn[i].onClick.AddListener(() =>
             {
+                sm.SFXPlay(clickSounds);
                 price = randSkill.skillCon[index].price;
                 Ask(index);
             });
@@ -77,6 +81,7 @@ public class ShopUI : MonoBehaviour
             // 구매한 스킬을 넣을 슬롯 정하는 버튼 기능
             slot[i].onClick.AddListener(() =>
             {
+                sm.SFXPlay(clickSounds);
                 GameObject skillIcon = Instantiate(randSkill.skillCon[selectSkillNum].gameObject, slot[index].transform);
                 RectTransform iconRect = skillIcon.GetComponent<RectTransform>();
                 iconRect.sizeDelta = new Vector2(80, 80);
@@ -93,6 +98,7 @@ public class ShopUI : MonoBehaviour
         // 스킬 구매 창으로 이동하는 버튼 기능 
         skillTabBtn.onClick.AddListener(() =>
         {
+            sm.SFXPlay(clickSounds);
             skillTabPage.SetActive(true);
             enhanceTabPage.SetActive(false);
         });
@@ -100,6 +106,7 @@ public class ShopUI : MonoBehaviour
         // 스킬 강화 창으로 이동하는 버튼 기능
         enhanceTabBtn.onClick.AddListener(() =>
         {
+            sm.SFXPlay(clickSounds);
             skillTabPage.SetActive(false);
             enhanceTabPage.SetActive(true);
         });

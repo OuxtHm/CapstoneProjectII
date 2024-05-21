@@ -8,6 +8,9 @@ using UnityEngine.UI;
 public class OptionUI : MonoBehaviour
 {
     GameManager gm;
+    SoundManager sm;
+
+    public AudioClip clickSounds;      // 버튼 클릭 사운드
 
     private Button[] btn = new Button[4];
     private GameObject btnArray;     
@@ -43,8 +46,11 @@ public class OptionUI : MonoBehaviour
     private void Start()
     {
         gm = GameManager.instance;
+        sm = SoundManager.instance;
+
         btn[0].onClick.AddListener(() =>
         {
+            sm.SFXPlay(clickSounds);
             gm.show = false;
             transform.gameObject.SetActive(false);
         });
@@ -55,6 +61,7 @@ public class OptionUI : MonoBehaviour
     {
         btn[1].onClick.AddListener(() =>
         {
+            sm.SFXPlay(clickSounds);
             btnArray.SetActive(false);
             soundsAray.SetActive(true);
         });
@@ -62,6 +69,7 @@ public class OptionUI : MonoBehaviour
         soundsBackBtn = transform.GetChild(0).GetChild(2).GetChild(3).GetComponent<Button>();
         soundsBackBtn.onClick.AddListener(() =>
         {
+            sm.SFXPlay(clickSounds);
             btnArray.SetActive(true);
             soundsAray.SetActive(false);
         });
@@ -70,6 +78,7 @@ public class OptionUI : MonoBehaviour
     {
         btn[2].onClick.AddListener(() =>
         {
+            sm.SFXPlay(clickSounds);
             questionTxt.text = mainSceneTxt;
             questionObj.SetActive(true);
         });
@@ -78,17 +87,24 @@ public class OptionUI : MonoBehaviour
     {
         btn[3].onClick.AddListener(() => 
         {
+            sm.SFXPlay(clickSounds);
             questionTxt.text = gameOverTxt;
             questionObj.SetActive(true);
         });
     }
     void YesBtn()       // 확인 버튼 함수
     {
-        yesBtn.onClick.AddListener(() =>  QuitGame());
+        yesBtn.onClick.AddListener(() => {
+            sm.SFXPlay(clickSounds);
+            QuitGame();
+        });
     }
     void NoBtn()        // 아니오 버튼 함수
     {
-        noBtn.onClick.AddListener(() => questionObj.SetActive(false)); 
+        noBtn.onClick.AddListener(() => {
+            sm.SFXPlay(clickSounds);
+            questionObj.SetActive(false);
+        }); 
     }
     public void QuitGame()  // 게임 종료 함수
     {
