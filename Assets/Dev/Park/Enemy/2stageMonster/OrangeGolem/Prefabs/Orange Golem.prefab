@@ -283,6 +283,7 @@ MonoBehaviour:
   enemy_Speed: 0
   enemy_AttackSensor: 0
   enemy_frontSensor: 0
+  enemyMoney: 0
 --- !u!114 &3344752554199596745
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -315,23 +316,25 @@ MonoBehaviour:
   bat_Die: {fileID: 8300000, guid: 5b7670e1b52dde54d9ca5da58d5f4f69, type: 3}
   golem_Attack: {fileID: 8300000, guid: 3546425c23f864b4381dfa7adc9665cf, type: 3}
   golem_Die: {fileID: 8300000, guid: 5c56791cfc63c1f4fa917099ebcb2f10, type: 3}
-  skeleton2s_Attack: {fileID: 0}
-  skeleton2s_Die: {fileID: 0}
-  ramses_Move: {fileID: 0}
-  knight_Attack1: {fileID: 0}
-  knight_Attack2: {fileID: 0}
-  knight_After: {fileID: 0}
-  knight_Light: {fileID: 0}
-  priest_Punch: {fileID: 0}
-  priest_Rock: {fileID: 0}
-  skeleton3s_Attack: {fileID: 0}
-  skeleton3s_Die: {fileID: 0}
-  flyeye_Die: {fileID: 0}
-  mushroom_Die: {fileID: 0}
-  plant_Shot: {fileID: 0}
-  plant_Slash: {fileID: 0}
-  demon_Attack: {fileID: 0}
-  demon_Die: {fileID: 0}
+  skeleton2s_Attack: {fileID: 8300000, guid: 474e2c252bc2ab54c912fe69b699ca10, type: 3}
+  skeleton2s_Die: {fileID: 8300000, guid: 9071345e425d3a64a85e3de08ee002ff, type: 3}
+  ramses_Move: {fileID: 8300000, guid: 34ad35923c9f38247a312cea4048c14c, type: 3}
+  knight_Attack1: {fileID: 8300000, guid: 3a56d4d9f90558c4e95167f5897c996e, type: 3}
+  knight_Attack2: {fileID: 8300000, guid: f83840460638f4c4cb778f07cb9018f2, type: 3}
+  knight_After: {fileID: 8300000, guid: d547be8b8a29c7f44ad65b682b4e5613, type: 3}
+  knight_Light: {fileID: 8300000, guid: cab8225cd4d43ec49b95d41910b4444b, type: 3}
+  priest_Punch: {fileID: 8300000, guid: 5132e4270065e274f99180c3ea21c338, type: 3}
+  priest_Rock: {fileID: 8300000, guid: 1e7a3d61621256848a924a6133ace844, type: 3}
+  skeleton3s_Attack: {fileID: 8300000, guid: 4fe871e3c68575f4abaf0f9a8488cf6a, type: 3}
+  skeleton3s_Die: {fileID: 8300000, guid: b4c43ea9748785b47914a7a8408ae1fe, type: 3}
+  flyeye_Die: {fileID: 8300000, guid: 29cb5dbfb69968447a77fa4cf6910a6e, type: 3}
+  mushroom_Die: {fileID: 8300000, guid: 39cd010874a0a164ebea0ca2af25765c, type: 3}
+  plant_Shot: {fileID: 8300000, guid: b1995656243f2e24caab85d9788fab44, type: 3}
+  plant_Slash: {fileID: 8300000, guid: 1f93e0b5ec74c5542b363ba424173cae, type: 3}
+  demon_Attack: {fileID: 8300000, guid: 86552007e074e6e40abef4c8f7293665, type: 3}
+  demon_FireBarrier: {fileID: 8300000, guid: 8953f28378f0d4e45a71ba8c88b1afed, type: 3}
+  demon_FireBolt: {fileID: 8300000, guid: fef51e1efe694d241bec2b1d1ae24140, type: 3}
+  demon_Die: {fileID: 8300000, guid: 3cafdebf4927a7e4bae9b7ebf1c64940, type: 3}
 --- !u!1 &8163167583579362565
 GameObject:
   m_ObjectHideFlags: 0

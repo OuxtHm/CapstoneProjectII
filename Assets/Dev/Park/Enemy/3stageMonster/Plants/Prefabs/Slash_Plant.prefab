@@ -293,6 +293,7 @@ MonoBehaviour:
   enemy_Speed: 0
   enemy_AttackSensor: 0
   enemy_frontSensor: 0
+  enemyMoney: 0
 --- !u!114 &-40741451376934329
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -339,8 +340,10 @@ MonoBehaviour:
   flyeye_Die: {fileID: 8300000, guid: 29cb5dbfb69968447a77fa4cf6910a6e, type: 3}
   mushroom_Die: {fileID: 8300000, guid: 39cd010874a0a164ebea0ca2af25765c, type: 3}
   plant_Shot: {fileID: 8300000, guid: b1995656243f2e24caab85d9788fab44, type: 3}
-  plant_Slash: {fileID: 0}
-  demon_Attack: {fileID: 0}
+  plant_Slash: {fileID: 8300000, guid: 1f93e0b5ec74c5542b363ba424173cae, type: 3}
+  demon_Attack: {fileID: 8300000, guid: 86552007e074e6e40abef4c8f7293665, type: 3}
+  demon_FireBarrier: {fileID: 8300000, guid: 8953f28378f0d4e45a71ba8c88b1afed, type: 3}
+  demon_FireBolt: {fileID: 8300000, guid: fef51e1efe694d241bec2b1d1ae24140, type: 3}
   demon_Die: {fileID: 8300000, guid: 3cafdebf4927a7e4bae9b7ebf1c64940, type: 3}
 --- !u!1 &8545458682889595754
 GameObject:

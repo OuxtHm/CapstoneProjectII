@@ -32,7 +32,6 @@ public abstract class Boss : MonoBehaviour
     public int boss_stage;  //보스별 스테이지 구분
     public float boss_MaxHP; //보스 최대체력
     public float boss_CurHP; //보스 현재체력
-    public int boss_Power; //보스 공격력
     public int boss_Speed; //보스 이동속도
     public int boss_BumpPower;    //충돌 대미지
     public int boss_OnePattenPower;   //첫번째 공격 패턴 대미지
@@ -44,7 +43,7 @@ public abstract class Boss : MonoBehaviour
     public GameObject ArrowPb; // 1스테이지 보스 화살 프리펩
     public GameObject ArrowrainPb; // 1스테이지 보스 화살비 프리펩
     public GameObject LaserPb; // 1스테이지 보스 화살비 프리펩
-    public GameObject WarringPb;  //공격 전 위험표시 프리펩
+    public GameObject WarningPb;  //공격 전 위험표시 프리펩
 
     [Header("2스테이지 보스 프리펩")]
     public GameObject SwordEffectPb; // 2스테이지 보스 가로베기 프리펩
@@ -64,6 +63,19 @@ public abstract class Boss : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+
+        FireBarrierPb = Resources.Load<GameObject>("Prefabs/FireBarrier");
+        FireBoltPb = Resources.Load<GameObject>("Prefabs/FireBolt");
+        FireGatePb = Resources.Load<GameObject>("Prefabs/FireGate");
+        FireBreathPb = Resources.Load<GameObject>("Prefabs/FireBreath");
+
+        SwordEffectPb = Resources.Load<GameObject>("Prefabs/SwordEffectPb");
+        FireEffectPb = Resources.Load<GameObject>("Prefabs/FirePb");
+
+        ArrowPb = Resources.Load<GameObject>("Prefabs/Arrow");
+        ArrowrainPb = Resources.Load<GameObject>("Prefabs/ArrowRain");
+        LaserPb = Resources.Load<GameObject>("Prefabs/Laser");
+        WarningPb = Resources.Load<GameObject>("Prefabs/Warning");
     }
 
     private void Start()
@@ -328,13 +340,13 @@ public abstract class Boss : MonoBehaviour
     {
         EffectPb ArPb = ArrowrainPb.GetComponent<EffectPb>();
         Vector2 Targetpos = new Vector2(player.transform.position.x, PbSpawn.position.y + 1.1f);  //원래 있는 Pbspawn위치값을 수정해서 새로운 위치 선언
-        Vector2 Warringpos = new Vector2(player.transform.position.x, PbSpawn.position.y - 2.1f);  //위험 표시 생성 위치
+        Vector2 Warningpos = new Vector2(player.transform.position.x, PbSpawn.position.y - 2.1f);  //위험 표시 생성 위치
         ArPb.Power = boss_ThreePattenPower;
         ArPb.dir = DirX;
         ArPb.DelTime = 1.1f;
         ArPb.movecheck = 0;
 
-        GameObject Warring = Instantiate(WarringPb, Warringpos, PbSpawn.rotation);  //위험 표시 생성
+        GameObject Warring = Instantiate(WarningPb, Warningpos, PbSpawn.rotation);  //위험 표시 생성
         yield return new WaitForSeconds(1.5f);
         GameObject arrowrain = Instantiate(ArrowrainPb, Targetpos, PbSpawn.rotation);//화살비 공격 생성
 
@@ -438,7 +450,6 @@ public abstract class Boss : MonoBehaviour
         GameObject FireBarrier = Instantiate(FireBarrierPb, Spownpos, transform.rotation);
         Invoke("MoveOn", 4f);
     }
-
     void Demon_FireBolt()   //3stage 파이어볼트 생성
     {
         EffectPb FTPb = FireBoltPb.GetComponent<EffectPb>();
@@ -449,7 +460,7 @@ public abstract class Boss : MonoBehaviour
         FTPb.Power = boss_ThreePattenPower;
         FTPb.DelTime = 2f;
         FTPb.movecheck = 2;
-        FTPb.speed = 13;
+        FTPb.speed = 10;
         FTPb.playerpos = player.transform;
 
         Vector2 Spownpos1 = new Vector2(this.transform.position.x - 2, this.transform.position.y + 3);
@@ -484,8 +495,6 @@ public abstract class Boss : MonoBehaviour
         Vector2 Spownpos = new Vector2(gatePos + (DirX > 0 ? -3 : 3), this.transform.position.y - 1f);
         GameObject FireBreath = Instantiate(FireBreathPb, Spownpos, transform.rotation);
     }
-
-
 
     public IEnumerator Hurt(Transform target, float Damage)  //플레이어에게 피격 받았을 때 실행
     {

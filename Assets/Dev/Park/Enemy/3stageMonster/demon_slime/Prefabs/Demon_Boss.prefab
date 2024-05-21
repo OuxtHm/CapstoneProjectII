@@ -370,7 +370,6 @@ MonoBehaviour:
   boss_stage: 0
   boss_MaxHP: 0
   boss_CurHP: 0
-  boss_Power: 0
   boss_Speed: 0
   boss_BumpPower: 0
   boss_OnePattenPower: 0
@@ -380,13 +379,13 @@ MonoBehaviour:
   ArrowPb: {fileID: 0}
   ArrowrainPb: {fileID: 0}
   LaserPb: {fileID: 0}
-  WarringPb: {fileID: 0}
+  WarningPb: {fileID: 0}
   SwordEffectPb: {fileID: 0}
   FireEffectPb: {fileID: 0}
-  FireBarrierPb: {fileID: 6590942590729711738, guid: 62920c9820188934d94732fa514140ec, type: 3}
-  FireBoltPb: {fileID: 4845693486344894720, guid: e4cb3015a12e39f41b4e58d61704692e, type: 3}
-  FireGatePb: {fileID: 2327799170789493073, guid: 254c256898e8ffe44978e2ee78ad281e, type: 3}
-  FireBreathPb: {fileID: 8112698148091459909, guid: b23da4a593067ed4a91b428cbb176a6f, type: 3}
+  FireBarrierPb: {fileID: 0}
+  FireBoltPb: {fileID: 0}
+  FireGatePb: {fileID: 0}
+  FireBreathPb: {fileID: 0}
 --- !u!114 &5843070177482744658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -434,8 +433,6 @@ MonoBehaviour:
   mushroom_Die: {fileID: 8300000, guid: 39cd010874a0a164ebea0ca2af25765c, type: 3}
   plant_Shot: {fileID: 8300000, guid: b1995656243f2e24caab85d9788fab44, type: 3}
   plant_Slash: {fileID: 8300000, guid: 1f93e0b5ec74c5542b363ba424173cae, type: 3}
-  demon_Move1: {fileID: 0}
-  demon_Move2: {fileID: 0}
   demon_Attack: {fileID: 8300000, guid: 86552007e074e6e40abef4c8f7293665, type: 3}
   demon_FireBarrier: {fileID: 8300000, guid: 8953f28378f0d4e45a71ba8c88b1afed, type: 3}
   demon_FireBolt: {fileID: 8300000, guid: fef51e1efe694d241bec2b1d1ae24140, type: 3}

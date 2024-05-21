@@ -3,13 +3,7 @@ guid: d8da4a43c0562b544bfad80e29e53c83
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences:
-  - ArrowPb: {fileID: 7389849368303966876, guid: b6f1421886f64ac4399a7adf4899c989, type: 3}
-  - ArrowrainPb: {fileID: 7000764193863456653, guid: bd7be2bd8d041814c9074920cd76a4a9, type: 3}
-  - LaserPb: {fileID: 4219622765080268290, guid: 8fdb73a49103fcf40935053c6388ee9a, type: 3}
-  - WarringPb: {fileID: 3388303051624161897, guid: bf2da110c1a05fa4b8e5b253bfb3d6d3, type: 3}
-  - SwordEffectPb: {fileID: 8738805075215991509, guid: ed6d8e445f1aafc4896f93db2b3547fa, type: 3}
-  - FireEffectPb: {fileID: 2563394640855931643, guid: cc098efe1459f3544a6a4bef280ba7ac, type: 3}
+  defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

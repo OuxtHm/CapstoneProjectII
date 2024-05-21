@@ -48,6 +48,9 @@ public abstract class Enemy : MonoBehaviour
     {
         Instance = this;
         enemyHpbar = this.transform.GetChild(1).GetComponent<EnemyHpBar>();
+        ExplosionPb = Resources.Load<GameObject>("Prefabs/Explosion");
+        RockPb = Resources.Load<GameObject>("Prefabs/Rock");
+        SeedPb = Resources.Load<GameObject>("Prefabs/Seed");
     }
 
     private void Start()

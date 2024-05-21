@@ -21,10 +21,10 @@ public class Ranger_Boss : Boss
         boss_CurHP = 100;
         boss_Speed = 3;
         boss_BumpPower = 5;
-        boss_OnePattenPower = 10;
-        boss_TwoPattenPower = 20;
-        boss_ThreePattenPower = 30;
-        boss_FourPattenPower = 40;
+        boss_OnePattenPower = 10;   //근접 공격 패턴 대미지
+        boss_TwoPattenPower = 20;   // 기본 활 패턴 대미지
+        boss_ThreePattenPower = 20; // 화살비 패턴 대미지
+        boss_FourPattenPower = 30;  // 레이져 패턴 대미지
     }
 
     // 보스가 죽었을 때 호출될 메서드
