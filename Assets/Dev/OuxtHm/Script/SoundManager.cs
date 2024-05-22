@@ -9,6 +9,10 @@ public class SoundManager : MonoBehaviour
     public AudioMixer mixer;
     public AudioSource bgmPlayer;
     public AudioSource sfxPlayer;
+
+    public AudioClip boss_stage1;
+    public AudioClip boss_stage2;
+    public AudioClip boss_stage3;
     private void Awake()
     {
         if (instance == null)
@@ -28,6 +32,9 @@ public class SoundManager : MonoBehaviour
     {
         bgmPlayer.outputAudioMixerGroup = mixer.FindMatchingGroups("BGM")[0];
         sfxPlayer.outputAudioMixerGroup = mixer.FindMatchingGroups("SFX")[0];
+        boss_stage1 = Resources.Load<AudioClip>("Sound/1stageBoss");
+        boss_stage2 = Resources.Load<AudioClip>("Sound/2stageBoss");
+        boss_stage3 = Resources.Load<AudioClip>("Sound/3stageBoss");
     }
 
     public void MasterVolume(float val)
@@ -46,6 +53,7 @@ public class SoundManager : MonoBehaviour
     public void BGMPlay(AudioClip clip)   // 배경음 재생
     {
         bgmPlayer.clip = clip;
+        bgmPlayer.loop = true;
         bgmPlayer.Play();
     }
 

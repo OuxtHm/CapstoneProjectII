@@ -5,6 +5,7 @@ using UnityEngine;
 public class Teleport : MonoBehaviour
 {
     StageManager stageManager;
+    SoundManager soundManager;
     public static Teleport Instance;  
     DataManager dm;
     public GameObject targetObj;
@@ -28,6 +29,7 @@ public class Teleport : MonoBehaviour
         stageUi = StageUI.instance;
         stageManager = StageManager.instance;
         animator = GetComponent<Animator>();
+        soundManager = SoundManager.instance;
     }
     
     private void OnTriggerEnter2D(Collider2D collision)
@@ -80,7 +82,27 @@ public class Teleport : MonoBehaviour
         {
             // 현재 스테이지 레벨이 5가 아닐 경우, 레벨을 1 증가
             stageManager.nowStageLv++;
+
+            if (stageManager.nowStageLv == 5)
+            {
+                if (stageManager.nowStage == 1)
+                {
+                    soundManager.BGMPlay(soundManager.boss_stage1);
+                    Debug.Log("1스테이지 보스 bgm실행");
+                }
+                else if (stageManager.nowStage == 2)
+                {
+                    soundManager.BGMPlay(soundManager.boss_stage2);
+                    Debug.Log("2스테이지 보스 bgm실행");
+                }
+                else
+                {
+                    soundManager.BGMPlay(soundManager.boss_stage3);
+                    Debug.Log("3스테이지 보스 bgm실행");
+                }
+            }
         }
+        Debug.Log(stageManager.nowStageLv);
 
         // 현재 스테이지와 레벨 출력
         stageUi.PrintStage(stageManager.nowStage, stageManager.nowStageLv);

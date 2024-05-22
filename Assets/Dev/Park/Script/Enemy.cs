@@ -257,13 +257,14 @@ public abstract class Enemy : MonoBehaviour
         Debug.DrawRay(WallVec, Vector3.down * 0.3f, new Color(0, 0, 1));
 
         // 물리 기반으로 레이저를 아래로 쏘아서 실질적인 레이저 생성, LayMask.GetMask("")는 해당하는 레이어만 스캔함
-        rayHit = Physics2D.Raycast(frontVec, Vector3.down, 2.5f, LayerMask.GetMask("Ground"));
+        rayHit = Physics2D.Raycast(frontVec, Vector3.down, 1.5f, LayerMask.GetMask("Ground"));
         rayHitfront = Physics2D.Raycast(WallVec, Vector3.down, 0.3f, LayerMask.GetMask("Ground"));
-        if (rayHit.collider == null && enemy_CurHP >= 0 && enemy_Type != 2)
+        if (rayHit.collider == null && enemy_CurHP >= 0 && enemy_Type != 2 && istracking)
         {
             Turn();
+            istracking = false;
         }
-        if(rayHitfront.collider != null && enemy_CurHP >= 0 && enemy_Type != 2 && !istracking)
+        else if(rayHitfront.collider != null && enemy_CurHP >= 0 && enemy_Type != 2)
         {
             Turn();
         }
@@ -308,12 +309,13 @@ public abstract class Enemy : MonoBehaviour
     }
     void FrogExplosion() //개구리 몬스터 투사체 패턴
     {
-        ExplosionPb ExPb = ExplosionPb.GetComponent<ExplosionPb>();
+        EffectPb ExPb = ExplosionPb.GetComponent<EffectPb>();
         ExPb.Power = 10;
-        ExPb.Speed = 4;
-        ExPb.Dir = PBdir;
+        ExPb.speed = 4;
+        ExPb.dir = PBdir;
         ExPb.DelTime = 2f;
-
+        ExPb.movecheck = 1;
+        ExPb.playerpos = player.transform;
         GameObject Explosion = Instantiate(ExplosionPb, AttackBox.position, AttackBox.rotation);
     }
 

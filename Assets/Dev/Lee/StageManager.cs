@@ -7,18 +7,13 @@ public class StageManager : MonoBehaviour
     public int nowStage;
     public int nowStageLv;
     public static StageManager instance;
-    public AudioSource audioSource; // 05.21 박지우 추가
     [SerializeField] public GameObject[] stage = new GameObject[3];
 
-    [Header("스테이지 BGM")]
-    public AudioClip boss_stage1;
-    public AudioClip boss_stage2;
-    public AudioClip boss_stage3;
+    
 
     private void Awake()
     {
         instance = this;
-        audioSource = this.gameObject.GetComponentInParent<AudioSource>();
     }
     private void Start()
     {
@@ -43,39 +38,12 @@ public class StageManager : MonoBehaviour
             {
                 teleport.enabled = (teleport.stageNumber <= nowStage);
             }
-            BGM_Sound();
         }
         else
         {
             Debug.LogError("스테이지 범위를 벗어났습니다.");
             stage[0].SetActive(true); // 첫 번째 스테이지 활성화
             nowStage = 1;
-        }
-    }
-
-    public void BGM_Sound()
-    {
-        if(nowStage == 1)
-            Sounds("Boss_stage1");
-        else if(nowStage == 2)
-            Sounds("Boss_stage2");
-        else
-            Sounds("Boss_stage3");
-    }
-
-    public void Sounds(string sounds)
-    {
-        switch (sounds)
-        {
-            case "Boss_stage1":   //1스테이지
-                audioSource.clip = boss_stage1;
-                break;
-            case "Boss_stage2":   //1스테이지
-                audioSource.clip = boss_stage2;
-                break;
-            case "Boss_stage3":   //1스테이지
-                audioSource.clip = boss_stage3;
-                break;
         }
     }
 }
