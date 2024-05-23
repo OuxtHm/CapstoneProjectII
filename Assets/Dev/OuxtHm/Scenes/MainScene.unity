@@ -2687,6 +2687,7 @@ MonoBehaviour:
   gm: {fileID: 0}
   sm: {fileID: 0}
   skillM: {fileID: 0}
+  player: {fileID: 0}
   playerDataPath: 
 --- !u!4 &1070825329
 Transform:
@@ -5059,6 +5060,9 @@ MonoBehaviour:
   mixer: {fileID: 24100000, guid: 1d85359dba4aac74db27bbcc5b99e9be, type: 2}
   bgmPlayer: {fileID: 0}
   sfxPlayer: {fileID: 0}
+  boss_stage1: {fileID: 0}
+  boss_stage2: {fileID: 0}
+  boss_stage3: {fileID: 0}
 --- !u!4 &2138103749
 Transform:
   m_ObjectHideFlags: 0

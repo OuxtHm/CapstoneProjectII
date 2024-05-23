@@ -273,8 +273,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b52ebf7a9e76cb40be4b5d2f167a6bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ExplosionPb: {fileID: 4390872846123526793, guid: 7f769ab235ef15d469b8eafe58db7749, type: 3}
-  RockPb: {fileID: 3013461507330989107, guid: 14a66e67f03f89642aff9c2b0666066f, type: 3}
+  ExplosionPb: {fileID: 0}
+  RockPb: {fileID: 0}
   SeedPb: {fileID: 0}
   istracking: 0
   enemy_MaxHP: 0
@@ -283,6 +283,7 @@ MonoBehaviour:
   enemy_Speed: 0
   enemy_AttackSensor: 0
   enemy_frontSensor: 0
+  enemyMoney: 0
 --- !u!114 &5193274509134120719
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,8 +330,10 @@ MonoBehaviour:
   flyeye_Die: {fileID: 8300000, guid: 29cb5dbfb69968447a77fa4cf6910a6e, type: 3}
   mushroom_Die: {fileID: 8300000, guid: 39cd010874a0a164ebea0ca2af25765c, type: 3}
   plant_Shot: {fileID: 8300000, guid: b1995656243f2e24caab85d9788fab44, type: 3}
-  plant_Slash: {fileID: 0}
-  demon_Attack: {fileID: 0}
+  plant_Slash: {fileID: 8300000, guid: 1f93e0b5ec74c5542b363ba424173cae, type: 3}
+  demon_Attack: {fileID: 8300000, guid: 86552007e074e6e40abef4c8f7293665, type: 3}
+  demon_FireBarrier: {fileID: 8300000, guid: 8953f28378f0d4e45a71ba8c88b1afed, type: 3}
+  demon_FireBolt: {fileID: 8300000, guid: fef51e1efe694d241bec2b1d1ae24140, type: 3}
   demon_Die: {fileID: 8300000, guid: 3cafdebf4927a7e4bae9b7ebf1c64940, type: 3}
 --- !u!1 &3001709762158263857
 GameObject:

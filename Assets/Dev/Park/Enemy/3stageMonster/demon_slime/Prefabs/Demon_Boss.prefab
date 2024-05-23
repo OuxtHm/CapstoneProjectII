@@ -42,7 +42,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -68,7 +68,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3777555956778312107}
   m_Layer: 0
-  m_Name: GameObject (1)
+  m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -370,7 +370,6 @@ MonoBehaviour:
   boss_stage: 0
   boss_MaxHP: 0
   boss_CurHP: 0
-  boss_Power: 0
   boss_Speed: 0
   boss_BumpPower: 0
   boss_OnePattenPower: 0
@@ -380,11 +379,13 @@ MonoBehaviour:
   ArrowPb: {fileID: 0}
   ArrowrainPb: {fileID: 0}
   LaserPb: {fileID: 0}
-  WarringPb: {fileID: 0}
+  WarningPb: {fileID: 0}
   SwordEffectPb: {fileID: 0}
   FireEffectPb: {fileID: 0}
-  FireBarrierPb: {fileID: 6590942590729711738, guid: 62920c9820188934d94732fa514140ec, type: 3}
-  FireBoltPb: {fileID: 4845693486344894720, guid: e4cb3015a12e39f41b4e58d61704692e, type: 3}
+  FireBarrierPb: {fileID: 0}
+  FireBoltPb: {fileID: 0}
+  FireGatePb: {fileID: 0}
+  FireBreathPb: {fileID: 0}
 --- !u!114 &5843070177482744658
 MonoBehaviour:
   m_ObjectHideFlags: 0

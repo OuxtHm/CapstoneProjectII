@@ -48,6 +48,9 @@ public abstract class Enemy : MonoBehaviour
     {
         Instance = this;
         enemyHpbar = this.transform.GetChild(1).GetComponent<EnemyHpBar>();
+        ExplosionPb = Resources.Load<GameObject>("Prefabs/Explosion");
+        RockPb = Resources.Load<GameObject>("Prefabs/Rock");
+        SeedPb = Resources.Load<GameObject>("Prefabs/Seed");
     }
 
     private void Start()
@@ -87,9 +90,9 @@ public abstract class Enemy : MonoBehaviour
         {
             if (distanceToTarget <= detectionRange && !ishurt && !isdie && enemy_Type == 1 || enemy_Type == 3) //공중 몬스터 이외의 몬스터가 타겟이 범위 안에 있을 때 수행
             {
-                istracking = true;
-                if (rayHit.collider != null && istracking && !isattack)
+                if (rayHit.collider != null && !isattack)
                 {
+                    istracking = true;
                     direction.y = 0; // y값 위치 고정을 위해 추가
                     direction.Normalize();
                     if (direction.x >= 0)   // 타겟이 오른쪽에 있을 때
@@ -127,11 +130,7 @@ public abstract class Enemy : MonoBehaviour
                 else if (rayHit.collider == null)  //바닥이 없으면 추적 종료
                 {
                     istracking = false;
-                    anim.SetBool("Move", false);
-                }
-                else //추적중에 바닥이 없으면 타겟 인식 범위까지 반대방향으로 이동함
-                {
-                    Move();
+                    StartCoroutine(DirectionChange());
                 }
             }
             else if (enemy_Type == 2 && !istracking)  // 공중 몬스터 일때
@@ -224,6 +223,9 @@ public abstract class Enemy : MonoBehaviour
                     spriteRenderer.flipX = false;
                     AttackBox.position = new Vector2(transform.position.x + 1, transform.position.y);
                 }
+
+                if (rayHit.collider == null)
+                    Turn();
             }
             else
             {
@@ -254,13 +256,14 @@ public abstract class Enemy : MonoBehaviour
         Debug.DrawRay(WallVec, Vector3.down * 0.3f, new Color(0, 0, 1));
 
         // 물리 기반으로 레이저를 아래로 쏘아서 실질적인 레이저 생성, LayMask.GetMask("")는 해당하는 레이어만 스캔함
-        rayHit = Physics2D.Raycast(frontVec, Vector3.down, 2.5f, LayerMask.GetMask("Ground"));
+        rayHit = Physics2D.Raycast(frontVec, Vector3.down, 1.5f, LayerMask.GetMask("Ground"));
         rayHitfront = Physics2D.Raycast(WallVec, Vector3.down, 0.3f, LayerMask.GetMask("Ground"));
-        if (rayHit.collider == null && enemy_CurHP >= 0 && enemy_Type != 2)
+        if (rayHit.collider == null && enemy_CurHP >= 0 && enemy_Type != 2 && istracking)
         {
             Turn();
+            istracking = false;
         }
-        if(rayHitfront.collider != null && enemy_CurHP >= 0 && enemy_Type != 2 && !istracking)
+        else if(rayHitfront.collider != null && enemy_CurHP >= 0 && enemy_Type != 2)
         {
             Turn();
         }
@@ -305,12 +308,13 @@ public abstract class Enemy : MonoBehaviour
     }
     void FrogExplosion() //개구리 몬스터 투사체 패턴
     {
-        ExplosionPb ExPb = ExplosionPb.GetComponent<ExplosionPb>();
+        EffectPb ExPb = ExplosionPb.GetComponent<EffectPb>();
         ExPb.Power = 10;
-        ExPb.Speed = 4;
-        ExPb.Dir = PBdir;
+        ExPb.speed = 4;
+        ExPb.dir = PBdir;
         ExPb.DelTime = 2f;
-
+        ExPb.movecheck = 1;
+        ExPb.playerpos = player.transform;
         GameObject Explosion = Instantiate(ExplosionPb, AttackBox.position, AttackBox.rotation);
     }
 
@@ -411,6 +415,16 @@ public abstract class Enemy : MonoBehaviour
     void OriginSpeed()  //몬스터 원래 이동속도로 변경하는 함수
     {
         enemy_Speed = enemy_OriginSpeed;
+    }
+
+    IEnumerator DirectionChange()
+    {
+        int originalSpeed = enemy_Speed;  // 원래 속도 저장
+        enemy_Speed = -enemy_Speed;  // 반대 방향으로 이동하도록 속도 부호 변경
+
+        yield return new WaitForSeconds(2f);  // 2초 대기
+
+        enemy_Speed = originalSpeed;  // 속도를 원래대로 복구
     }
 
     private void OnDrawGizmos()
