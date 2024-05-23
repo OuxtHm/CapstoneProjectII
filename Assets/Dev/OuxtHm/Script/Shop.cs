@@ -7,6 +7,7 @@ public class Shop : MonoBehaviour
     public static Shop instance;
     public GameObject shopUiPrefabs;
     public GameObject keyX;
+    GameObject shopUi;
     public bool uiOpen;     // 상점 UI가 열렸는지 확인
     public bool inShop;     // 상점 범위에 진입했는지 확인
     private void Awake()
@@ -20,7 +21,14 @@ public class Shop : MonoBehaviour
     {
         if (inShop && Input.GetKeyDown(KeyCode.X) && !uiOpen)
         {
-            GameObject shopUi = Instantiate(shopUiPrefabs);
+            if(shopUi != null)
+            {
+                shopUi.SetActive(true);
+            }
+            else
+            {
+                shopUi = Instantiate(shopUiPrefabs);
+            }
             uiOpen = true;
         }
     }

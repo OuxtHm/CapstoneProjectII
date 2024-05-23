@@ -1,13 +1,12 @@
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SoundOption : MonoBehaviour
 {
     public static SoundOption instance;
     DataManager dm;
+    SoundManager sm;
     public Slider masterSlider;
     public Slider bgmSlider;
     public Slider sfxSlider;
@@ -15,6 +14,8 @@ public class SoundOption : MonoBehaviour
     TextMeshProUGUI bgmTxt;
     TextMeshProUGUI sfxTxt;
     Button saveBtn;
+    public AudioClip clickSounds;      // 버튼 클릭 사운드
+
     private void Awake()
     {
         instance = this;
@@ -32,13 +33,14 @@ public class SoundOption : MonoBehaviour
     private void Start()
     {
         dm = DataManager.instance;
+        sm = SoundManager.instance;
         masterSlider.value = dm.optionData.masterValue;
         bgmSlider.value = dm.optionData.bgmValue;
         sfxSlider.value = dm.optionData.sfxValue;
 
-
         saveBtn.onClick.AddListener(() =>
         {
+            sm.SFXPlay(clickSounds);
             WriteSoundValue();
             dm.SaveOptionData();
         });

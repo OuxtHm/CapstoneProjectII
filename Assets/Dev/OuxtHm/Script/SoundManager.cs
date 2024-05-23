@@ -18,7 +18,7 @@ public class SoundManager : MonoBehaviour
         }
         else if (instance != this)
         {
-            Destroy(instance.gameObject);
+            Destroy(this.gameObject);
         }
         bgmPlayer = transform.GetChild(0).GetComponent<AudioSource>();
         sfxPlayer = transform.GetChild(1).GetComponent<AudioSource>();

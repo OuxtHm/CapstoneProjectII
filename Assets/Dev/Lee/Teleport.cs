@@ -62,6 +62,8 @@ public class Teleport : MonoBehaviour
         // 현재 스테이지 레벨이 5일 경우, 다음 스테이지로 이동
         if (stageManager.nowStageLv == 5)
         {
+            ShopUI shopUi = ShopUI.instance;
+            Destroy(shopUi);
             // 다음 스테이지 번호 계산
             int nextStage = stageManager.nowStage + 1;
             // 스테이지 배열 범위를 초과하지 않는 경우, 스테이지 변경
@@ -80,12 +82,22 @@ public class Teleport : MonoBehaviour
         {
             // 현재 스테이지 레벨이 5가 아닐 경우, 레벨을 1 증가
             stageManager.nowStageLv++;
+            if(stageManager.nowStageLv == 5)        // 2024-05-19 유재현 추가
+            {
+                Debug.Log("상점 UI 지우기");
+                ShopUI shopUi = ShopUI.instance;
+                Destroy(shopUi.gameObject);
+            }
         }
+        // 2024-05-20 유재현 추가
+        dm.playerData.nowStage = stageManager.nowStage;
+        dm.playerData.nowStageLV = stageManager.nowStageLv;
 
         // 현재 스테이지와 레벨 출력
         stageUi.PrintStage(stageManager.nowStage, stageManager.nowStageLv);
         // 플레이어 위치 이동
         targetObj.transform.position = toObj.transform.position;
+        dm.playerData.nowPosition = toObj.transform.position;
         // 추가적인 대기 시간 없이 바로 페이드 아웃 시작
         isTelepo = false;   
         dm.SaveData();     

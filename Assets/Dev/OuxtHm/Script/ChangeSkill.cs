@@ -22,13 +22,14 @@ public class ChangeSkill : MonoBehaviour
         changeCoolTime = transform.GetChild(0).GetComponent<Image>();
         nowskill = transform.GetChild(1).GetComponent<Transform>();     // 현재 사용중인 스킬 Transform 설정
         readyskill = transform.GetChild(2).GetComponent<Transform>();   // 대기중인 스킬 Transform 설정
-        skill_1 = nowskill.GetChild(0).GetComponent<Image>();       // 사용중인 스킬 Image 설정
-        skill_2 = readyskill.GetChild(0).GetComponent<Image>();     // 대기중인 스킬 Image 설정
         change = false;
     }
     private void Start()
     {
         skillUi = SkillUI.instance;
+/*        skill_1 = nowskill.GetChild(0).GetComponent<Image>();       // 사용중인 스킬 Image 설정
+        skill_2 = readyskill.GetChild(0).GetComponent<Image>();     // 대기중인 스킬 Image 설정
+*/
     }
     void Update()
     {
@@ -38,7 +39,11 @@ public class ChangeSkill : MonoBehaviour
             StartCoroutine(ChangeskillCoolTime(7f));
         }
     }
-
+    public void ImageGetComponent()
+    {
+        skill_1 = nowskill.GetChild(0).GetComponent<Image>();       // 사용중인 스킬 Image 설정
+        skill_2 = readyskill.GetChild(0).GetComponent<Image>();     // 대기중인 스킬 Image 설정
+    }
     public IEnumerator ChangeskillCoolTime(float duration)      // 기본 스킬 변경 쿨타임 적용
     {
         change = true;

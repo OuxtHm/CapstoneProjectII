@@ -24,6 +24,7 @@ public class HpBar : MonoBehaviour
         player = Player.instance;
         ShowHpText();
         hpRatio = player.curHp / player.maxHp;
+        hpBar.fillAmount = hpRatio;
     }
 
     void ShowHpText()       // 체력 상황을 텍스트로 표현

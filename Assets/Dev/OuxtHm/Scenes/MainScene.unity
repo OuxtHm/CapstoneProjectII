@@ -457,7 +457,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uAC8C\uC784 \uC2DC\uC791"
+  m_text: "\uC0C8 \uAC8C\uC784"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7d43331a989ab854cb13db04a4e732df, type: 2}
   m_sharedMaterial: {fileID: 5008236375344878939, guid: 7d43331a989ab854cb13db04a4e732df, type: 2}
@@ -1093,11 +1093,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a123506f795b064eafa235e01c71950, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dm: {fileID: 0}
   btn:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  clickSounds: {fileID: 8300000, guid: 0a8b0f9c520426946bbf7a033b131f7e, type: 3}
 --- !u!114 &362293624
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1341,6 +1343,7 @@ MonoBehaviour:
   masterSlider: {fileID: 0}
   bgmSlider: {fileID: 0}
   sfxSlider: {fileID: 0}
+  clickSounds: {fileID: 8300000, guid: 0a8b0f9c520426946bbf7a033b131f7e, type: 3}
 --- !u!1 &426180085
 GameObject:
   m_ObjectHideFlags: 0
@@ -1901,6 +1904,7 @@ MonoBehaviour:
   btnArray: {fileID: 0}
   soundOption: {fileID: 0}
   deadUiPrefab: {fileID: 0}
+  fadeInPrefab: {fileID: 0}
   show: 0
 --- !u!1 &643834219
 GameObject:
@@ -2682,6 +2686,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gm: {fileID: 0}
   sm: {fileID: 0}
+  skillM: {fileID: 0}
   playerDataPath: 
 --- !u!4 &1070825329
 Transform:
@@ -3367,19 +3372,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1240641315}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 73049535}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1240641315
 MonoBehaviour:
   m_ObjectHideFlags: 0
