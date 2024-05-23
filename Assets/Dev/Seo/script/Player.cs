@@ -549,4 +549,36 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         Destroy(slash);       
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Coin"))
+        {
+            Debug.Log("획득");
+            money += 1; // 코인과 충돌 시 돈 증가
+            Destroy(collision.gameObject); // 코인 오브젝트 제거
+        }
+        else if (collision.gameObject.CompareTag("Potion"))
+        {
+            curHp = Mathf.Min(curHp + 20f, maxHp); // 포션과 충돌 시 체력 회복, 최대 체력 초과 방지
+            Destroy(collision.gameObject); // 포션 오브젝트 제거
+        }
+        else if (collision.gameObject.CompareTag("SkillItem"))
+        {
+            int randomStat = Random.Range(0, 3);
+            switch (randomStat)
+            {
+                case 0:
+                    power += 5f; // 공격력 증가
+                    break;
+                case 1:
+                    moveSpeed += 1f; // 이동 속도 증가
+                    break;
+                case 2:
+                    groundCheckRadius += 1; // 점프 횟수 증가
+                    break;
+            }
+            Destroy(collision.gameObject); // 스킬 아이템 오브젝트 제거
+        }
+    }// 5.22 이경규추가
 }

@@ -9,6 +9,9 @@ TagManager:
   - projectile
   - wall
   - Item
+  - Coin
+  - Potion
+  - SkillItem
   layers:
   - Default
   - TransparentFX

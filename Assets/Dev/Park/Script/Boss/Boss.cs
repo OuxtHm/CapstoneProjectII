@@ -54,10 +54,10 @@ public abstract class Boss : MonoBehaviour
     public GameObject FireBarrierPb;  //3 스테이지 보스 불꽃 배리어 프리펩
     public GameObject FireBoltPb;  //3 스테이지 보스 파이어볼트 프리펩
 
-    /*[Header("보스 보상")]
+    [Header("보스 보상")]
     public GameObject coinPrefab; // 코인 프리팹 참조를 위한 변수
     public GameObject potionPrefab; // 포션 프리팹 참조를 위한 변수
-    public GameObject skillItemPrefab; // 스킬 아이템 프리팹 참조를 위한 변수*/
+    public GameObject skillItemPrefab; // 스킬 아이템 프리팹 참조를 위한 변수
     private void Awake()
     {
         Instance = this;
@@ -490,7 +490,7 @@ public abstract class Boss : MonoBehaviour
         spriteRenderer.color = originalColor;
     }
 
-    IEnumerator Die()  //보스가 죽었을 실행
+    IEnumerator Die()
     {
         yield return new WaitForSeconds(0.2f);
         spriteRenderer.color = new Color(1, 1, 1, 0.5f);
@@ -500,8 +500,75 @@ public abstract class Boss : MonoBehaviour
         anim.SetTrigger("Die");
         anim.SetBool("Move", false);
         yield return new WaitForSeconds(2f);
+
+        // 아이템 생성 코드 추가
+        SpawnItems(coinPrefab, 3); // 3개의 코인 생성
+        SpawnItems(potionPrefab, 2); // 2개의 포션 생성
+        SpawnItems(skillItemPrefab, 1); // 1개의 스킬 아이템 생성
+
         Destroy(gameObject);
+    }// 5.22 이경규추가
+
+    void SpawnItems(GameObject itemPrefab, int itemCount)
+    {
+        List<Vector3> spawnPositions = new List<Vector3>();
+        int maxAttempts = 10; // 최대 시도 횟수
+
+        for (int i = 0; i < itemCount; i++)
+        {
+            Vector3 spawnPosition;
+            int attempts = 0;
+
+            // 아이템이 겹치지 않고 유효한 위치에 생성되도록 설정
+            do
+            {
+                spawnPosition = transform.position + new Vector3(Random.Range(-2f, 2f), Random.Range(-2f, 2f), 0);
+                attempts++;
+            }
+            while ((IsPositionOverlap(spawnPosition, spawnPositions, 0.5f) || IsPositionBlocked(spawnPosition)) && attempts < maxAttempts); // 최소 거리 0.5f 및 충돌 감지
+
+            if (attempts < maxAttempts)
+            {
+                spawnPositions.Add(spawnPosition);
+                GameObject spawnedItem = Instantiate(itemPrefab, spawnPosition, Quaternion.identity);
+                StartCoroutine(RotateItem(spawnedItem));
+            }
+            else
+            {
+                Debug.LogWarning("유효한 위치를 찾지 못해 아이템 생성 실패");
+            }
+        }
+    }// 5.22 이경규추가
+
+    bool IsPositionOverlap(Vector3 position, List<Vector3> positions, float minDistance)
+    {
+        foreach (var pos in positions)
+        {
+            if (Vector3.Distance(position, pos) < minDistance)
+            {
+                return true;
+            }
+        }
+        return false;
+    }// 5.22 이경규추가
+
+    bool IsPositionBlocked(Vector3 position)
+    {
+        // 특정 레이어의 충돌체가 있는지 확인 (예: 벽이나 바닥 레이어)
+        Collider2D hitCollider = Physics2D.OverlapCircle(position, 0.5f, LayerMask.GetMask("Wall", "Ground"));
+        return hitCollider != null;
     }
+
+    IEnumerator RotateItem(GameObject item)
+    {
+        while (item != null)
+        {
+            item.transform.Rotate(new Vector3(0, 0, 45) * Time.deltaTime); // Z축 기준으로 45도 회전
+            yield return null;
+        }
+    }                  // 5.22 이경규추가
+
+
     void MoveOn()
     {
         if(!isdie)
@@ -509,4 +576,6 @@ public abstract class Boss : MonoBehaviour
     }
 
     public abstract void BossInitSetting(); // 적의 기본 정보를 설정하는 함수(추상)
+
+
 }
