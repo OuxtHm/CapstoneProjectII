@@ -30,11 +30,22 @@ public class MainScene : MonoBehaviour
         dm = DataManager.instance;
         sm = SoundManager.instance;
         savePath = dm.playerDataPath;
-        btn[0].onClick.AddListener(() => StartCoroutine(ClickGameStartBtn()));
+        btn[0].onClick.AddListener(() => StartCoroutine(ClickNewGameBtn()));
         btn[1].onClick.AddListener(() => StartCoroutine(ClickGameStartBtn()));
         btn[2].onClick.AddListener(() => ClickOptionBtn());
         btn[3].onClick.AddListener(() => ClickGameOverBtn());
         FileExistence(SceneManager.GetActiveScene(), LoadSceneMode.Single);
+    }
+
+    IEnumerator ClickNewGameBtn()
+    {
+        sm.SFXPlay(clickSounds);
+        dm.NewGame();
+        GameObject fade = Instantiate(fadePrefab);
+        yield return new WaitForSeconds(1f);
+        Destroy(fade);     //--------------삭제 할 때 로드가 느려서 화면 이상하게 전환됨
+        SceneManager.LoadScene("Merge_7");
+
     }
     IEnumerator ClickGameStartBtn()
     {
