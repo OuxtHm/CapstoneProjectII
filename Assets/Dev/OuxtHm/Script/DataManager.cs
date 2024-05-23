@@ -129,17 +129,14 @@ public class DataManager : MonoBehaviour
     }
     public void SaveData()      // 플레이어 및 스킬 데이터 저장 함수
     {
-        Debug.Log("데이터 저장 시작");
-        if (!player.isDead)
-        {
+            Debug.Log("데이터 저장 시작");      
             string pData = JsonUtility.ToJson(playerData, true);     // 플레이어 데이터 세이브
             string sData = JsonUtility.ToJson(skillData, true);     // 스킬 데이터 세이브
 
             // Json 파일 쓰기
             File.WriteAllText(playerDataPath, pData);
             File.WriteAllText(skillDataPath, sData);
-            Debug.Log("저장 완료");
-        }
+            Debug.Log("저장 완료");       
     }
 
     public void SaveOptionData()    // 옵션 데이터 저장 함수

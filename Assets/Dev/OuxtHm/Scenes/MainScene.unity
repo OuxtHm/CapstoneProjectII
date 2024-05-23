@@ -2682,6 +2682,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gm: {fileID: 0}
   sm: {fileID: 0}
+  skillM: {fileID: 0}
   playerDataPath: 
 --- !u!4 &1070825329
 Transform:

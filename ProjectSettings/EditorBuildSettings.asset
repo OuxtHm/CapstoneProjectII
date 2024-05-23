@@ -8,7 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Dev/OuxtHm/Scenes/MainScene.unity
     guid: c63dcc7cfee44454b89b5e7207228a29
-  - enabled: 0
+  - enabled: 1
     path: Assets/Dev/Seo/scene/Merge_7.unity
     guid: 01aa0a80892da034f859f48afc298293
   - enabled: 0

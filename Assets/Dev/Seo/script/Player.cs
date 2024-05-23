@@ -9,6 +9,14 @@ public class Player : MonoBehaviour
     //public float knockbackForce = 5f; // 넉백 힘
     //public float knockbackDuration = 0.2f;
     //private float healingDuration = 5.0f;
+    //private float increasedMoveSpeed;
+    public float damageAbsorptionBuffStartTime = 0f;
+    public float damageAbsorptionBuffDuration = 5f;
+    public float damageAbsorptionBuffCooldown = 30f;
+    public bool isDamageAbsorptionBuffActive = false;
+    private bool isDamageAbsorptionBuffOnCooldown = false;
+    public float damageAbsorptionRate = 0.5f; // 데미지 흡수 비율
+    public float healingAmount;
     float moveX;
     public int JumpCount = 2;
     public bool isGround = false;
@@ -32,6 +40,7 @@ public class Player : MonoBehaviour
     public GameObject effect1;
     public GameObject effect2;
     public GameObject effect3;
+    public GameObject effect4;
     public bool isHealingActive = false;
     public bool isAttacking = false;
     public bool move;
@@ -79,6 +88,8 @@ public class Player : MonoBehaviour
         hpBar = HpBar.instance;
         originalSpeed = moveSpeed;
         currentJumpCount = JumpCount;
+        //StartCoroutine(RegenerateHealth());
+        //StartCoroutine(IncreaseMovementSpeed());
     }
 
     void StartDash()
@@ -199,7 +210,18 @@ public class Player : MonoBehaviour
             gameObject.layer = LayerMask.NameToLayer("Enemy");
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha7))//스킬4
+        if (Input.GetKey(KeyCode.Alpha8) && !isAttacking)//스킬4
+        {
+            StartCoroutine(ShowEffect4ForDuration(1.0f));
+        }
+
+        if (Input.GetKey(KeyCode.Alpha9) && !isAttacking)//스킬5
+        {
+            RecoverHealth();
+        }
+
+
+        if (Input.GetKeyDown(KeyCode.Alpha7))//스킬6
         {
             isHealingActive = true;
             StartCoroutine(StopHealing());
@@ -293,18 +315,31 @@ public class Player : MonoBehaviour
         curHp -= damage;
         gameObject.layer = LayerMask.NameToLayer("Enemy");
         StartCoroutine(ChangeLayerToPlayer());
-        dm.playerData.curHpValue -= damage;     // 데이터 체력 변경
+        dm.playerData.curHpValue -= damage;
         hpBar.ChangeHp((int)curHp);
 
-       /* Vector3 knockbackDirection = (transform.position - damageSource.transform.position).normalized;
-        StartCoroutine(Knockback(knockbackDirection));*/
+        // 데미지 흡수 패시브 효과 적용
+        if (isDamageAbsorptionBuffActive)
+        {
+            healingAmount = damage * damageAbsorptionRate;
+            curHp = Mathf.Clamp(curHp + healingAmount, 0, maxHp);
+            dm.playerData.curHpValue = curHp;
+            hpBar.ChangeHp((int)curHp);
+        }
 
         if (curHp <= 0)
         {
             animator.SetTrigger("isDie");
             gameObject.layer = LayerMask.NameToLayer("Enemy");
-            StartCoroutine(gm.ShowDeadUI());        // 2024-04-13 유재현 추가 *******************************************
-        }     
+            StartCoroutine(gm.ShowDeadUI());
+        }
+        else if (!isDamageAbsorptionBuffActive || Time.time - damageAbsorptionBuffStartTime >= damageAbsorptionBuffDuration)
+        {
+            if (!isDamageAbsorptionBuffOnCooldown)
+            {
+                StartCoroutine(DamageAbsorptionBuff());
+            }
+        }
     }
     IEnumerator BoostSpeedForDuration(float duration, float direction)
         {
@@ -344,7 +379,7 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(1f);
         gameObject.layer = LayerMask.NameToLayer("Player");
     }
-    IEnumerator ShowEffect1ForDuration(float duration)//스킬1
+    IEnumerator ShowEffect1ForDuration(float duration)//피의칼날
     {
         isAttacking = true;
         animator.SetTrigger("isSkill1");
@@ -366,7 +401,7 @@ public class Player : MonoBehaviour
         effect1.SetActive(false);
         isAttacking = false;
     }
-    IEnumerator ShowEffect2ForDuration(float duration)//스킬2
+    IEnumerator ShowEffect2ForDuration(float duration)//검기
     {
         isAttacking = true;
         animator.SetTrigger("isSkill2");
@@ -396,7 +431,7 @@ public class Player : MonoBehaviour
         effect2.SetActive(false);
         isAttacking = false;
     }
-    IEnumerator BoostSpeedForDurationskill(float duration, float direction)//스킬3
+    IEnumerator BoostSpeedForDurationskill(float duration, float direction)//대쉬어택
     {
         if (!isBoosted)
         {
@@ -426,6 +461,7 @@ public class Player : MonoBehaviour
                 transform.position = Vector3.Lerp(startPosition, endPosition, (elapsedTime / duration));
                 elapsedTime += Time.deltaTime;
                 yield return null;
+
             }
 
             // effect3 오브젝트 활성화
@@ -447,8 +483,78 @@ public class Player : MonoBehaviour
             // 부스트 상태 초기화
             isBoosted = false;
             moveSpeed = originalSpeed;
+            gameObject.layer = LayerMask.NameToLayer("Player");
         }
     }
+
+    IEnumerator ShowEffect4ForDuration(float duration)//파이어볼트
+    {
+        isAttacking = true;
+        animator.SetTrigger("isSkill4");
+        Vector3 direction = lastHorizontalInput < 0 ? Vector3.left : Vector3.right;
+        Vector3 spawnPosition = transform.position + direction * 2.0f;
+
+        effect4.transform.position = spawnPosition;
+        effect4.SetActive(true);
+
+        if (lastHorizontalInput < 0)
+        {
+            effect4.transform.localScale = new Vector3(-Mathf.Abs(effect4.transform.localScale.x), effect4.transform.localScale.y, effect4.transform.localScale.z);
+        }
+        else if (lastHorizontalInput > 0)
+        {
+            effect4.transform.localScale = new Vector3(Mathf.Abs(effect4.transform.localScale.x), effect4.transform.localScale.y, effect4.transform.localScale.z);
+        }
+
+        float elapsedTime = 0;
+        while (elapsedTime < duration)
+        {
+            effect4.transform.position += direction * Time.deltaTime * 10.0f;
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        effect4.SetActive(false);
+        isAttacking = false;
+    }
+
+    void RecoverHealth()//힐스킬
+    {
+        curHp = Mathf.Min(maxHp, curHp + 10f);
+    }
+
+    IEnumerator RegenerateHealth()//힐 패시브
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(5f);
+            curHp = Mathf.Min(maxHp, curHp + 5f);
+        }
+    }
+
+    IEnumerator IncreaseMovementSpeed()//이속 패시브
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(20f);
+            moveSpeed += 2f;
+        }
+    }
+
+    private IEnumerator DamageAbsorptionBuff()//데미지 흡수
+    {
+        isDamageAbsorptionBuffActive = true;
+        isDamageAbsorptionBuffOnCooldown = true;
+        damageAbsorptionBuffStartTime = Time.time;
+
+        yield return new WaitForSeconds(damageAbsorptionBuffDuration);
+
+        isDamageAbsorptionBuffActive = false;
+
+        yield return new WaitForSeconds(damageAbsorptionBuffCooldown);
+        isDamageAbsorptionBuffOnCooldown = false;
+    }
+
     void TestSkill()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))

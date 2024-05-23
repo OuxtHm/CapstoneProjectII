@@ -3,7 +3,9 @@ guid: 3b9350e3c5582b344bf36912d8b27a94
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - skillInfo: {fileID: 11400000, guid: df6f170880b58e3469d7028795a5f00b, type: 2}
+  - player: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
