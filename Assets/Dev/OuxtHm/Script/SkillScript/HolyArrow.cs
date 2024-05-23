@@ -6,6 +6,7 @@ public class HolyArrow : MonoBehaviour
 {   
     Enemy enemy;
     Boss boss;
+    public SkillScriptable skillInfo;
     public Player player;
     private SpriteRenderer sprite;
     private CapsuleCollider2D capsuleCollider;

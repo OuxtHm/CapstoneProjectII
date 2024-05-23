@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class HolyPillar : MonoBehaviour
 {
+    public SkillScriptable skillInfo;
     Enemy enemy;
     Boss boss;
     BoxCollider2D boxCollider2D;

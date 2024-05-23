@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Thunder : MonoBehaviour
 {
+    public SkillScriptable skillInfo;
     BoxCollider2D boxCollider2D;
     public int thunderDamage;
 

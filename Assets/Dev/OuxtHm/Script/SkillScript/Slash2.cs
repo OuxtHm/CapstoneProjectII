@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 
 public class Slash2 : MonoBehaviour
 {
+    public SkillScriptable skillInfo;
     BoxCollider2D box;
 
     private void Awake()
