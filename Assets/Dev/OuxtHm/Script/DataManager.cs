@@ -109,7 +109,6 @@ public class DataManager : MonoBehaviour
             SaveData();
         }
         OptionLoad();       // 옵션 데이터 불러오기
-        //StartCoroutine(FirstSaveFile());
     }
 
     void FindInstance(Scene scene, LoadSceneMode mode)
@@ -218,18 +217,7 @@ public class DataManager : MonoBehaviour
         sm.BGMVolume(optionData.bgmValue);
         sm.SFXVolume(optionData.sfxValue);
     }
-    /*public IEnumerator FirstSaveFile()
-    {
-        if(SceneManager.GetActiveScene().name != "MainScene")
-        {
-            SaveData();
-        }
-        else
-        {
-            yield return null;
-            StartCoroutine(FirstSaveFile());
-        }
-    }*/
+
     public void NewGame()       // 새 게임 버튼 클릭시 실행하는 함수
     {
         Debug.Log("데이터 파일 삭제");
@@ -243,7 +231,6 @@ public class DataManager : MonoBehaviour
         File.WriteAllText(playerDataPath, pData);
         File.WriteAllText(skillDataPath, sData);
         Debug.Log("새 게임");
-        //SceneManager.LoadScene("V7_Dev");
     }
 
 }

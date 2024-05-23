@@ -14,9 +14,11 @@ public class MainScene : MonoBehaviour
     GameObject optionUi;        // 옵션 UI
     string savePath;        // 데이터 저장 경로
     public AudioClip clickSounds;      // 버튼 클릭 사운드
+    public string sceneName;        // 이동할 씬 이름
     private void Awake()
     {
         instance = this;
+        sceneName = "Merge_8";
         fadePrefab = Resources.Load<GameObject>("Prefabs/FadeOut_canvas");
         optionUi = transform.GetChild(1).gameObject;
         for (int i = 0; i < btn.Length; i++)
@@ -44,7 +46,7 @@ public class MainScene : MonoBehaviour
         GameObject fade = Instantiate(fadePrefab);
         yield return new WaitForSeconds(1f);
         Destroy(fade);     //--------------삭제 할 때 로드가 느려서 화면 이상하게 전환됨
-        SceneManager.LoadScene("Merge_7");
+        SceneManager.LoadScene(sceneName);
 
     }
     IEnumerator ClickGameStartBtn()
@@ -53,7 +55,7 @@ public class MainScene : MonoBehaviour
         GameObject fade = Instantiate(fadePrefab);
         yield return new WaitForSeconds(1f);
         Destroy(fade);     //--------------삭제 할 때 로드가 느려서 화면 이상하게 전환됨
-        SceneManager.LoadScene("Merge_7");
+        SceneManager.LoadScene(sceneName);
     }
 
     void ClickOptionBtn()
