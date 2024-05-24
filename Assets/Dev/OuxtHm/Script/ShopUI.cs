@@ -68,9 +68,16 @@ public class ShopUI : MonoBehaviour
             // 상점 스킬 목록 버튼 기능
             btn[i].onClick.AddListener(() =>
             {
-                sm.SFXPlay(clickSounds);
-                price = randSkill.skillCon[index].price;
-                Ask(index);
+                if(player.money <= 0)
+                {
+                    Debug.Log("금액이 부족해 구매할 수 없습니다.");
+                }
+                else
+                {
+                    sm.SFXPlay(clickSounds);
+                    price = randSkill.skillCon[index].price;
+                    Ask(index);
+                }
             });
         }
 

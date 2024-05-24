@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class StageManager : MonoBehaviour
 {
+    DataManager dm;
     public int nowStage;
     public int nowStageLv;
     public static StageManager instance;
@@ -15,8 +14,11 @@ public class StageManager : MonoBehaviour
     }
     private void Start()
     {
-        nowStage = 1;
-        nowStageLv = 1;
+        dm = DataManager.instance;
+        nowStage = dm.playerData.nowStage;
+        nowStageLv = dm.playerData.nowStageLV;
+        /*nowStage = 1;
+        nowStageLv = 1;*/
     }
 
     public void ChangeStage(int num)

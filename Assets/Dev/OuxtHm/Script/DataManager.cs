@@ -9,6 +9,8 @@ public class PlayerData
     public float maxHpValue;        // 최대 체력
     public float curHpValue;        // 현재 체력
     public float atk;               // 공격력
+    public float moveSpeed;         // 이동속도
+    public float dashCoolTime;      // 대쉬 쿨타임
     public int money;               // 돈
     public Vector2 nowPosition;     // 현재 위치
     public int nowStage;            // 현재 스테이지
@@ -46,8 +48,12 @@ public class DataManager : MonoBehaviour
         maxHpValue = 100,
         curHpValue = 100,
         atk = 10,
+        moveSpeed = 5f,
+        dashCoolTime = 3f,
         money = 0,
-        nowPosition = new Vector2(0, 1)
+        nowPosition = new Vector2(0, 1),
+        nowStage = 1,
+        nowStageLV = 1,
     };
 
     public OptionData optionData = new OptionData()
@@ -221,8 +227,7 @@ public class DataManager : MonoBehaviour
     public void NewGame()       // 새 게임 버튼 클릭시 실행하는 함수
     {
         Debug.Log("데이터 파일 삭제");
-        File.Delete(playerDataPath);
-        File.Delete(skillDataPath);
+        DeleteFile();
         Debug.Log(playerDataPath);
         string pData = JsonUtility.ToJson(playerData, true);     // 플레이어 데이터 세이브
         string sData = JsonUtility.ToJson(skillData, true);     // 스킬 데이터 세이브
@@ -232,5 +237,12 @@ public class DataManager : MonoBehaviour
         File.WriteAllText(skillDataPath, sData);
         Debug.Log("새 게임");
     }
-
+    public void DeleteFile()    // 데이터 파일 삭제하는 함수
+    {
+        if(playerDataPath != null)
+        {
+            File.Delete(playerDataPath);
+            File.Delete(skillDataPath);
+        }
+    }
 }

@@ -75,10 +75,6 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         cc = GetComponent<CapsuleCollider2D>();
-        maxHp = 100f;
-        curHp = 100f;
-        money = 9999;
-
     }
     public void Start()
     {
@@ -86,6 +82,7 @@ public class Player : MonoBehaviour
         dm = DataManager.instance;
         dashSc = Dash.instance;
         hpBar = HpBar.instance;
+        moveSpeed = dm.playerData.moveSpeed;        // 데이터매니저에서 값 받기
         originalSpeed = moveSpeed;
         currentJumpCount = JumpCount;
         //StartCoroutine(RegenerateHealth());

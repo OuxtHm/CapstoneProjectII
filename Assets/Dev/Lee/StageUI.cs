@@ -18,7 +18,7 @@ public class StageUI : MonoBehaviour
     public void Start()
     {
         stageManager = StageManager.instance;
-        PrintStage(1, 1);
+        PrintStage(stageManager.nowStage, stageManager.nowStageLv);
     }
 
     public void PrintStage(int _nowStage, int _nowStageLv)
