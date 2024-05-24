@@ -17,8 +17,6 @@ public class StageManager : MonoBehaviour
         dm = DataManager.instance;
         nowStage = dm.playerData.nowStage;
         nowStageLv = dm.playerData.nowStageLV;
-        /*nowStage = 1;
-        nowStageLv = 1;*/
     }
 
     public void ChangeStage(int num)

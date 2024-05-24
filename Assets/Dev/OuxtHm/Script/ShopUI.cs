@@ -26,6 +26,7 @@ public class ShopUI : MonoBehaviour
     public int price;
     private int selectSkillNum;
     public AudioClip clickSounds;      // 버튼 클릭 사운드
+    private GameObject warning;     // 골드 부족 경고창
     private void Awake()
     {
         instance = this;
@@ -37,7 +38,8 @@ public class ShopUI : MonoBehaviour
         checkingObj = transform.GetChild(1).gameObject;
         skillSlotUi = transform.GetChild(2).gameObject;
         purchaseY = checkingObj.transform.GetChild(0).GetComponent<Button>();
-        for(int i = 0; i < 2; i++)
+        warning = Resources.Load<GameObject>("Prefabs/Warning_canvas");
+        for (int i = 0; i < 2; i++)
         {
             slot[i] = skillSlotUi.transform.GetChild(i).GetComponentInChildren<Button>();
         }
@@ -70,7 +72,7 @@ public class ShopUI : MonoBehaviour
             {
                 if(player.money <= 0)
                 {
-                    Debug.Log("금액이 부족해 구매할 수 없습니다.");
+                    Instantiate(warning);
                 }
                 else
                 {

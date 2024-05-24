@@ -45,7 +45,6 @@ public class MainScene : MonoBehaviour
         dm.NewGame();
         GameObject fade = Instantiate(fadePrefab);
         yield return new WaitForSeconds(1f);
-        Destroy(fade);     //--------------삭제 할 때 로드가 느려서 화면 이상하게 전환됨
         SceneManager.LoadScene(sceneName);
 
     }
@@ -54,7 +53,6 @@ public class MainScene : MonoBehaviour
         sm.SFXPlay(clickSounds);
         GameObject fade = Instantiate(fadePrefab);
         yield return new WaitForSeconds(1f);
-        Destroy(fade);     //--------------삭제 할 때 로드가 느려서 화면 이상하게 전환됨
         SceneManager.LoadScene(sceneName);
     }
 
@@ -80,7 +78,6 @@ public class MainScene : MonoBehaviour
 
     public void FileExistence(Scene scene, LoadSceneMode mode)        // 이어하기 버튼 유무 결정
     {
-        
         if (scene.name == "MainScene")
         {
             if (btn[1] != null)
