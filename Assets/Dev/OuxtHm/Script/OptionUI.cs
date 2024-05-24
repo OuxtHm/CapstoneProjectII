@@ -11,7 +11,7 @@ public class OptionUI : MonoBehaviour
     SoundManager sm;
 
     public AudioClip clickSounds;      // 버튼 클릭 사운드
-
+    private GameObject fadeOutObject;       // 페이드 아웃 프리펩
     private Button[] btn = new Button[4];
     private GameObject btnArray;     
     private GameObject soundsAray;   
@@ -24,6 +24,7 @@ public class OptionUI : MonoBehaviour
     private string gameOverTxt;     // 게임 종료 버튼을 눌렀을 떄 띄울 텍스트
     private void Awake()
     {
+        fadeOutObject = Resources.Load<GameObject>("Prefabs/FadeOut_canvas");
         mainSceneTxt = "메인화면으로 이동하시겠습니까?";
         gameOverTxt = "정말 종료하시겠습니까?\r\n(저장되지 않은 구간은 지워집니다.)";
         btnArray = transform.GetChild(0).GetChild(1).gameObject;
@@ -96,7 +97,7 @@ public class OptionUI : MonoBehaviour
     {
         yesBtn.onClick.AddListener(() => {
             sm.SFXPlay(clickSounds);
-            QuitGame();
+            StartCoroutine(QuitGame());
         });
     }
     void NoBtn()        // 아니오 버튼 함수
@@ -106,7 +107,7 @@ public class OptionUI : MonoBehaviour
             questionObj.SetActive(false);
         }); 
     }
-    public void QuitGame()  // 게임 종료 함수
+    public IEnumerator QuitGame()  // 게임 종료 함수
     {
         if (questionTxt.text == gameOverTxt)
         {
@@ -120,6 +121,8 @@ public class OptionUI : MonoBehaviour
         }
         else
         {
+            Instantiate(fadeOutObject);
+            yield return new WaitForSeconds(1f);
             SceneManager.LoadScene("MainScene");
         }
     }    

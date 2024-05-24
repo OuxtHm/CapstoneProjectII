@@ -95,7 +95,7 @@ public class GameManager : MonoBehaviour
             GameObject fadeIn = Instantiate(fadeInPrefab);
             fadeIn.name = "FadeInCanvas"; // 생성된 객체에 고유 이름 부여
 
-            yield return new WaitForSeconds(0.7f);
+            yield return new WaitForSeconds(1f);
 
             Destroy(fadeIn);
         }
