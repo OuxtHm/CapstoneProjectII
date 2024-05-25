@@ -22,7 +22,6 @@ public class Dash : MonoBehaviour
     {
         dm = DataManager.instance;
         duration = dm.playerData.dashCoolTime;
-        Debug.Log(duration);
     }
     private void Update()
     {

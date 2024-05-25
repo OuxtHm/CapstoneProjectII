@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fca7c8178b52a1d4d850ef93f1495fa4, type: 3}
   m_Name: Firebolt
   m_EditorClassIdentifier: 
-  number: 2
+  number: 5
   skillName: Firebolt
   description: "\uD654\uC5FC\uAD6C\uCCB4\uB97C \uBC1C\uC0AC\uD569\uB2C8\uB2E4."
   level: 010000000200000003000000

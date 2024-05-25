@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -115,7 +114,7 @@ public class Player : MonoBehaviour
     }*/
     void EndAttackAnimation()
     {
-       isAttacking = false;
+        isAttacking = false;
 
     }
 
@@ -155,10 +154,10 @@ public class Player : MonoBehaviour
         {
             currentJumpCount = JumpCount; // 땅에 닿으면 점프 횟수 초기화
         }
-        
+
         // 이동 상태 설정
         move = horizontalInput != 0;
-         
+
         // 방향 전환 로직
         if (horizontalInput < 0)
         {
@@ -170,7 +169,7 @@ public class Player : MonoBehaviour
             sr.flipX = false; // 오른쪽을 바라보게 함
             cc.offset = new Vector2(-Mathf.Abs(cc.offset.x), cc.offset.y);
         }
-        
+
         // 이동 상태에 따라 애니메이터 변수 설정
         animator.SetBool("isRun", move);
 
@@ -191,14 +190,14 @@ public class Player : MonoBehaviour
             StartCoroutine(ShowEffect1ForDuration(1.0f));
         }
 
-        
+
 
         if (Input.GetKey(KeyCode.D) && !isAttacking)//스킬2
         {
             StartCoroutine(ShowEffect2ForDuration(1.0f));
         }
 
-       
+
 
         if (Input.GetKey(KeyCode.Alpha6) && !isAttacking)//스킬3
         {
@@ -247,41 +246,41 @@ public class Player : MonoBehaviour
             Debug.Log("effect3 오브젝트가 비활성화되어 있습니다.");
         }*/
 
-        
+
     }
 
     IEnumerator ShowHitboxForDuration(float duration)//평타
+    {
+        isAttacking = true;
+        animator.SetTrigger("isAttack");
+        yield return new WaitForSeconds(duration);
+
+        Vector3 direction = lastHorizontalInput < 0 ? Vector3.left : Vector3.right;
+        Vector3 spawnPosition = transform.position + direction * 2.0f;
+
+        if (lastHorizontalInput < 0)
         {
-            isAttacking = true;
-            animator.SetTrigger("isAttack");
-            yield return new WaitForSeconds(duration);           
-
-            Vector3 direction = lastHorizontalInput < 0 ? Vector3.left : Vector3.right;
-            Vector3 spawnPosition = transform.position + direction * 2.0f;
-
-            if (lastHorizontalInput < 0)
-            {
-                hitboxPrefab.transform.localScale = new Vector3(-Mathf.Abs(hitboxPrefab.transform.localScale.x), hitboxPrefab.transform.localScale.y, hitboxPrefab.transform.localScale.z);
-            }
-            else if (lastHorizontalInput > 0)
-            {
-                hitboxPrefab.transform.localScale = new Vector3(Mathf.Abs(hitboxPrefab.transform.localScale.x), hitboxPrefab.transform.localScale.y, hitboxPrefab.transform.localScale.z);
-            }
-            hitboxPrefab.transform.position = spawnPosition;
-            hitboxPrefab.SetActive(true);
-
-            yield return new WaitForSeconds(duration);
-            hitboxPrefab.SetActive(false);
-
-
-            if (isHealingActive)
-            {
-                float healAmount = hitbox.damage * 0.1f;
-                curHp = Mathf.Clamp(curHp + healAmount, 0f, maxHp);
-            }
-
-            isAttacking = false;
+            hitboxPrefab.transform.localScale = new Vector3(-Mathf.Abs(hitboxPrefab.transform.localScale.x), hitboxPrefab.transform.localScale.y, hitboxPrefab.transform.localScale.z);
         }
+        else if (lastHorizontalInput > 0)
+        {
+            hitboxPrefab.transform.localScale = new Vector3(Mathf.Abs(hitboxPrefab.transform.localScale.x), hitboxPrefab.transform.localScale.y, hitboxPrefab.transform.localScale.z);
+        }
+        hitboxPrefab.transform.position = spawnPosition;
+        hitboxPrefab.SetActive(true);
+
+        yield return new WaitForSeconds(duration);
+        hitboxPrefab.SetActive(false);
+
+
+        if (isHealingActive)
+        {
+            float healAmount = hitbox.damage * 0.1f;
+            curHp = Mathf.Clamp(curHp + healAmount, 0f, maxHp);
+        }
+
+        isAttacking = false;
+    }
     public void Movement()
     {
         if (currentJumpCount > 0)
@@ -291,7 +290,7 @@ public class Player : MonoBehaviour
                 rb.AddForce(Vector2.up * jumpforce);
                 currentJumpCount--;
                 animator.SetTrigger("isJump"); // 점프 애니메이션 트리거 실행
-            }        
+            }
         }
 
         rb.velocity = new Vector2(moveX, rb.velocity.y);
@@ -339,38 +338,38 @@ public class Player : MonoBehaviour
         }
     }
     IEnumerator BoostSpeedForDuration(float duration, float direction)
+    {
+        if (!isBoosted)
         {
-            if (!isBoosted)
+            isBoosted = true;
+            float dashDistance = 5f; // 대쉬할 거리
+            Vector2 dashDirection = new Vector2(direction, 0f).normalized; // 대쉬 방향
+            Vector3 startPosition = transform.position; // 시작 위치
+            Vector3 endPosition = startPosition + new Vector3(dashDirection.x, dashDirection.y, 0) * dashDistance; // 목표 위치
+
+            float elapsedTime = 0;
+            while (elapsedTime < duration)
             {
-                isBoosted = true;
-                float dashDistance = 5f; // 대쉬할 거리
-                Vector2 dashDirection = new Vector2(direction, 0f).normalized; // 대쉬 방향
-                Vector3 startPosition = transform.position; // 시작 위치
-                Vector3 endPosition = startPosition + new Vector3(dashDirection.x, dashDirection.y, 0) * dashDistance; // 목표 위치
+                // 대쉬 중 충돌 체크
+                RaycastHit2D wallHit = Physics2D.Raycast(transform.position, dashDirection, dashDistance, LayerMask.GetMask("Wall"));
+                RaycastHit2D groundHit = Physics2D.Raycast(transform.position, Vector2.down, 1f, LayerMask.GetMask("Ground"));
 
-                float elapsedTime = 0;
-                while (elapsedTime < duration)
+                if (wallHit.collider != null || groundHit.collider != null)
                 {
-                    // 대쉬 중 충돌 체크
-                    RaycastHit2D wallHit = Physics2D.Raycast(transform.position, dashDirection, dashDistance, LayerMask.GetMask("Wall"));
-                    RaycastHit2D groundHit = Physics2D.Raycast(transform.position, Vector2.down, 1f, LayerMask.GetMask("Ground"));
-
-                    if (wallHit.collider != null || groundHit.collider != null)
-                    {
-                        // 벽이나 바닥에 부딪히면 대쉬 중지
-                        transform.position = wallHit.collider != null ? wallHit.point : groundHit.point;
-                        break;
-                    }
-
-                    transform.position = Vector3.Lerp(startPosition, endPosition, (elapsedTime / duration));
-                    elapsedTime += Time.deltaTime;
-                    yield return null;
+                    // 벽이나 바닥에 부딪히면 대쉬 중지
+                    transform.position = wallHit.collider != null ? wallHit.point : groundHit.point;
+                    break;
                 }
 
-                gameObject.layer = LayerMask.NameToLayer("Player");
-                isBoosted = false;
+                transform.position = Vector3.Lerp(startPosition, endPosition, (elapsedTime / duration));
+                elapsedTime += Time.deltaTime;
+                yield return null;
             }
+
+            gameObject.layer = LayerMask.NameToLayer("Player");
+            isBoosted = false;
         }
+    }
     private IEnumerator ChangeLayerToPlayer()
     {
         yield return new WaitForSeconds(1f);
@@ -582,14 +581,14 @@ public class Player : MonoBehaviour
         Vector3 spawnPosition = transform.position + new Vector3(direction, 0f, 0f);
 
         animator.SetTrigger("isArrow");
-        yield return new WaitForSeconds(0.5f); 
+        yield return new WaitForSeconds(0.5f);
 
         for (int i = 0; i < 2; i++)
         {
             Instantiate(holyArrowPrefab, spawnPosition, Quaternion.identity);
-            if (i < 1) 
+            if (i < 1)
             {
-                yield return new WaitForSeconds(0.4f); 
+                yield return new WaitForSeconds(0.4f);
             }
         }
         yield return new WaitForSeconds(0);
@@ -624,7 +623,7 @@ public class Player : MonoBehaviour
         }
         isAttacking = false;
     }
-    
+
     public IEnumerator AtkBuffSkill()      // AtkBuff 스킬 생성 함수 
     {
         float direction = sr.flipX ? 0.3f : -0.3f;
@@ -650,7 +649,7 @@ public class Player : MonoBehaviour
         direction = sr.flipX ? 0.3f : -0.3f;
         slash.transform.position = new Vector2(direction, 0.8f);
         yield return new WaitForSeconds(0.3f);
-        Destroy(slash);       
+        Destroy(slash);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

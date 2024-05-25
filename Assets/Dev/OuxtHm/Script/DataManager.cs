@@ -40,6 +40,7 @@ public class DataManager : MonoBehaviour
     public GameManager gm;
     public SoundManager sm;
     public SkillManager skillM;
+    ChangePassive changePassvie;
     SkillUI skillUi;
     public Player player;
 
@@ -124,6 +125,7 @@ public class DataManager : MonoBehaviour
             player = Player.instance;
             skillM = SkillManager.instance;
             skillUi = SkillUI.instance;
+            changePassvie = ChangePassive.instance;
         }
     }
     private void OnDestroy()
@@ -184,6 +186,9 @@ public class DataManager : MonoBehaviour
             skillM.commonSkillNum[1] = skillData.nowSkill;
             skillM.ultSkillNum = skillData.ultSkill;
 
+            // 패시브 정보 불러오기
+            skillM.passiveNum[0] = skillData.readyPassive;
+            skillM.passiveNum[1] = skillData.nowPassive;
             yield return null;
             //-----------------------------------------------
             // 스킬 데이터 -1 값이 없어서 현재 오류 발생 중
@@ -194,11 +199,14 @@ public class DataManager : MonoBehaviour
             skillM.CreateSkill(skillM.commonSkillNum[1], skillUi.change.nowskill);
             skillM.CreateSkill(skillM.ultSkillNum, skillUi.ult);
 
+            // 패시브 아이콘 생성
+            skillM.CreateSkill(skillM.passiveNum[0], changePassvie.readyPassive);
+            skillM.CreateSkill(skillM.passiveNum[1], changePassvie.nowPassive);
+
             // 스킬 아이콘 컴포넌트 받기
             skillUi.GetSkillComponent();
             skillUi.GetUltComponent();
             skillUi.change.ImageGetComponent();
-
         }
         else
         {

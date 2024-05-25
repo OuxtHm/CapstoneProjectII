@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fca7c8178b52a1d4d850ef93f1495fa4, type: 3}
   m_Name: Heal
   m_EditorClassIdentifier: 
-  number: 1
+  number: 7
   skillName: Heal
   description: "\uC0AC\uC6A9 \uC989\uC2DC \uCCB4\uB825\uC744 \uD68C\uBCF5\uD569\uB2C8\uB2E4."
   level: 010000000200000003000000
   coolTime: 20
-  price: 0
+  price: 100
   coefficient: 1.5

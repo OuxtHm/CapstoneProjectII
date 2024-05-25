@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fca7c8178b52a1d4d850ef93f1495fa4, type: 3}
   m_Name: Reach
   m_EditorClassIdentifier: 
-  number: 6
+  number: 3
   skillName: Reach
   description: "\uC0AC\uAC70\uB9AC\uAC00 \uC99D\uAC00\uB41C \uAC80\uAE30\uB97C \uC0DD\uC131\uD569\uB2C8\uB2E4."
   level: 010000000200000003000000

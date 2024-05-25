@@ -7,11 +7,12 @@ public class SkillManager : MonoBehaviour
     public static SkillManager instance;
     public int[] commonSkillNum = new int[2];
     public int ultSkillNum;
-    public GameObject[] skill = new GameObject[9];
+    public int[] passiveNum = new int[2];   
+    public GameObject[] skill = new GameObject[13];
     private void Awake()
     {
         instance = this;
-        ultSkillNum = -1;
+        //ultSkillNum = -1;
     }
 
     public void CreateSkill(int number, Transform createObjectParent)
