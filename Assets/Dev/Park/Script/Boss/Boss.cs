@@ -330,6 +330,7 @@ public abstract class Boss : MonoBehaviour
         APb.DelTime = 3f;
         APb.movecheck = 1;
         APb.speed = 20;
+        APb.playerpos = player.transform;
 
         GameObject arrow = Instantiate(ArrowPb, PbSpawn.position, PbSpawn.rotation);
 
@@ -345,6 +346,7 @@ public abstract class Boss : MonoBehaviour
         ArPb.dir = DirX;
         ArPb.DelTime = 1.1f;
         ArPb.movecheck = 0;
+        ArPb.playerpos = player.transform;
 
         GameObject Warring = Instantiate(WarningPb, Warningpos, PbSpawn.rotation);  //위험 표시 생성
         yield return new WaitForSeconds(1.5f);
@@ -362,6 +364,7 @@ public abstract class Boss : MonoBehaviour
         LrPb.dir = DirX;
         LrPb.DelTime = 0.3f;
         LrPb.movecheck = 0;
+        LrPb.playerpos = player.transform;
 
         yield return new WaitForSeconds(0.9f);
         GameObject arrowlaser = Instantiate(LaserPb, newPosition, PbSpawn.rotation);
@@ -417,6 +420,7 @@ public abstract class Boss : MonoBehaviour
         SEfPb.Power = boss_TwoPattenPower;
         SEfPb.DelTime = 0.6f;
         SEfPb.movecheck = 0;
+        SEfPb.playerpos = player.transform;
 
         GameObject effect = Instantiate(SwordEffectPb, Spownpos, PbSpawn.rotation);
         Invoke("MoveOn", 3.5f);
@@ -432,6 +436,7 @@ public abstract class Boss : MonoBehaviour
         FirePb.DelTime = 1f;
         FirePb.movecheck = 1;
         FirePb.speed = 15;
+        FirePb.playerpos = player.transform;
 
         GameObject effect = Instantiate(FireEffectPb, Spownpos, PbSpawn.rotation);
         Invoke("MoveOn", 3.5f);

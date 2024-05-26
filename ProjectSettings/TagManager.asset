@@ -12,6 +12,8 @@ TagManager:
   - Coin
   - Potion
   - SkillItem
+  - CameraDown
+  - CameraUp
   layers:
   - Default
   - TransparentFX

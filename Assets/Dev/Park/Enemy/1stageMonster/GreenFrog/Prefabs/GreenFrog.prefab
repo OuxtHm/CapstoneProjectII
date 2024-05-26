@@ -345,7 +345,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4980826423454236720}
   - component: {fileID: 3977670085171073959}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: AttackBox
   m_TagString: Enemy
   m_Icon: {fileID: 0}

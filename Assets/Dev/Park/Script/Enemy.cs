@@ -90,7 +90,7 @@ public abstract class Enemy : MonoBehaviour
         {
             if (distanceToTarget <= detectionRange && !ishurt && !isdie && enemy_Type == 1 || enemy_Type == 3) //공중 몬스터 이외의 몬스터가 타겟이 범위 안에 있을 때 수행
             {
-                if (rayHit.collider != null && !isattack)
+                if (!isattack)
                 {
                     istracking = true;
                     direction.y = 0; // y값 위치 고정을 위해 추가
@@ -110,7 +110,7 @@ public abstract class Enemy : MonoBehaviour
                         AttackBox.position = new Vector2(transform.position.x - 1, transform.position.y);
                     }
 
-                    if ((target.position.y - transform.position.y) <= 4f)   //타겟과 어느정도의 높이 차이가 있을경우 추적 멈춤
+                    if (Mathf.Abs(target.position.y - transform.position.y) <= 4f)   //타겟과 어느정도의 높이 차이가 있을경우 추적 멈춤
                     {
                         anim.SetBool("Move", true);
                         transform.Translate(direction * Time.deltaTime * enemy_Speed);
@@ -118,6 +118,7 @@ public abstract class Enemy : MonoBehaviour
                     else
                     {
                         anim.SetBool("Move", false);
+                        istracking = false;
                     }
 
 
@@ -126,11 +127,6 @@ public abstract class Enemy : MonoBehaviour
                         if (player.curHp > 0)
                             StartCoroutine(Attack());
                     }
-                }
-                else if (rayHit.collider == null)  //바닥이 없으면 추적 종료
-                {
-                    istracking = false;
-                    StartCoroutine(DirectionChange());
                 }
             }
             else if (enemy_Type == 2 && !istracking)  // 공중 몬스터 일때
@@ -223,9 +219,6 @@ public abstract class Enemy : MonoBehaviour
                     spriteRenderer.flipX = false;
                     AttackBox.position = new Vector2(transform.position.x + 1, transform.position.y);
                 }
-
-                if (rayHit.collider == null)
-                    Turn();
             }
             else
             {
@@ -258,12 +251,11 @@ public abstract class Enemy : MonoBehaviour
         // 물리 기반으로 레이저를 아래로 쏘아서 실질적인 레이저 생성, LayMask.GetMask("")는 해당하는 레이어만 스캔함
         rayHit = Physics2D.Raycast(frontVec, Vector3.down, 1.5f, LayerMask.GetMask("Ground"));
         rayHitfront = Physics2D.Raycast(WallVec, Vector3.down, 0.3f, LayerMask.GetMask("Ground"));
-        if (rayHit.collider == null && enemy_CurHP >= 0 && enemy_Type != 2 && istracking)
+        if (rayHit.collider == null && enemy_CurHP >= 0 && enemy_Type != 2 && !istracking)
         {
             Turn();
-            istracking = false;
         }
-        else if(rayHitfront.collider != null && enemy_CurHP >= 0 && enemy_Type != 2)
+        if(rayHitfront.collider != null && enemy_CurHP >= 0 && enemy_Type != 2 && !istracking)
         {
             Turn();
         }
@@ -273,7 +265,7 @@ public abstract class Enemy : MonoBehaviour
     {
         spriteRenderer = this.GetComponentInChildren<SpriteRenderer>();
         DirX *= -1;   // nextDirX에 -1을 곱해 방향 전환
-        if (DirX == 1 && distanceToTarget > detectionRange)  // distanceToTarget > detectionRange를 추가하지 않으면 플레이어가 사거리 내에 있고 rayHit=null이라면 제자리 돌기함
+        if (DirX == 1)  // distanceToTarget > detectionRange를 추가하지 않으면 플레이어가 사거리 내에 있고 rayHit=null이라면 제자리 돌기함
         {
             spriteRenderer.flipX = false; // DirX 값이 1이면 x축을 flip함
         }

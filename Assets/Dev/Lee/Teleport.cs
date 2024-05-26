@@ -16,7 +16,8 @@ public class Teleport : MonoBehaviour
     Animator animator;
     public int stageNumber; // 포탈이 속한 스테이지 번호
     public bool isActive = false; // 포탈이 활성화 상태인지 저장하는 필드
-    public bool isTelepo = false;   
+    public bool isTelepo = false;
+    bool isbgm = false; //bgm이 실행되고 있는지 확인
 
     private void Awake()
     {
@@ -77,12 +78,15 @@ public class Teleport : MonoBehaviour
                 // 스테이지 배열 범위를 초과하는 경우, 첫 번째 스테이지로 돌아감
                 stageManager.ChangeStage(1);
             }
+
+            isbgm = false;
         }
         else
         {
             // 현재 스테이지 레벨이 5가 아닐 경우, 레벨을 1 증가
             stageManager.nowStageLv++;
-            if(stageManager.nowStageLv == 5)        
+            isbgm = true;
+            if (stageManager.nowStageLv == 5)        
             {
                 Debug.Log("상점 UI 지우기");
                 ShopUI shopUi = ShopUI.instance;
@@ -92,8 +96,8 @@ public class Teleport : MonoBehaviour
         dm.playerData.nowStage = stageManager.nowStage;
         dm.playerData.nowStageLV = stageManager.nowStageLv;
 
-        if (stageManager.nowStageLv == 5)
-            {
+        if (stageManager.nowStageLv == 5)   //보스 스테이지일 때 실행되는 bgm
+        {
                 if (stageManager.nowStage == 1)
                 {
                     soundManager.BGMPlay(soundManager.boss_stage1);
@@ -109,8 +113,28 @@ public class Teleport : MonoBehaviour
                     soundManager.BGMPlay(soundManager.boss_stage3);
                     Debug.Log("3스테이지 보스 bgm실행");
                 }
+        }
+        else   //일반 스테이지일 때 실행되는 bgm
+        {
+            if (!isbgm) // nowStage가 변경될 때만 실행되게 조건문 추가
+            {
+                if (stageManager.nowStage == 1)
+                {
+                    soundManager.BGMPlay(soundManager.nomal_stage1);
+                    Debug.Log("1스테이지 일반 bgm실행");
+                }
+                else if (stageManager.nowStage == 2)
+                {
+                    soundManager.BGMPlay(soundManager.nomal_stage2);
+                    Debug.Log("2스테이지 일반 bgm실행");
+                }
+                else
+                {
+                    soundManager.BGMPlay(soundManager.nomal_stage3);
+                    Debug.Log("3스테이지 일반 bgm실행");
+                }
             }
-            
+        }
 
         // 현재 스테이지와 레벨 출력
         stageUi.PrintStage(stageManager.nowStage, stageManager.nowStageLv);

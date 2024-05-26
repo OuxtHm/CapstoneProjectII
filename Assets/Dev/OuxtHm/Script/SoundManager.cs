@@ -13,6 +13,9 @@ public class SoundManager : MonoBehaviour
     public AudioClip boss_stage1;
     public AudioClip boss_stage2;
     public AudioClip boss_stage3;
+    public AudioClip nomal_stage1;
+    public AudioClip nomal_stage2;
+    public AudioClip nomal_stage3;
     private void Awake()
     {
         if (instance == null)
@@ -35,6 +38,9 @@ public class SoundManager : MonoBehaviour
         boss_stage1 = Resources.Load<AudioClip>("Sound/1stageBoss");
         boss_stage2 = Resources.Load<AudioClip>("Sound/2stageBoss");
         boss_stage3 = Resources.Load<AudioClip>("Sound/3stageBoss");
+        nomal_stage1 = Resources.Load<AudioClip>("Sound/1stageNomal");
+        nomal_stage2 = Resources.Load<AudioClip>("Sound/2stageNomal");
+        nomal_stage3 = Resources.Load<AudioClip>("Sound/3stageNomal");
     }
 
     public void MasterVolume(float val)
