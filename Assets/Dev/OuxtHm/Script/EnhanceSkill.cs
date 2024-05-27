@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class EnhanceSkill : MonoBehaviour
 {
+    SoundManager sm;
     Player player;
     ChangeSkill changeSkill;
     public SkillControler[] skill = new SkillControler[2];      // 플레이어의 스킬
@@ -13,9 +14,10 @@ public class EnhanceSkill : MonoBehaviour
     public TextMeshProUGUI[,] description = new TextMeshProUGUI[2,2];     // 강화 내용
     public Button[] enhanceBtn = new Button[2];     // 스킬 강화 버튼
     private GameObject warning;     // 골드 부족 경고창
-
+    private int[] cost = new int[2];
     private void Awake()
     {
+        cost = new int[] { 100, 300 };
         warning = Resources.Load<GameObject>("Prefabs/Warning_canvas");
         for (int i = 0; i < 2; i++)
         {
@@ -29,6 +31,7 @@ public class EnhanceSkill : MonoBehaviour
 
     private void Start()
     {
+        sm = SoundManager.instance;
         player = Player.instance;
         changeSkill = ChangeSkill.instance;
 
@@ -57,7 +60,11 @@ public class EnhanceSkill : MonoBehaviour
             {
                 if(player.money > 0)
                 {
+                    Debug.Log(cost[skill[index].level - 1]);
+                    player.money -= cost[skill[index].level - 1];
                     skill[index].level++;
+                    skill[index].coolTime *= 0.9f;
+                    skill[index].coefficient *= 1.2f;
                     SkillTextUpdate(index);
                     if (skill[index].level == 3)
                     {
@@ -88,21 +95,25 @@ public class EnhanceSkill : MonoBehaviour
 
     public void SkillTextUpdate(int index)  // 강화 창의 텍스트 내용 업데이트
     {
-        description[index, 0].text = "Level" + skill[index].level.ToString();
+        // 좌측 현재 스킬 능력치 출력
+        description[index, 0].text = "Level" + skill[index].level.ToString() + "\n" + "쿨타임" + skill[index].coolTime.ToString("F2") + "\n" + "스킬 계수" + skill[index].coefficient.ToString("F1");
 
         if (skill[index].level == 2)
         {
-            description[index, 1].text = "MAX";
+            description[index, 1].text = "MAX";     // 강화 된 모습 우측 출력
         }
         if (skill[index].level == 3)
         {
+            // 좌,우측 강화된 모습 출력
             description[index, 0].text = "MAX";
             description[index, 1].text = "MAX";
         }
         else
         {
             int plusLevel = skill[index].level + 1;
-            description[index, 1].text = "Level" + plusLevel.ToString();
+            float enhanceCoolTime = skill[index].coolTime * 0.9f;
+            float enhanceCoefficent = skill[index].coefficient * 1.2f;
+            description[index, 1].text = "Level" + plusLevel.ToString() + "\n" + "쿨타임" + enhanceCoolTime.ToString("F2") + "\n" + "스킬 계수" + enhanceCoefficent.ToString("F1");
         }
     }
 }

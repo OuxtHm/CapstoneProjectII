@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class MainScene : MonoBehaviour
 {
     public static MainScene instance;
-    public DataManager dm;
+    DataManager dm;
     SoundManager sm;
     public Button[] btn = new Button[4];
     GameObject fadePrefab;      // ÆäÀÌµå ¾Æ¿ô ÇÁ¸®Æé

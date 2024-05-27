@@ -11,6 +11,7 @@ public class SkillControler : MonoBehaviour
     public int level;
     public float coolTime;
     public int price;
+    public float coefficient;
 
     private void Awake()
     {
@@ -20,5 +21,6 @@ public class SkillControler : MonoBehaviour
         level = skill.level[0];
         coolTime = skill.coolTime;
         price = skill.price;
+        coefficient = skill.coefficient;
     }
 }
