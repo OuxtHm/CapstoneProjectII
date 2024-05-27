@@ -6,14 +6,18 @@ using UnityEngine.UI;
 
 public class EnhanceSkill : MonoBehaviour
 {
+    Player player;
     ChangeSkill changeSkill;
     public SkillControler[] skill = new SkillControler[2];      // 플레이어의 스킬
     public RectTransform[,] rect = new RectTransform[2,2];      // 스킬 이미지를 띄울 RectTransform
     public TextMeshProUGUI[,] description = new TextMeshProUGUI[2,2];     // 강화 내용
     public Button[] enhanceBtn = new Button[2];     // 스킬 강화 버튼
+    private GameObject warning;     // 골드 부족 경고창
+
     private void Awake()
     {
-        for(int i = 0; i < 2; i++)
+        warning = Resources.Load<GameObject>("Prefabs/Warning_canvas");
+        for (int i = 0; i < 2; i++)
         {
             for(int j = 0; j < 2; j++)
             {
@@ -25,6 +29,7 @@ public class EnhanceSkill : MonoBehaviour
 
     private void Start()
     {
+        player = Player.instance;
         changeSkill = ChangeSkill.instance;
 
         GameObject[] skill_1 = new GameObject[2];
@@ -50,11 +55,18 @@ public class EnhanceSkill : MonoBehaviour
             // 강화 버튼 기능
             enhanceBtn[i].onClick.AddListener(() =>
             {
-                skill[index].level++;
-                SkillTextUpdate(index);
-                if (skill[index].level == 3)
+                if(player.money > 0)
                 {
-                    Destroy(enhanceBtn[index].gameObject);
+                    skill[index].level++;
+                    SkillTextUpdate(index);
+                    if (skill[index].level == 3)
+                    {
+                        Destroy(enhanceBtn[index].gameObject);
+                    }
+                }
+                else
+                {
+                    Instantiate(warning);
                 }
             });
         }

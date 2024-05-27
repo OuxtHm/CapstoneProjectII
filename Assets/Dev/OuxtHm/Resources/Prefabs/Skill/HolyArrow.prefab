@@ -190,8 +190,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b9350e3c5582b344bf36912d8b27a94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skillInfo: {fileID: 11400000, guid: df6f170880b58e3469d7028795a5f00b, type: 2}
   player: {fileID: 0}
   arrowDamage: 10
   speed: 20
   duration: 0.5
   direction: 0
+  damage: 10

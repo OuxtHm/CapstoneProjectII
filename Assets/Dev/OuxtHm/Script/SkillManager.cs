@@ -12,7 +12,6 @@ public class SkillManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        //ultSkillNum = -1;
     }
 
     public void CreateSkill(int number, Transform createObjectParent)

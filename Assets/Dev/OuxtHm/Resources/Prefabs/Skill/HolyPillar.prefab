@@ -94,6 +94,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 634714e8180517e4d8ed03b5c89acdd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skillInfo: {fileID: 11400000, guid: 4e64e1a16b3640d4da80c19a1aa10a70, type: 2}
+  enemy: {fileID: 0}
+  boxCollider2D: {fileID: 0}
   PillarDamage: 20
 --- !u!1 &6040721070478294298
 GameObject:

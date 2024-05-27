@@ -6,7 +6,10 @@ public class Thunder : MonoBehaviour
 {
     public SkillScriptable skillInfo;
     BoxCollider2D boxCollider2D;
-    public int thunderDamage;
+    public Enemy enemy;
+    Boss boss;
+
+    public int thunderDamage = 20;
 
     private void Awake()
     {
@@ -25,4 +28,27 @@ public class Thunder : MonoBehaviour
         boxCollider2D.enabled = false;
         Destroy(this.gameObject);
     }
+
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            enemy = collider.GetComponent<Enemy>();
+
+            if (enemy != null)
+            {
+                StartCoroutine(enemy.Hurt(this.transform, thunderDamage));
+            }
+        }
+        else if (collider.gameObject.layer == LayerMask.NameToLayer("Boss"))
+        {
+            boss = collider.GetComponent<Boss>();
+
+            if (boss != null)
+            {
+                StartCoroutine(boss.Hurt(this.transform, thunderDamage));
+            }
+        }
+    }
+
 }

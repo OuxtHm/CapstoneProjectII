@@ -14,6 +14,7 @@ public class HolyArrow : MonoBehaviour
     public float speed = 20f; // 속도
     public float duration = 0.5f; // 이동 시간
     public int direction;      // 방향
+    public float damage = 10f;
     private void Awake()
     {
         sprite = this.gameObject.GetComponentInChildren<SpriteRenderer>();
@@ -58,5 +59,29 @@ public class HolyArrow : MonoBehaviour
         }
 
         Destroy(this.gameObject);
+    }
+
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            enemy = collider.GetComponent<Enemy>();
+
+            if (enemy != null)
+            {
+                StartCoroutine(enemy.Hurt(this.transform, damage));
+            }
+        }
+
+
+        if (collider.gameObject.layer == LayerMask.NameToLayer("Boss"))
+        {
+            boss = collider.GetComponent<Boss>();
+
+            if (boss != null)
+            {
+                StartCoroutine(boss.Hurt(this.transform, damage));
+            }
+        }
     }
 }
