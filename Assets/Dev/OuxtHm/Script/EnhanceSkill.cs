@@ -96,7 +96,9 @@ public class EnhanceSkill : MonoBehaviour
     public void SkillTextUpdate(int index)  // 강화 창의 텍스트 내용 업데이트
     {
         // 좌측 현재 스킬 능력치 출력
-        description[index, 0].text = "Level" + skill[index].level.ToString() + "\n" + "쿨타임" + skill[index].coolTime.ToString("F2") + "\n" + "스킬 계수" + skill[index].coefficient.ToString("F1");
+        description[index, 0].text = "Level" + skill[index].level.ToString() + "\n" 
+            + "쿨타임" + skill[index].coolTime.ToString("F2") + "\n" 
+            + "스킬 계수" + skill[index].coefficient.ToString("F1");
 
         if (skill[index].level == 2)
         {
@@ -113,7 +115,9 @@ public class EnhanceSkill : MonoBehaviour
             int plusLevel = skill[index].level + 1;
             float enhanceCoolTime = skill[index].coolTime * 0.9f;
             float enhanceCoefficent = skill[index].coefficient * 1.2f;
-            description[index, 1].text = "Level" + plusLevel.ToString() + "\n" + "쿨타임" + enhanceCoolTime.ToString("F2") + "\n" + "스킬 계수" + enhanceCoefficent.ToString("F1");
+            description[index, 1].text = "Level" + plusLevel.ToString() + "\n" 
+                + "쿨타임" + enhanceCoolTime.ToString("F2") + "\n" 
+                + "스킬 계수" + enhanceCoefficent.ToString("F1");
         }
     }
 }

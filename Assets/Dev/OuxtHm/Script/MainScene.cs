@@ -14,6 +14,7 @@ public class MainScene : MonoBehaviour
     GameObject optionUi;        // 옵션 UI
     string savePath;        // 데이터 저장 경로
     public AudioClip clickSounds;      // 버튼 클릭 사운드
+    public AudioClip mainBgm;       // 메인 배경음
     public string sceneName;        // 이동할 씬 이름
     private void Awake()
     {
@@ -42,17 +43,21 @@ public class MainScene : MonoBehaviour
     IEnumerator ClickNewGameBtn()
     {
         sm.SFXPlay(clickSounds);
+        StartCoroutine(sm.FadeOutCoroutine());
         dm.NewGame();
         GameObject fade = Instantiate(fadePrefab);
         yield return new WaitForSeconds(1f);
+        sm.BGMStop(mainBgm);
         SceneManager.LoadScene(sceneName);
 
     }
     IEnumerator ClickGameStartBtn()
     {
         sm.SFXPlay(clickSounds);
+        StartCoroutine(sm.FadeOutCoroutine());
         GameObject fade = Instantiate(fadePrefab);
         yield return new WaitForSeconds(1f);
+        sm.BGMStop(mainBgm);
         SceneManager.LoadScene(sceneName);
     }
 

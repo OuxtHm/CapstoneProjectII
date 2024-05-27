@@ -1093,13 +1093,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a123506f795b064eafa235e01c71950, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dm: {fileID: 0}
   btn:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   clickSounds: {fileID: 8300000, guid: 0a8b0f9c520426946bbf7a033b131f7e, type: 3}
+  mainBgm: {fileID: 8300000, guid: 3064482b2db32594b9847562cc5d55b5, type: 3}
   sceneName: 
 --- !u!114 &362293624
 MonoBehaviour:
@@ -1907,6 +1907,7 @@ MonoBehaviour:
   deadUiPrefab: {fileID: 0}
   fadeInPrefab: {fileID: 0}
   show: 0
+  mainBgm: {fileID: 8300000, guid: 3064482b2db32594b9847562cc5d55b5, type: 3}
 --- !u!1 &643834219
 GameObject:
   m_ObjectHideFlags: 0
