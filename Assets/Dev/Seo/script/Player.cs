@@ -237,7 +237,7 @@ public class Player : MonoBehaviour
         {
             StartCoroutine(BoostSpeedForDuration(boostDuration, lastHorizontalInput));
             animator.SetTrigger("isDash");
-            gameObject.layer = LayerMask.NameToLayer("Enemy");
+            gameObject.layer = LayerMask.NameToLayer("Dash");
             //canChangeDirDuringDash = false;
         }
 
