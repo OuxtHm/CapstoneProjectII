@@ -17,7 +17,11 @@ public class StageManager : MonoBehaviour
         dm = DataManager.instance;
         nowStage = dm.playerData.nowStage;
         nowStageLv = dm.playerData.nowStageLV;
+        LoadMapData();
+    }
 
+    void LoadMapData()      // 맵 데이터 불러오기
+    {
         stage[dm.playerData.nowStage - 1].SetActive(true);
 
         for (int i = 0; i < stage.Length; i++)
@@ -27,9 +31,7 @@ public class StageManager : MonoBehaviour
                 stage[i].SetActive(false);
             }
         }
-        
     }
-
     public void ChangeStage(int num)
     {
         stage[nowStage - 1].SetActive(false); // 현재 스테이지를 비활성화

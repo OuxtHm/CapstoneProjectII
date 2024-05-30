@@ -16,11 +16,15 @@ public class Teleport : MonoBehaviour
     public int stageNumber; // 포탈이 속한 스테이지 번호
     public bool isActive = false; // 포탈이 활성화 상태인지 저장하는 필드
     public bool isTelepo = false;
-
+    GameObject[] bossScene = new GameObject[3];
     private void Awake()
     {
         Instance = this;
         keyX = this.transform.GetChild(0).gameObject;
+
+        bossScene[0] = Resources.Load<GameObject>("Prefabs/LeafBossShow_canvas");
+        bossScene[1] = Resources.Load<GameObject>("Prefabs/ShadowBossShow_canvas");
+        bossScene[1] = Resources.Load<GameObject>("Prefabs/DevilBossShow_canvas");
     }
     private void Start()
     {
@@ -88,22 +92,28 @@ public class Teleport : MonoBehaviour
 
         if (stageManager.nowStageLv == 5)
         {
+            GameObject bossScnenShow;
             if (stageManager.nowStage == 1)
             {
                 soundManager.BGMPlay(soundManager.boss_stage1);
+                bossScnenShow = Instantiate(bossScene[0]);
                 Debug.Log("1스테이지 보스 bgm실행");
             }
             else if (stageManager.nowStage == 2)
             {
                 soundManager.BGMPlay(soundManager.boss_stage2);
+                bossScnenShow = Instantiate(bossScene[1]);
                 Debug.Log("2스테이지 보스 bgm실행");
             }
             else
             {
                 soundManager.BGMPlay(soundManager.boss_stage3);
+                bossScnenShow = Instantiate(bossScene[2]);
                 Debug.Log("3스테이지 보스 bgm실행");
             }
+            StartCoroutine(BossSceneShowDestroy(bossScnenShow));
         }
+        
 
 
         // 현재 스테이지와 레벨 출력
@@ -116,7 +126,11 @@ public class Teleport : MonoBehaviour
         dm.SaveData();
         fadeScript.gameObject.SetActive(false);
     }
-
+    IEnumerator BossSceneShowDestroy(GameObject destroyObject)
+    {
+        yield return new WaitForSeconds(2f);
+        Destroy(destroyObject);
+    }
     void DestroyShopUi()        // 상점 UI가 있다면 삭제하는 함수
     {
         if (stageManager.nowStageLv == 4)
