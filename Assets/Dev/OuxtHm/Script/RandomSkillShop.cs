@@ -8,7 +8,7 @@ public class RandomSkillShop : MonoBehaviour
 {
     public static RandomSkillShop instance;
     public SkillControler[] skillCon = new SkillControler[4];       // 스킬 정보 스크립트
-    public RectTransform[] skillRect = new RectTransform[4];        
+    public RectTransform[] skillRect = new RectTransform[4];        // 스킬 아이콘을 생성한 위치
     public TextMeshProUGUI[] skillTxt = new TextMeshProUGUI[4];     // 스킬 내용이 작성될 공간
     public TextMeshProUGUI[] priceTxt = new TextMeshProUGUI[4];     // 스킬 가격이 작성될 공간
     private string ultSkillPath = "Prefabs/SkillIcon/Ult";

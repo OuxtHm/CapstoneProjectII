@@ -24,7 +24,7 @@ public class MainScene : MonoBehaviour
         optionUi = transform.GetChild(1).gameObject;
         for (int i = 0; i < btn.Length; i++)
         {
-            btn[i] = transform.GetChild(0).GetChild(0).GetChild(i).GetComponent<Button>();
+            btn[i] = transform.GetChild(0).GetChild(1).GetChild(i).GetComponent<Button>();
         }
         
     }

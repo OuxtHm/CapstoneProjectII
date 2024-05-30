@@ -17,6 +17,17 @@ public class StageManager : MonoBehaviour
         dm = DataManager.instance;
         nowStage = dm.playerData.nowStage;
         nowStageLv = dm.playerData.nowStageLV;
+
+        stage[dm.playerData.nowStage - 1].SetActive(true);
+
+        for (int i = 0; i < stage.Length; i++)
+        {
+            if (i != dm.playerData.nowStage - 1)
+            {
+                stage[i].SetActive(false);
+            }
+        }
+        
     }
 
     public void ChangeStage(int num)

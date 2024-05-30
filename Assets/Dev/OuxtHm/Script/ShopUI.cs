@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,7 +12,6 @@ public class ShopUI : MonoBehaviour
     RandomSkillShop randSkill;
     SkillUI skillUI;
     public TextMeshProUGUI money_txt;
-    public GameObject grandObject;
     public Button skillTabBtn;     // 스킬 구매 탭 활성화 버튼
     public Button enhanceTabBtn;       // 강화 탭 활성화 버튼
     public GameObject skillTabPage;     // 스킬 구매 화면
@@ -27,6 +27,9 @@ public class ShopUI : MonoBehaviour
     private int selectSkillNum;
     public AudioClip clickSounds;      // 버튼 클릭 사운드
     private GameObject warning;     // 골드 부족 경고창
+    private GameObject soldOut;     // 판매완료 프리펩
+    private int selectindex;      // 선택한 물품 번호
+    private List<int> purchasedSkills = new List<int>(); // 구매한 스킬 인덱스 저장
     private void Awake()
     {
         instance = this;
@@ -39,6 +42,7 @@ public class ShopUI : MonoBehaviour
         skillSlotUi = transform.GetChild(2).gameObject;
         purchaseY = checkingObj.transform.GetChild(0).GetComponent<Button>();
         warning = Resources.Load<GameObject>("Prefabs/Warning_canvas");
+        soldOut = Resources.Load<GameObject>("Prefabs/SoldOut");
         for (int i = 0; i < 2; i++)
         {
             slot[i] = skillSlotUi.transform.GetChild(i).GetComponentInChildren<Button>();
@@ -70,7 +74,12 @@ public class ShopUI : MonoBehaviour
             // 상점 스킬 목록 버튼 기능
             btn[i].onClick.AddListener(() =>
             {
-                if(player.money <= 0)
+                if (purchasedSkills.Contains(index)) // 이미 구매한 스킬인지 확인
+                {
+                    return; // 여기서 함수를 종료하여 더 이상 진행하지 않음
+                }
+
+                if (player.money <= 0)
                 {
                     Instantiate(warning);
                 }
@@ -78,6 +87,7 @@ public class ShopUI : MonoBehaviour
                 {
                     sm.SFXPlay(clickSounds);
                     price = randSkill.skillCon[index].price;
+                    selectindex = index;
                     Ask(index);
                 }
             });
@@ -151,9 +161,11 @@ public class ShopUI : MonoBehaviour
 
     public void Sell()      // 물품 판매
     {
+        Instantiate(soldOut, randSkill.skillRect[selectindex]);
         player.money -= price;
         MoneyUpdate();
         skillSlotUi.SetActive(true);
+        purchasedSkills.Add(selectSkillNum); // 구매한 스킬 인덱스를 리스트에 추가
     }
  
     public void Ask(int num)        // 구매 여부를 묻는 UI 생성
