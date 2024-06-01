@@ -6,6 +6,7 @@ public class Teleport : MonoBehaviour
 {
     StageManager stageManager;
     SoundManager soundManager;
+    MainCam maincam;
     public static Teleport Instance;  
     DataManager dm;
     public GameObject targetObj;
@@ -31,6 +32,7 @@ public class Teleport : MonoBehaviour
         stageManager = StageManager.instance;
         animator = GetComponent<Animator>();
         soundManager = SoundManager.instance;
+        
     }
     
     private void OnTriggerEnter2D(Collider2D collision)
@@ -50,6 +52,7 @@ public class Teleport : MonoBehaviour
     {
         if (collision.CompareTag("Player") && Input.GetKeyDown(KeyCode.X))
         {
+            maincam = MainCam.instance.GetComponent<MainCam>();
             StartCoroutine(TelepotyRoutine());
         }
     }
@@ -95,6 +98,7 @@ public class Teleport : MonoBehaviour
         }
         dm.playerData.nowStage = stageManager.nowStage;
         dm.playerData.nowStageLV = stageManager.nowStageLv;
+        maincam.CameraPosition();   //박지우 추가 05.29 - 카메라 위치 이동
 
         if (stageManager.nowStageLv == 5)   //보스 스테이지일 때 실행되는 bgm
         {

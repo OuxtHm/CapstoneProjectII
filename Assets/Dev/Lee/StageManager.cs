@@ -36,6 +36,7 @@ public class StageManager : MonoBehaviour
             {
                 teleport.enabled = (teleport.stageNumber <= nowStage);
             }
+            Debug.Log(nowStageLv);
         }
         else
         {

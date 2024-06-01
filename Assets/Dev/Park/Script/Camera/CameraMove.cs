@@ -9,8 +9,6 @@ public class CameraMove : MonoBehaviour
     float directionX;    // 플레이어가 지나간 X방향
     float directionY;    // 플레이어가 지나간 Y방향
     public int moveCount = 0;   //카메라가 더 이상 이동할 수 없는 위치인지 확인하는 변수 
-    int changeUp = 1;    //위 아래로 움직이는 카메라이동 오브젝트의 
-    int changeDown = 1;
 
     private void Awake()
     {
@@ -56,29 +54,25 @@ public class CameraMove : MonoBehaviour
             if (player != null)
             {
                 directionX = transform.position.x - player.transform.position.x;
-                directionY = transform.position.y - player.transform.position.y;
                 if (isMove)
                 {
+                    float UpSize = 8f;
+                    float DownSize = 5f;
                     if (tag == "CameraDown")
                     {
-                        if(changeDown == 1)
-                            mainCamera.transform.position = new Vector3(mainCamera.transform.position.x, mainCamera.transform.position.y - 5f, mainCamera.transform.position.z);
+                        if(directionX < 0)
+                            mainCamera.transform.position = new Vector3(mainCamera.transform.position.x, mainCamera.transform.position.y - DownSize, mainCamera.transform.position.z);
                         else
-                            mainCamera.transform.position = new Vector3(mainCamera.transform.position.x, mainCamera.transform.position.y + 5f, mainCamera.transform.position.z);
+                            mainCamera.transform.position = new Vector3(mainCamera.transform.position.x, mainCamera.transform.position.y + DownSize, mainCamera.transform.position.z);
 
-                        changeDown *= -1;
                     }
                     else if (tag == "CameraUp")
                     {
-                        
-                        if (changeUp == 1)
-                            mainCamera.transform.position = new Vector3(mainCamera.transform.position.x, mainCamera.transform.position.y + 5f, mainCamera.transform.position.z);
+                        if (directionX < 0)
+                            mainCamera.transform.position = new Vector3(mainCamera.transform.position.x, mainCamera.transform.position.y + UpSize, mainCamera.transform.position.z);
                         else
-                            mainCamera.transform.position = new Vector3(mainCamera.transform.position.x, mainCamera.transform.position.y - 5f, mainCamera.transform.position.z);
-
-                        changeUp *= -1;
+                            mainCamera.transform.position = new Vector3(mainCamera.transform.position.x, mainCamera.transform.position.y - UpSize, mainCamera.transform.position.z);
                     }
-
                     MovingCamera();
                 }
             }
@@ -92,7 +86,7 @@ public class CameraMove : MonoBehaviour
     IEnumerator MoveCameraToNextPosX(float targetX)
     {
         BoxCollider2D boxCollider = GetComponent<BoxCollider2D>();
-        float moveSpeed = 18;
+        float moveSpeed = 50;
         float duration = Mathf.Abs((targetX - mainCamera.transform.position.x) / moveSpeed) * Time.deltaTime;
         Vector3 targetPositionX = new Vector3(targetX, mainCamera.transform.position.y, mainCamera.transform.position.z);
         boxCollider.isTrigger = false;
@@ -103,7 +97,7 @@ public class CameraMove : MonoBehaviour
         }
 
         isMove = false;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         boxCollider.isTrigger = true;
         
     }
@@ -111,7 +105,7 @@ public class CameraMove : MonoBehaviour
     IEnumerator MoveCameraToNextPosY(float targetY)
     {
         BoxCollider2D boxCollider = GetComponent<BoxCollider2D>();
-        float moveSpeed = 18;
+        float moveSpeed = 50;
         float duration = Mathf.Abs((targetY - mainCamera.transform.position.y) / moveSpeed) * Time.deltaTime;
         Vector3 targetPositionY = new Vector3(mainCamera.transform.position.x, targetY, mainCamera.transform.position.z);
         boxCollider.isTrigger = false;
@@ -129,20 +123,20 @@ public class CameraMove : MonoBehaviour
 
     void MovingCamera()
     {
-        moveCount += directionX < 0 ? 1 : -1;
-        //YmoveCount += directionY < 0 ? 1 : -1;
+        moveCount = directionX < 0 ? 1 : -1;
 
-        if (moveCount >= 0)
+        if (tag == "YDown" || tag == "YUp")
         {
-            float moveDistanceX = 20;
-            float moveDistanceY = 10;
-            float nextPosX = mainCamera.transform.position.x + (directionX < 0 ? moveDistanceX : -moveDistanceX);
-            float nextPosY = mainCamera.transform.position.y + (directionY < 0 ? moveDistanceY : -moveDistanceY);
-            StartCoroutine(MoveCameraToNextPosX(nextPosX));
+            float moveDistanceY = 14;
+            float nextPosY = mainCamera.transform.position.y + (tag == "CameraUp" ? moveDistanceY : -moveDistanceY);
+            StartCoroutine(MoveCameraToNextPosY(nextPosY));
         }
         else
         {
-            moveCount = 0;
-        }
+            float moveDistanceX = 22;
+            float nextPosX = mainCamera.transform.position.x + (moveCount > 0 ? moveDistanceX : -moveDistanceX);
+
+            StartCoroutine(MoveCameraToNextPosX(nextPosX));
+        }     
     }
 }

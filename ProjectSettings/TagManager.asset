@@ -14,6 +14,8 @@ TagManager:
   - SkillItem
   - CameraDown
   - CameraUp
+  - YDown
+  - YUp
   layers:
   - Default
   - TransparentFX
