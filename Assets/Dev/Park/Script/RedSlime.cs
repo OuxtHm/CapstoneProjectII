@@ -12,5 +12,6 @@ public class RedSlime : Enemy
         enemy_Power = 10;
         enemy_Speed = 2;
         enemy_frontSensor = 0.7f;
+        enemyMoney = Random.Range(80, 101);
     }
 }

@@ -17,7 +17,7 @@ public class EnhanceSkill : MonoBehaviour
     private int[] cost = new int[2];
     private void Awake()
     {
-        cost = new int[] { 100, 300 };
+        cost = new int[] { 300, 800 };
         warning = Resources.Load<GameObject>("Prefabs/Warning_canvas");
         for (int i = 0; i < 2; i++)
         {

@@ -12,5 +12,6 @@ public class OrangeGolem : Enemy
         enemy_Power = 5;
         enemy_Speed = 1;
         enemy_AttackSensor = 2.8f;
+        enemyMoney = Random.Range(50, 71);
     }
 }

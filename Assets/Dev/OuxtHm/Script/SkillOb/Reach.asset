@@ -16,6 +16,6 @@ MonoBehaviour:
   skillName: Reach
   description: "\uC0AC\uAC70\uB9AC\uAC00 \uC99D\uAC00\uB41C \uAC80\uAE30\uB97C \uC0DD\uC131\uD569\uB2C8\uB2E4."
   level: 010000000200000003000000
-  coolTime: 20
-  price: 400
+  coolTime: 17
+  price: 1200
   coefficient: 2

@@ -13,5 +13,6 @@ public class GreenFrog : Enemy
         enemy_Speed = 2;
         enemy_AttackSensor = 1f;
         enemy_frontSensor = 0.7f;
+        enemyMoney = Random.Range(20, 31);
     }
 }

@@ -13,5 +13,6 @@ public class Mushroom : Enemy
         enemy_Speed = 2;
         enemy_AttackSensor = 1.5f;
         enemy_frontSensor = 1f;
+        enemyMoney = Random.Range(80, 101);
     }
 }

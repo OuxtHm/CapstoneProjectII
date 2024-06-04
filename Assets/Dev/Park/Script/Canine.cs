@@ -13,5 +13,6 @@ public class Canine : Enemy
         enemy_Speed = 3;
         enemy_AttackSensor = 1.3f;
         enemy_frontSensor = 1f;
+        enemyMoney = Random.Range(20, 31);
     }
 }

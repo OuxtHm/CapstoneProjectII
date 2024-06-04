@@ -12,5 +12,6 @@ public class Slash_Plant : Enemy
         enemy_Power = 2;
         enemy_Speed = 0;
         enemy_AttackSensor = 1.7f;
+        enemyMoney = Random.Range(80, 101);
     }
 }

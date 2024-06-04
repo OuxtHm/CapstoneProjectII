@@ -17,5 +17,5 @@ MonoBehaviour:
   description: "\uC0AC\uC6A9 \uC989\uC2DC \uCCB4\uB825\uC744 \uD68C\uBCF5\uD569\uB2C8\uB2E4."
   level: 010000000200000003000000
   coolTime: 20
-  price: 100
+  price: 1000
   coefficient: 1.5

@@ -13,5 +13,6 @@ public class CultistPriest : Enemy
         enemy_Speed = 1;
         enemy_AttackSensor = 3f;
         enemy_frontSensor = 1.5f;
+        enemyMoney = Random.Range(80, 101);
     }
 }

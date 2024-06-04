@@ -13,5 +13,6 @@ public class Goblin : Enemy
         enemy_Speed = 2;
         enemy_AttackSensor = 1.2f;
         enemy_frontSensor = 1.2f;
+        enemyMoney = Random.Range(20, 31);
     }
 }

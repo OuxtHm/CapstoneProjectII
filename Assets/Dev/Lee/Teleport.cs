@@ -136,7 +136,6 @@ public class Teleport : MonoBehaviour
         if (stageManager.nowStageLv == 4)
         {
             ShopUI shopUi = ShopUI.instance;
-            Debug.Log(shopUi);
             if (shopUi != null)
             {
                 Destroy(shopUi.gameObject);

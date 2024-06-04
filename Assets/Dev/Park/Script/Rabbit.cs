@@ -13,5 +13,6 @@ public class Rabbit : Enemy
         enemy_Speed = 2;
         enemy_AttackSensor = 0.8f;
         enemy_frontSensor = 1f;
+        enemyMoney = Random.Range(20, 31);
     }
 }
