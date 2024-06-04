@@ -18,7 +18,7 @@ public class Teleport : MonoBehaviour
     public int stageNumber; // 포탈이 속한 스테이지 번호
     public bool isActive = false; // 포탈이 활성화 상태인지 저장하는 필드
     public bool isTelepo = false;
-    bool isbgm = false; //bgm이 실행되고 있는지 확인
+    bool isbgm = false; //bgm이 실행하고 있는지 확인
 
     private void Awake()
     {
@@ -32,7 +32,7 @@ public class Teleport : MonoBehaviour
         stageManager = StageManager.instance;
         animator = GetComponent<Animator>();
         soundManager = SoundManager.instance;
-        
+        stageBGM();
     }
     
     private void OnTriggerEnter2D(Collider2D collision)
@@ -99,30 +99,43 @@ public class Teleport : MonoBehaviour
         dm.playerData.nowStage = stageManager.nowStage;
         dm.playerData.nowStageLV = stageManager.nowStageLv;
         maincam.CameraPosition();   //박지우 추가 05.29 - 카메라 위치 이동
+        stageBGM(); //박지우 추가 6.4 - bgm실행
 
+        // 현재 스테이지와 레벨 출력
+        stageUi.PrintStage(stageManager.nowStage, stageManager.nowStageLv);
+        // 플레이어 위치 이동
+        targetObj.transform.position = toObj.transform.position;
+        dm.playerData.nowPosition = toObj.transform.position;
+        // 추가적인 대기 시간 없이 바로 페이드 아웃 시작
+        isTelepo = false;   
+        dm.SaveData();     
+    }
+
+    void stageBGM() //스테이지 변경시 bgm 변경
+    {
         if (stageManager.nowStageLv == 5)   //보스 스테이지일 때 실행되는 bgm
         {
-                if (stageManager.nowStage == 1)
-                {
-                    soundManager.BGMPlay(soundManager.boss_stage1);
-                    Debug.Log("1스테이지 보스 bgm실행");
-                }
-                else if (stageManager.nowStage == 2)
-                {
-                    soundManager.BGMPlay(soundManager.boss_stage2);
-                    Debug.Log("2스테이지 보스 bgm실행");
-                }
-                else
-                {
-                    soundManager.BGMPlay(soundManager.boss_stage3);
-                    Debug.Log("3스테이지 보스 bgm실행");
-                }
+            if (stageManager.nowStage == 1)
+            {
+                soundManager.BGMPlay(soundManager.boss_stage1);
+                Debug.Log("1스테이지 보스 bgm실행");
+            }
+            else if (stageManager.nowStage == 2)
+            {
+                soundManager.BGMPlay(soundManager.boss_stage2);
+                Debug.Log("2스테이지 보스 bgm실행");
+            }
+            else
+            {
+                soundManager.BGMPlay(soundManager.boss_stage3);
+                Debug.Log("3스테이지 보스 bgm실행");
+            }
         }
         else   //일반 스테이지일 때 실행되는 bgm
         {
             if (!isbgm) // nowStage가 변경될 때만 실행되게 조건문 추가
             {
-                if (stageManager.nowStage == 1)
+                if (stageManager.nowStage == 1 || stageManager.nowStage == 0)
                 {
                     soundManager.BGMPlay(soundManager.nomal_stage1);
                     Debug.Log("1스테이지 일반 bgm실행");
@@ -139,15 +152,5 @@ public class Teleport : MonoBehaviour
                 }
             }
         }
-
-        // 현재 스테이지와 레벨 출력
-        stageUi.PrintStage(stageManager.nowStage, stageManager.nowStageLv);
-        // 플레이어 위치 이동
-        targetObj.transform.position = toObj.transform.position;
-        dm.playerData.nowPosition = toObj.transform.position;
-        // 추가적인 대기 시간 없이 바로 페이드 아웃 시작
-        isTelepo = false;   
-        dm.SaveData();     
     }
-
 }

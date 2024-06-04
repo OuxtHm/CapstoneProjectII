@@ -11,25 +11,21 @@ public class MainCam : MonoBehaviour
     {
         instance = this;
         stageManager = StageManager.instance.GetComponent<StageManager>();
-        Camera.main.orthographicSize = 9f;
+        CameraPosition();
     }
 
     public void CameraPosition()
     {
-        if (stageManager.nowStage == 1)
-        {
-            Camera.main.orthographicSize = 9f;
-            transform.position = new Vector3(0, 5, transform.position.z);
-        }
-        else if (stageManager.nowStage == 2)
+        Debug.Log("현재 스테이지:" + stageManager.nowStage);
+        if (stageManager.nowStage == 2)
         {
             Camera.main.orthographicSize = 8f;
-            transform.position = new Vector3(0, 4, transform.position.z);
+            Camera.main.transform.localPosition = new Vector3(0, 4, Camera.main.transform.localPosition.z);
         }
-        else if (stageManager.nowStage == 3)
+        else
         {
             Camera.main.orthographicSize = 9f;
-            transform.position = new Vector3(0, 5, transform.position.z);
+            Camera.main.transform.localPosition = new Vector3(0, 5, Camera.main.transform.localPosition.z);
         }
     }
 }
