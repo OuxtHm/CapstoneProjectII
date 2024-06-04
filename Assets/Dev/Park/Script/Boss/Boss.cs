@@ -54,6 +54,8 @@ public abstract class Boss : MonoBehaviour
     public GameObject FireBoltPb;  //3 스테이지 보스 파이어볼트 프리펩
     public GameObject FireGatePb;  //3 스테이지 보스 브레스게이트 프리펩
     public GameObject FireBreathPb;  //3 스테이지 보스 파이어브레스 프리펩
+    public GameObject DemonBoss;    //3스테이지 데몬 슬라임 보스 프리펩
+    public GameObject Summoning;    //데몬 슬라임 소환되는 효과 프리펩
 
 
     [Header("보스 보상")]
@@ -68,6 +70,8 @@ public abstract class Boss : MonoBehaviour
         FireBoltPb = Resources.Load<GameObject>("Prefabs/FireBolt");
         FireGatePb = Resources.Load<GameObject>("Prefabs/FireGate");
         FireBreathPb = Resources.Load<GameObject>("Prefabs/FireBreath");
+        DemonBoss = Resources.Load<GameObject>("Prefabs/Demon_Boss");
+        Summoning = Resources.Load<GameObject>("Prefabs/Summoning");
 
         SwordEffectPb = Resources.Load<GameObject>("Prefabs/SwordEffectPb");
         FireEffectPb = Resources.Load<GameObject>("Prefabs/FirePb");
@@ -104,11 +108,11 @@ public abstract class Boss : MonoBehaviour
         playerLoc = target.position.x;
         bossLoc = this.gameObject.transform.position.x;
         distanceToTarget = Mathf.Abs(target.position.x - transform.position.x); // 거리의 차이를 절대값으로 저장
-        bossMove();
+        bossMove(target);
         bossAttack();
     }
 
-    public void bossMove()  // boss의 움직이도록 하는 함수
+    public void bossMove(Transform target)  // boss의 움직이도록 하는 함수
     {
         if (boss_stage == 1)   //벽에 닿을 시 플레이어쪽으로 이동
         {
@@ -157,6 +161,26 @@ public abstract class Boss : MonoBehaviour
             }
             else
                 anim.SetBool("Move", false);
+        }
+        else
+        {
+            if (bossMoving && !isdie && !ishurt)
+            {
+                if (playerLoc < bossLoc)
+                {
+                    spriteRenderer.flipX = true;
+                    DirX = -1;
+                }
+                else
+                {
+                    spriteRenderer.flipX = false;
+                    DirX = 1;
+                }
+                Vector2 directionToTarget = target.position - transform.position;
+                Vector2 normalizedDirection = directionToTarget.normalized;
+                gameObject.transform.Translate(normalizedDirection * Time.deltaTime * boss_Speed);
+                anim.SetBool("Move", true);
+            }
         }
     }
     public void bossAttack()
@@ -458,10 +482,11 @@ public abstract class Boss : MonoBehaviour
     void Demon_FireBolt()   //3stage 파이어볼트 생성
     {
         EffectPb FTPb = FireBoltPb.GetComponent<EffectPb>();
-        if(playerLoc < bossLoc)
-            FTPb.dir = -DirX;
-        else
+        if(Mathf.Abs(playerLoc - bossLoc) > 0)
             FTPb.dir = DirX;
+        else
+            FTPb.dir = -DirX;
+
         FTPb.Power = boss_ThreePattenPower;
         FTPb.DelTime = 2f;
         FTPb.movecheck = 2;
@@ -542,13 +567,24 @@ public abstract class Boss : MonoBehaviour
         anim.SetBool("Move", false);
         yield return new WaitForSeconds(2f);
 
-        // 아이템 생성 코드 추가
-        SpawnItems(coinPrefab, 3); // 3개의 코인 생성
-        SpawnItems(potionPrefab, 2); // 2개의 포션 생성
-        SpawnItems(skillItemPrefab, 1); // 1개의 스킬 아이템 생성
-
-        Destroy(gameObject);
-    }// 5.22 이경규추가
+        if(boss_stage == 4) //레드 슬라임이 죽을 시 데몬 슬라임 소환
+        {
+            Instantiate(Summoning, transform.position, transform.rotation);
+            yield return new WaitForSeconds(2f);
+            Instantiate(DemonBoss, transform.position, transform.rotation);
+            Destroy(gameObject);
+        }
+        else
+        {
+            // 아이템 생성 코드 추가
+            SpawnItems(coinPrefab, 3); // 3개의 코인 생성
+            SpawnItems(potionPrefab, 2); // 2개의 포션 생성
+            SpawnItems(skillItemPrefab, 1); // 1개의 스킬 아이템 생성
+            Destroy(gameObject);
+        }
+            
+        
+    }
 
     void SpawnItems(GameObject itemPrefab, int itemCount)
     {

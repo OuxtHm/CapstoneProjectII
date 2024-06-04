@@ -129,7 +129,7 @@ public abstract class Enemy : MonoBehaviour
                     }
                 }
             }
-            else if (enemy_Type == 2 && !istracking)  // 공중 몬스터 일때
+            else if (distanceToTarget <= detectionRange && enemy_Type == 2 && !istracking)  // 공중 몬스터 일때
             {
                 if (direction.x >= 0)   // 타겟이 오른쪽에 있을 때
                 {
