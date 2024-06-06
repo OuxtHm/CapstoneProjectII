@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class Thunder : MonoBehaviour
 {
+    Enemy enemy;
+    Boss boss;
     public SkillScriptable skillInfo;
     BoxCollider2D boxCollider2D;
-    public int thunderDamage;
+    public int thunderDamage= 50;
 
     private void Awake()
     {
@@ -24,5 +26,29 @@ public class Thunder : MonoBehaviour
         yield return new WaitForSeconds(0.4f);
         boxCollider2D.enabled = false;
         Destroy(this.gameObject);
+    }
+
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            enemy = collider.GetComponent<Enemy>();
+
+            if (enemy != null)
+            {
+                StartCoroutine(enemy.Hurt(this.transform, thunderDamage));
+            }
+        }
+
+
+        if (collider.gameObject.layer == LayerMask.NameToLayer("Boss"))
+        {
+            boss = collider.GetComponent<Boss>();
+
+            if (boss != null)
+            {
+                StartCoroutine(boss.Hurt(this.transform, thunderDamage));
+            }
+        }
     }
 }

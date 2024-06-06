@@ -8,7 +8,7 @@ public class HolyPillar : MonoBehaviour
     Enemy enemy;
     Boss boss;
     BoxCollider2D boxCollider2D;
-    public int PillarDamage = 20;
+    public int PillarDamage = 50;
 
     private void Awake()
     {

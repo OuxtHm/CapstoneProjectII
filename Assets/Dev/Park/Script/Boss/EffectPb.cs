@@ -60,7 +60,7 @@ public class EffectPb : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             Player player = collision.GetComponent<Player>();
-            player.Playerhurt(Power);
+            player.Playerhurt(Power, this.transform);
             if (movecheck == 2)
                 Destroy(gameObject);
         }
