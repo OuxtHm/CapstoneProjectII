@@ -570,7 +570,7 @@ public abstract class Boss : MonoBehaviour
         if(boss_stage == 4) //레드 슬라임이 죽을 시 데몬 슬라임 소환
         {
             Instantiate(Summoning, transform.position, transform.rotation);
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(3f);
             Instantiate(DemonBoss, transform.position, transform.rotation);
             Destroy(gameObject);
         }

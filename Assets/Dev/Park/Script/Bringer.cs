@@ -10,8 +10,8 @@ public class Bringer : Enemy
         enemy_MaxHP = 50;
         enemy_CurHP = 50;
         enemy_Power = 10;
-        enemy_Speed = 3;
+        enemy_Speed = 2;
         enemy_AttackSensor = 1.5f;
-        enemy_frontSensor = 1.2f;
+        enemy_frontSensor = 1.5f;
     }
 }

@@ -6,6 +6,6 @@ public class Summoning : MonoBehaviour
 {
     void Start()
     {
-        Destroy(gameObject, 2f);
+        Destroy(gameObject, 3.5f);
     }
 }

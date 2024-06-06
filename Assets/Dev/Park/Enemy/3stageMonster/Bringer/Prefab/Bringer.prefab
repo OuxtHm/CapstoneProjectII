@@ -17,9 +17,9 @@ GameObject:
   - component: {fileID: 8621938103964207126}
   - component: {fileID: 1484579880767829708}
   - component: {fileID: 7554757840175629845}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bringer
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -287,12 +287,9 @@ MonoBehaviour:
   RockPb: {fileID: 0}
   SeedPb: {fileID: 0}
   istracking: 0
+  isattack: 0
   enemy_MaxHP: 0
   enemy_CurHP: 0
-  enemy_Power: 0
-  enemy_Speed: 0
-  enemy_AttackSensor: 0
-  enemy_frontSensor: 0
   enemyMoney: 0
 --- !u!114 &7554757840175629845
 MonoBehaviour:
@@ -345,6 +342,7 @@ MonoBehaviour:
   demon_FireBarrier: {fileID: 8300000, guid: 8953f28378f0d4e45a71ba8c88b1afed, type: 3}
   demon_FireBolt: {fileID: 8300000, guid: fef51e1efe694d241bec2b1d1ae24140, type: 3}
   demon_Die: {fileID: 8300000, guid: 3cafdebf4927a7e4bae9b7ebf1c64940, type: 3}
+  demon_Summoning: {fileID: 0}
 --- !u!1 &6815912285880794720
 GameObject:
   m_ObjectHideFlags: 0

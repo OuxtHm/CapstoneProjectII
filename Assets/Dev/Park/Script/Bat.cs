@@ -11,6 +11,7 @@ public class Bat : Enemy
         enemy_CurHP = 10;
         enemy_Power = 1;
         enemy_Speed = 2;
+        detectionRange = 15f;
         enemyMoney = Random.Range(100, 501);
     }
 }

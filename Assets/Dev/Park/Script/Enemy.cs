@@ -26,22 +26,22 @@ public abstract class Enemy : MonoBehaviour
     int DirX;   //몬스터가 바라보는 방향값
     int enemy_OriginSpeed;  //몬스터의 원래 속도
     int PBdir;  //투사체 방향값
-    float detectionRange = 7f;  //몬스터의 타겟 인식 범위
+    protected float detectionRange = 7f;  //몬스터의 타겟 인식 범위
     float distanceToTarget; // 몬스터와 타겟 사이의 거리
     public bool istracking = false;    // 추적 가능 여부
     bool isdie = false; //죽음 확인
     bool ishurt = false;    //피격 적용 확인
-    bool isattack = false;  //공격 가능 확인
+    public bool isattack = false;  //공격 가능 확인
 
 
     [Header("일반 몬스터 능력치")]
     protected int enemy_Type; // 몬스터 종류에 따른 분류 번호 1: 일반 몬스터, 2: 공중 몬스터, 3: 충돌 몬스터, 4: 고정 몬스터
     public float enemy_MaxHP; //일반 몬스터 최대체력
     public float enemy_CurHP; //일반 몬스터 현재체력
-    public int enemy_Power; //일반 몬스터 공격력
-    public int enemy_Speed; //일반 몬스터 이동속도
-    public float enemy_AttackSensor;  //일반 몬스터 플레이어 감지 범위
-    public float enemy_frontSensor; //일반 몬스터 전방 감지 범위
+    protected int enemy_Power; //일반 몬스터 공격력
+    protected int enemy_Speed; //일반 몬스터 이동속도
+    protected float enemy_AttackSensor;  //일반 몬스터 플레이어 감지 범위
+    protected float enemy_frontSensor; //일반 몬스터 전방 감지 범위
     public int enemyMoney;      // 몬스터 사망 시 플레이어에게 줄 돈 2024-05-15 유재현 추가
 
     private void Awake()
@@ -113,6 +113,8 @@ public abstract class Enemy : MonoBehaviour
                     if (Mathf.Abs(target.position.y - transform.position.y) <= 4f)   //타겟과 어느정도의 높이 차이가 있을경우 추적 멈춤
                     {
                         anim.SetBool("Move", true);
+                        Debug.Log("추적중 이동 실행");
+                        Debug.Log(direction);
                         transform.Translate(direction * Time.deltaTime * enemy_Speed);
                     }
                     else
@@ -249,8 +251,8 @@ public abstract class Enemy : MonoBehaviour
         Debug.DrawRay(WallVec, Vector3.down * 0.3f, new Color(0, 0, 1));
 
         // 물리 기반으로 레이저를 아래로 쏘아서 실질적인 레이저 생성, LayMask.GetMask("")는 해당하는 레이어만 스캔함
-        rayHit = Physics2D.Raycast(frontVec, Vector3.down, 1.5f, LayerMask.GetMask("Ground"));
-        rayHitfront = Physics2D.Raycast(WallVec, Vector3.down, 0.3f, LayerMask.GetMask("Ground"));
+        rayHit = Physics2D.Raycast(frontVec, Vector3.down, 2.5f, LayerMask.GetMask("Ground"));
+        rayHitfront = Physics2D.Raycast(WallVec, Vector3.down, 0.3f, LayerMask.GetMask("Ground","Wall"));
         if (rayHit.collider == null && enemy_CurHP >= 0 && enemy_Type != 2 && !istracking)
         {
             Turn();
@@ -347,11 +349,7 @@ public abstract class Enemy : MonoBehaviour
             anim.SetTrigger("Hurt");
 
             StartCoroutine(Blink());
-            if (enemy_Speed > 0)
-                enemy_OriginSpeed = enemy_Speed;
-            enemy_Speed = 0;
 
-            Invoke("OriginSpeed", 0.5f);
             if (enemy_Type != 3) //충돌 몬스터는 넉백처리 안함
             {
                 StartCoroutine(Knockback(target));
@@ -363,7 +361,6 @@ public abstract class Enemy : MonoBehaviour
                 StopAllCoroutines();
                 StartCoroutine(enemyHpbar.HpUpdate());      // 2024-03-30 유재현 추가
                 StartCoroutine(Die());
-                Debug.Log("죽었음");
             }
         }
         ishurt = false;
@@ -385,8 +382,9 @@ public abstract class Enemy : MonoBehaviour
     IEnumerator Knockback(Transform target)
     {
         Vector2 knockbackDirection = (transform.position - target.position).normalized;  // 피격된 위치를 저장하고 방향을 정규화
-        float maxKnockbackDistance = 2f;    // 넉백 가능한 최대 거리
-        float knockbackDistance = 2.0f;  // 넉백 거리를 나타내는 변수
+        knockbackDirection = new Vector2(knockbackDirection.x, 0).normalized;
+        float maxKnockbackDistance = 4f;    // 넉백 가능한 최대 거리
+        float knockbackDistance = 4.0f;  // 넉백 거리를 나타내는 변수
         rigid.AddForce(knockbackDirection * knockbackDistance, ForceMode2D.Impulse);  // 피격된 위치 * 넉백 거리만큼의 힘을 넉백에 사용
         float distanceTravelled = 0f;  // 이미 이동한 거리를 나타내는 변수
 
@@ -407,16 +405,6 @@ public abstract class Enemy : MonoBehaviour
     void OriginSpeed()  //몬스터 원래 이동속도로 변경하는 함수
     {
         enemy_Speed = enemy_OriginSpeed;
-    }
-
-    IEnumerator DirectionChange()
-    {
-        int originalSpeed = enemy_Speed;  // 원래 속도 저장
-        enemy_Speed = -enemy_Speed;  // 반대 방향으로 이동하도록 속도 부호 변경
-
-        yield return new WaitForSeconds(2f);  // 2초 대기
-
-        enemy_Speed = originalSpeed;  // 속도를 원래대로 복구
     }
 
     private void OnDrawGizmos()
