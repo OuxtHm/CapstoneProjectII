@@ -19,7 +19,7 @@ public class MainScene : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        sceneName = "Merge_8";
+        sceneName = "Merge_9";
         fadePrefab = Resources.Load<GameObject>("Prefabs/FadeOut_canvas");
         optionUi = transform.GetChild(1).gameObject;
         for (int i = 0; i < btn.Length; i++)

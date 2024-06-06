@@ -140,6 +140,7 @@ public class Teleport : MonoBehaviour
     {
         if (stageManager.nowStageLv == 5)   //보스 스테이지일 때 실행되는 bgm
         {
+            GameObject bossScnenShow;
             if (stageManager.nowStage == 1)
             {
                 soundManager.BGMPlay(soundManager.boss_stage1);
