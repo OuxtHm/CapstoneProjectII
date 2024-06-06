@@ -12,6 +12,7 @@ TagManager:
   - Coin
   - Potion
   - SkillItem
+  - Portal
   layers:
   - Default
   - TransparentFX

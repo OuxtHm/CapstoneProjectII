@@ -17,7 +17,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Dev/OuxtHm/Scenes/Merge_8.unity
     guid: 616686d4dae30fd4c9adfdf251fffc28
-  - enabled: 0
+  - enabled: 1
     path: Assets/Dev/Lee/Merge_8.unity
     guid: 024a39e40201cf74e962f12452f857c4
   m_configObjects: {}

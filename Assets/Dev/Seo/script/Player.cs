@@ -661,7 +661,7 @@ public class Player : MonoBehaviour
         if (collision.gameObject.CompareTag("Coin"))
         {
             Debug.Log("획득");
-            money += 1; // 코인과 충돌 시 돈 증가
+            money += Random.Range(1, 11); // 코인과 충돌 시 돈이 1에서 10까지 랜덤하게 증가
             Destroy(collision.gameObject); // 코인 오브젝트 제거
         }
         else if (collision.gameObject.CompareTag("Potion"))

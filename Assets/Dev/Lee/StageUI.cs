@@ -29,7 +29,7 @@ public class StageUI : MonoBehaviour
             switch (_nowStageLv)
             {
                 case 4:
-                    stageText.text = "ªÛ¡°";
+                    stageText.text = "shop";
                     break;
                 case 5:
                     stageText.text = "Boss";

@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class ShopUI : MonoBehaviour
 {
@@ -26,6 +27,7 @@ public class ShopUI : MonoBehaviour
     public int price;
     private int selectSkillNum;
     public AudioClip clickSounds;      // 버튼 클릭 사운드
+    private List<int> purchasedSkills = new List<int>(); // 구매한 스킬 인덱스 저장
     private void Awake()
     {
         instance = this;
@@ -68,13 +70,19 @@ public class ShopUI : MonoBehaviour
             // 상점 스킬 목록 버튼 기능
             btn[i].onClick.AddListener(() =>
             {
+                if (purchasedSkills.Contains(index)) // 이미 구매한 스킬인지 확인
+                {
+                    Debug.Log("이미 구매한 스킬입니다."); // 또는 사용자에게 알림을 표시
+                    return; // 여기서 함수를 종료하여 더 이상 진행하지 않음
+                }
+
                 sm.SFXPlay(clickSounds);
                 price = randSkill.skillCon[index].price;
                 Ask(index);
             });
         }
 
-        for(int i = 0; i < slot.Length; i++)
+        for (int i = 0; i < slot.Length; i++)
         {
             int index = i;
             
@@ -145,8 +153,8 @@ public class ShopUI : MonoBehaviour
         player.money -= price;
         MoneyUpdate();
         skillSlotUi.SetActive(true);
+        purchasedSkills.Add(selectSkillNum); // 구매한 스킬 인덱스를 리스트에 추가
     }
- 
     public void Ask(int num)        // 구매 여부를 묻는 UI 생성
     {
         checkingObj.SetActive(true);

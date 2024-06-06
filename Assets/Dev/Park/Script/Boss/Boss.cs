@@ -60,6 +60,8 @@ public abstract class Boss : MonoBehaviour
     public GameObject coinPrefab; // 코인 프리팹 참조를 위한 변수
     public GameObject potionPrefab; // 포션 프리팹 참조를 위한 변수
     public GameObject skillItemPrefab; // 스킬 아이템 프리팹 참조를 위한 변수
+
+   
     private void Awake()
     {
         Instance = this;
@@ -76,7 +78,12 @@ public abstract class Boss : MonoBehaviour
         ArrowrainPb = Resources.Load<GameObject>("Prefabs/ArrowRain");
         LaserPb = Resources.Load<GameObject>("Prefabs/Laser");
         WarningPb = Resources.Load<GameObject>("Prefabs/Warning");
+
+
+
+
     }
+
 
     private void Start()
     {
@@ -89,6 +96,8 @@ public abstract class Boss : MonoBehaviour
         rigid = this.GetComponent<Rigidbody2D>();
         randomAtk();
         OneTime();
+
+
     }
 
     void OneTime()
@@ -538,8 +547,8 @@ public abstract class Boss : MonoBehaviour
         yield return new WaitForSeconds(2f);
 
         // 아이템 생성 코드 추가
-        SpawnItems(coinPrefab, 3); // 3개의 코인 생성
-        SpawnItems(potionPrefab, 2); // 2개의 포션 생성
+        SpawnItems(coinPrefab, 2); // 3개의 코인 생성
+        SpawnItems(potionPrefab, 1); // 2개의 포션 생성
         SpawnItems(skillItemPrefab, 1); // 1개의 스킬 아이템 생성
 
         Destroy(gameObject);

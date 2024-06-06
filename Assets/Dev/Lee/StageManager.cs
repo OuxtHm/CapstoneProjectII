@@ -7,16 +7,30 @@ public class StageManager : MonoBehaviour
     public int nowStage;
     public int nowStageLv;
     public static StageManager instance;
-    [SerializeField] public GameObject[] stage = new GameObject[3];
 
+    [SerializeField] public GameObject[] stage = new GameObject[3];
+    [SerializeField] public GameObject[] boss = new GameObject[3];
+    [SerializeField] private GameObject portal1; // 1스테이지
+    [SerializeField] private GameObject portal2; // 2스테이지
+    [SerializeField] private GameObject portal3; // 3스테이지
     private void Awake()
     {
         instance = this;
     }
+
     private void Start()
     {
         nowStage = 1;
         nowStageLv = 1;
+        portal1.SetActive(false); // 초기에는 포탈을 비활성화
+        portal2.SetActive(false);
+        portal3.SetActive(false);
+
+    }
+
+    private void Update()
+    {
+        CheckAndActivateBoss();
     }
 
     public void ChangeStage(int num)
@@ -43,5 +57,42 @@ public class StageManager : MonoBehaviour
             stage[0].SetActive(true); // 첫 번째 스테이지 활성화
             nowStage = 1;
         }
+    }
+
+    private void CheckAndActivateBoss()
+    {
+        // nowStage와 nowStageLv가 각각 1, 2, 3과 5일 때 boss 오브젝트를 활성화
+        if (nowStageLv == 5)
+        {
+            if (nowStage - 1 < boss.Length)
+            {
+                StartCoroutine(ActivateBossWithDelay(boss[nowStage - 1]));
+            }
+            else
+            {
+                Debug.LogError("보스 배열의 범위를 벗어났습니다.");
+            }
+        }
+    }
+
+    private IEnumerator ActivateBossWithDelay(GameObject bossObject)
+    {
+        yield return new WaitForSeconds(3.0f);
+        bossObject.SetActive(true);
+    }
+
+    public void ActivatePortal1()
+    {
+        portal1.SetActive(true); // 1스테이지 포탈을 활성화
+    }
+
+    public void ActivatePortal2()
+    {
+        portal1.SetActive(true); // 2스테이지 포탈을 활성화
+    }
+
+    public void ActivatePortal3()
+    {
+        portal1.SetActive(true); // 3스테이지 포탈을 활성화
     }
 }
