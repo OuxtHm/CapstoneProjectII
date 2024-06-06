@@ -50,6 +50,7 @@ public class EnemySound : MonoBehaviour
     public AudioClip demon_FireBarrier;
     public AudioClip demon_FireBolt;
     public AudioClip demon_Die;
+    public AudioClip demon_Summoning;
 
 
     private void Awake()
@@ -214,7 +215,10 @@ public class EnemySound : MonoBehaviour
     {
         Sounds("demon_Die");
     }
-
+    public void Demon_Summoning()
+    {
+        Sounds("demon_Summoning");
+    }
     public void Sounds(string sounds)
     {
         switch (sounds)
@@ -332,6 +336,9 @@ public class EnemySound : MonoBehaviour
                 break;
             case "demon_Die":
                 audioSource.clip = demon_Die;
+                break;
+            case "demon_Summoning":
+                audioSource.clip = demon_Summoning;
                 break;
         }
 

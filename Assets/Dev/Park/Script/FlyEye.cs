@@ -12,5 +12,6 @@ public class FlyEye : Enemy
         enemy_Power = 1;
         enemy_Speed = 2;
         enemyMoney = Random.Range(80, 101);
+        detectionRange = 15f;
     }
 }

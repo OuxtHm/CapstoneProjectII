@@ -12,5 +12,6 @@ public class Bat : Enemy
         enemy_Power = 1;
         enemy_Speed = 2;
         enemyMoney = Random.Range(50, 71);
+        detectionRange = 15f;
     }
 }

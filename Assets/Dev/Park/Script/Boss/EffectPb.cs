@@ -49,11 +49,12 @@ public class EffectPb : MonoBehaviour
         }
 
         animTime -= Time.deltaTime;
+        if(this.gameObject.name == "FireBarrier(Clone)")
+        {
+            if (animTime < 0.5)
+                anim.SetBool("Explosion", true);
 
-        if (animTime < 0.5)
-            anim.SetBool("Explosion", true);
-        else
-            anim.SetBool("Explosion", false);
+        }
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
