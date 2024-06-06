@@ -184,7 +184,7 @@ public abstract class Enemy : MonoBehaviour
             player = collision.gameObject.GetComponent<Player>();
             if (player != null)
             {
-                player.Playerhurt(enemy_Power);
+                player.Playerhurt(enemy_Power, this.transform);
             }
             else
                 Debug.Log("플레이어를 못 불러옴");
@@ -293,7 +293,7 @@ public abstract class Enemy : MonoBehaviour
             if (collider.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
                 player = collider.GetComponent<Player>();
-                player.Playerhurt(enemy_Power);
+                player.Playerhurt(enemy_Power, this.transform);
             }
         }
         yield return new WaitForSeconds(1.5f);

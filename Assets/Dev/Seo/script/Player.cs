@@ -14,6 +14,11 @@ public class Player : MonoBehaviour
     public float damageAbsorptionBuffCooldown = 30f;
     public bool isDamageAbsorptionBuffActive = false;
     private bool isDamageAbsorptionBuffOnCooldown = false;
+    public float knockbackForce = 7f;
+    public float enemyDetectionRadius = 1.0f;
+    public LayerMask enemyLayer; 
+    public LayerMask playerLayer;
+    public float invincibilityDuration = 1f;
     public float damageAbsorptionRate = 0.5f; // 데미지 흡수 비율
     public float healingAmount;
     float moveX;
@@ -40,6 +45,7 @@ public class Player : MonoBehaviour
     public GameObject effect2;
     public GameObject effect3;
     public GameObject effect4;
+    public GameObject effect5;
     public bool isHealingActive = false;
     public bool isAttacking = false;
     public bool move;
@@ -71,7 +77,6 @@ public class Player : MonoBehaviour
         atkBuffPrefab = Resources.Load<GameObject>("Prefabs/Skill/AtkBuff");
         slashPrefab = Resources.Load<GameObject>("Prefabs/Skill/Slash");
         animator = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         cc = GetComponent<CapsuleCollider2D>();
     }
@@ -82,6 +87,7 @@ public class Player : MonoBehaviour
         dashSc = Dash.instance;
         hpBar = HpBar.instance;
         moveSpeed = dm.playerData.moveSpeed;        // 데이터매니저에서 값 받기
+        rb = GetComponent<Rigidbody2D>();
         originalSpeed = moveSpeed;
         currentJumpCount = JumpCount;
         //StartCoroutine(RegenerateHealth());
@@ -97,21 +103,6 @@ public class Player : MonoBehaviour
     {
         gameObject.layer = LayerMask.NameToLayer("Player");
     }
-    /*void StartAttack()
-    {
-        hitboxClone = Instantiate(hitboxPrefab, transform.position, Quaternion.identity) as GameObject;
-    }
-
-    void StartAttackAnimation()
-    {
-        isAttacking = true;
-        animator.SetTrigger("isAttack");
-    }
-
-    void EndSkillAnimation()
-    {
-        isAttacking = false;
-    }*/
     void EndAttackAnimation()
     {
         isAttacking = false;
@@ -124,16 +115,6 @@ public class Player : MonoBehaviour
         Movement();
         float horizontalInput = Input.GetAxis("Horizontal");
         TestSkill();
-
-        /*if (canChangeDirDuringDash)
-        {
-            lastHorizontalInput = Input.GetAxisRaw("Horizontal");
-        }
-        else
-        {
-            // 대쉬 중이 아닐 때는 방향 전환 불가
-            lastHorizontalInput = Mathf.Clamp(lastHorizontalInput, -1f, 1f);
-        }*/
 
         if (horizontalInput != 0)
         {
@@ -234,19 +215,7 @@ public class Player : MonoBehaviour
             StartCoroutine(BoostSpeedForDuration(boostDuration, lastHorizontalInput));
             animator.SetTrigger("isDash");
             gameObject.layer = LayerMask.NameToLayer("Dash");
-            //canChangeDirDuringDash = false;
-        }
-
-        /*if (effect3.gameObject.activeSelf)
-        {
-            Debug.Log("effect3 오브젝트가 활성화되어 있습니다.");
-        }
-        else
-        {
-            Debug.Log("effect3 오브젝트가 비활성화되어 있습니다.");
-        }*/
-
-
+        }       
     }
 
     IEnumerator ShowHitboxForDuration(float duration)//평타
@@ -295,24 +264,26 @@ public class Player : MonoBehaviour
 
         rb.velocity = new Vector2(moveX, rb.velocity.y);
     }
-    /*private IEnumerator Knockback(Vector3 direction)
-    {
-        float elapsedTime = 0f;
-        while (elapsedTime < knockbackDuration)
-        {
-            transform.Translate(-direction * knockbackForce * Time.deltaTime);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-    }*/
-    public void Playerhurt(int damage)//피격
+ 
+    public void Playerhurt(int damage, Transform target)//피격
     {
         animator.SetTrigger("isHit");
         curHp -= damage;
-        gameObject.layer = LayerMask.NameToLayer("Enemy");
-        StartCoroutine(ChangeLayerToPlayer());
         dm.playerData.curHpValue -= damage;
         hpBar.ChangeHp((int)curHp);
+        if (curHp <= 0)
+        {
+            animator.SetTrigger("isDie");
+            gameObject.layer = LayerMask.NameToLayer("Invincible");
+            StartCoroutine(gm.ShowDeadUI());
+        }
+        else 
+        {
+            StartCoroutine(Knockback(target));
+            StartCoroutine(Invincibility());
+        }
+        
+        
 
         // 데미지 흡수 패시브 효과 적용
         if (isDamageAbsorptionBuffActive)
@@ -323,12 +294,6 @@ public class Player : MonoBehaviour
             hpBar.ChangeHp((int)curHp);
         }
 
-        if (curHp <= 0)
-        {
-            animator.SetTrigger("isDie");
-            gameObject.layer = LayerMask.NameToLayer("Enemy");
-            StartCoroutine(gm.ShowDeadUI());
-        }
         else if (!isDamageAbsorptionBuffActive || Time.time - damageAbsorptionBuffStartTime >= damageAbsorptionBuffDuration)
         {
             if (!isDamageAbsorptionBuffOnCooldown)
@@ -337,7 +302,24 @@ public class Player : MonoBehaviour
             }
         }
     }
-    IEnumerator BoostSpeedForDuration(float duration, float direction)
+
+    IEnumerator Knockback(Transform target)
+    {
+        Vector2 knockbackDirection = (transform.position - target.position).normalized;  // 피격된 위치를 저장하고 방향을 정규화
+        knockbackDirection = new Vector2(knockbackDirection.x, 0).normalized;  // y축 값을 0으로 설정하여 수평 방향으로만 넉백 적용
+        float knockbackForce = 50.0f;  // 넉백 거리를 나타내는 변수
+
+        float startTime = Time.time;  // 넉백 시작 시간을 기록
+
+        while (Time.time - startTime < 0.5f)  // 넉백 시간을 1초로 설정
+        {
+            rb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);  // 피격된 위치 * 넉백 거리만큼의 힘을 넉백에 사용
+            yield return new WaitForFixedUpdate();  // Fixed Update마다 체크하여 일정 시간 동안 이동하도록 함
+        }
+
+        rb.velocity = Vector2.zero;  // 넉백이 완료되면 속도를 0으로 설정하여 객체를 멈춤
+    }
+    IEnumerator BoostSpeedForDuration(float duration, float direction)//대쉬
     {
         if (!isBoosted)
         {
@@ -358,6 +340,7 @@ public class Player : MonoBehaviour
                 {
                     // 벽이나 바닥에 부딪히면 대쉬 중지
                     transform.position = wallHit.collider != null ? wallHit.point : groundHit.point;
+                    Debug.Log("대쉬 중지");
                     break;
                 }
 
@@ -366,13 +349,15 @@ public class Player : MonoBehaviour
                 yield return null;
             }
 
+            Debug.Log("대쉬 실행");
             gameObject.layer = LayerMask.NameToLayer("Player");
             isBoosted = false;
         }
     }
-    private IEnumerator ChangeLayerToPlayer()
+    private IEnumerator Invincibility()
     {
-        yield return new WaitForSeconds(1f);
+        gameObject.layer = LayerMask.NameToLayer("Invincible");
+        yield return new WaitForSeconds(invincibilityDuration);
         gameObject.layer = LayerMask.NameToLayer("Player");
     }
     IEnumerator ShowEffect1ForDuration(float duration)//피의칼날
@@ -514,17 +499,41 @@ public class Player : MonoBehaviour
         isAttacking = false;
     }
 
-    void RecoverHealth()//힐스킬
+    public void RecoverHealth()//힐스킬
     {
         curHp = Mathf.Min(maxHp, curHp + 10f);
+        StartCoroutine(ShowHealEffectForDuration(0.5f));
     }
 
-    IEnumerator RegenerateHealth()//힐 패시브
+    public IEnumerator ShowHealEffectForDuration(float duration)
+    {
+        Vector3 playerPosition = transform.position;
+        effect5.transform.position = playerPosition;
+
+        if (lastHorizontalInput < 0)
+        {
+            effect5.transform.localScale = new Vector3(-Mathf.Abs(effect5.transform.localScale.x), effect5.transform.localScale.y, effect5.transform.localScale.z);
+        }
+        else if (lastHorizontalInput > 0)
+        {
+            effect5.transform.localScale = new Vector3(Mathf.Abs(effect5.transform.localScale.x), effect5.transform.localScale.y, effect5.transform.localScale.z);
+        }
+
+        effect5.SetActive(true);
+        yield return new WaitForSeconds(duration);
+        effect5.SetActive(false);
+    }
+    IEnumerator RegenerateHealth()
     {
         while (true)
         {
-            yield return new WaitForSeconds(5f);
-            curHp = Mathf.Min(maxHp, curHp + 5f);
+            yield return new WaitForSeconds(3f);
+
+            if (curHp < maxHp)
+            {
+                StartCoroutine(ShowHealEffectForDuration(0.5f));
+                curHp = Mathf.Min(maxHp, curHp + 5f);
+            }
         }
     }
 

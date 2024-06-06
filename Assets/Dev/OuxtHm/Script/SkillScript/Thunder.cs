@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class Thunder : MonoBehaviour
 {
+    Enemy enemy;
+    Boss boss;
     public SkillScriptable skillInfo;
     BoxCollider2D boxCollider2D;
-    public Enemy enemy;
-    Boss boss;
-
-    public int thunderDamage = 20;
+    public int thunderDamage = 50;
 
     private void Awake()
     {
@@ -50,5 +49,4 @@ public class Thunder : MonoBehaviour
             }
         }
     }
-
 }

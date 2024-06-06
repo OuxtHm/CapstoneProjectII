@@ -332,7 +332,7 @@ public abstract class Boss : MonoBehaviour
             player = collision.gameObject.GetComponent<Player>();
             if (player != null && boss_CurHP > 0)
             {
-                player.Playerhurt(boss_BumpPower);
+                player.Playerhurt(boss_BumpPower, this.transform);
             }
         }
 
@@ -416,7 +416,7 @@ public abstract class Boss : MonoBehaviour
             if (collider.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
                 player = collider.GetComponent<Player>();
-                player.Playerhurt(totalDamage);
+                player.Playerhurt(totalDamage, this.transform);
             }
         }
         this.gameObject.transform.GetChild(0).GetComponent<BoxCollider2D>().enabled = false;

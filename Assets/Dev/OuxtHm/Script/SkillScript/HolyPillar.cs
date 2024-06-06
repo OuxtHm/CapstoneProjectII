@@ -7,8 +7,8 @@ public class HolyPillar : MonoBehaviour
     public SkillScriptable skillInfo;
     public Enemy enemy;
     Boss boss;
-    public BoxCollider2D boxCollider2D;
-    public int PillarDamage = 20;
+    BoxCollider2D boxCollider2D;
+    public int PillarDamage = 50;
 
     private void Awake()
     {
