@@ -5,9 +5,9 @@ using UnityEngine;
 public class HolyPillar : MonoBehaviour
 {
     public SkillScriptable skillInfo;
-    Enemy enemy;
+    public Enemy enemy;
     Boss boss;
-    BoxCollider2D boxCollider2D;
+    public BoxCollider2D boxCollider2D;
     public int PillarDamage = 20;
 
     private void Awake()
@@ -32,18 +32,20 @@ public class HolyPillar : MonoBehaviour
             SetBoxColliderProperties(offsets[i], sizes[i]);
 
             // 적과 보스에게 데미지 주기
-            if (boxCollider2D.IsTouchingLayers(LayerMask.GetMask("Enemy")))
+            Collider2D[] hitEnemies = Physics2D.OverlapBoxAll(transform.position + (Vector3)offsets[i], sizes[i], 0, LayerMask.GetMask("Enemy"));
+            foreach (var hit in hitEnemies)
             {
-                enemy = boxCollider2D.GetComponent<Enemy>();
+                Enemy enemy = hit.GetComponent<Enemy>();
                 if (enemy != null)
                 {
                     StartCoroutine(enemy.Hurt(this.transform, PillarDamage));
                 }
             }
 
-            if (boxCollider2D.IsTouchingLayers(LayerMask.GetMask("Boss")))
+            Collider2D[] hitBosses = Physics2D.OverlapBoxAll(transform.position + (Vector3)offsets[i], sizes[i], 0, LayerMask.GetMask("Boss"));
+            foreach (var hit in hitBosses)
             {
-                boss = boxCollider2D.GetComponent<Boss>();
+                Boss boss = hit.GetComponent<Boss>();
                 if (boss != null)
                 {
                     StartCoroutine(boss.Hurt(this.transform, PillarDamage));
@@ -59,6 +61,7 @@ public class HolyPillar : MonoBehaviour
 
     private void SetBoxColliderProperties(Vector2 offset, Vector2 size)
     {
+        Debug.Log("크기 설정");
         boxCollider2D.offset = offset;
         boxCollider2D.size = size;
     }

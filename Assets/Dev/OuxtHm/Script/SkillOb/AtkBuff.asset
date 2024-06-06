@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fca7c8178b52a1d4d850ef93f1495fa4, type: 3}
   m_Name: AtkBuff
   m_EditorClassIdentifier: 
-  number: 3
+  number: 0
   skillName: AtkBuff
   description: "\uACF5\uACA9\uB825\uC744 \uC7A0\uC2DC \uC18C\uD3ED \uC0C1\uC2B9\uC2DC\uD0B5\uB2C8\uB2E4."
   level: 010000000200000003000000
   coolTime: 20
-  price: 300
+  price: 1500
   coefficient: 1.5

@@ -5,10 +5,13 @@ using UnityEngine;
 public class skill4 : MonoBehaviour
 {
     public SkillScriptable skillInfo;
-    public float damage = 20;
+    public float damage;
     Enemy enemy;
     Boss boss;
-
+    private void Awake()
+    {
+        damage = 20;
+    }
     void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))

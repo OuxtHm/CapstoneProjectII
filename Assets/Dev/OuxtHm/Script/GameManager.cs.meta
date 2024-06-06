@@ -3,7 +3,14 @@ guid: c0fac9e45788f8441b568b7f2b1a1690
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - playerUi: {instanceID: 0}
+  - optionUI: {instanceID: 0}
+  - btnArray: {instanceID: 0}
+  - soundOption: {instanceID: 0}
+  - deadUiPrefab: {instanceID: 0}
+  - fadeInPrefab: {instanceID: 0}
+  - mainBgm: {fileID: 8300000, guid: 3064482b2db32594b9847562cc5d55b5, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

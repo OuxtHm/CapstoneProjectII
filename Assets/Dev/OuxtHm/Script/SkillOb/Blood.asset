@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fca7c8178b52a1d4d850ef93f1495fa4, type: 3}
   m_Name: Blood
   m_EditorClassIdentifier: 
-  number: 4
+  number: 1
   skillName: Blood
   description: "\uD53C\uB85C \uBB3C\uB4E4\uC785\uB2C8\uB2E4."
   level: 010000000200000003000000
-  coolTime: 20
-  price: 400
+  coolTime: 14
+  price: 1700
   coefficient: 1.5

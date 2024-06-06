@@ -27,9 +27,6 @@ public class ChangeSkill : MonoBehaviour
     private void Start()
     {
         skillUi = SkillUI.instance;
-/*        skill_1 = nowskill.GetChild(0).GetComponent<Image>();       // 사용중인 스킬 Image 설정
-        skill_2 = readyskill.GetChild(0).GetComponent<Image>();     // 대기중인 스킬 Image 설정
-*/
     }
     void Update()
     {

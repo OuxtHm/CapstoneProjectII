@@ -1,34 +1,38 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Teleport : MonoBehaviour
 {
     StageManager stageManager;
-    public static Teleport Instance;    // 04.28 박지우 추가
+    SoundManager soundManager;
+    public static Teleport Instance;
+    DataManager dm;
     public GameObject targetObj;
     public pade fadeScript; // 'pade'가 올바른 클래스 이름인지 확인하세요. 일반적으로 클래스 이름은 대문자로 시작합니다.
     public GameObject toObj;
     StageUI stageUi;
     Animator animator;
     public int stageNumber; // 포탈이 속한 스테이지 번호
-
-    public bool isTelepo = false;   // 04.28 박지우 추가 - 텔레포트 확인용
-
+    public bool isActive = false; // 포탈이 활성화 상태인지 저장하는 필드
+    public bool isTelepo = false;
+    GameObject[] bossScene = new GameObject[3];
+    public GameObject keyX;
     private void Awake()
     {
-        Instance = this;    // 04.28 박지우 추가
+        Instance = this;
         keyX = this.transform.GetChild(0).gameObject;
 
+        bossScene[0] = Resources.Load<GameObject>("Prefabs/LeafBossShow_canvas");
+        bossScene[1] = Resources.Load<GameObject>("Prefabs/ShadowBossShow_canvas");
+        bossScene[1] = Resources.Load<GameObject>("Prefabs/DevilBossShow_canvas");
     }
     private void Start()
     {
         stageUi = StageUI.instance;
         stageManager = StageManager.instance;
+        soundManager = SoundManager.instance;
         animator = GetComponent<Animator>();
     }
-
-    public GameObject keyX;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -56,10 +60,13 @@ public class Teleport : MonoBehaviour
 
     IEnumerator TelepotyRoutine()
     {
-        isTelepo = true;
-        fadeScript.Fade(); // 페이드인 실행
-        yield return new WaitForSeconds(1f); // 페이드인 완료 대기
+        DestroyShopUi();
 
+        isTelepo = true;
+        fadeScript.gameObject.SetActive(true);
+        fadeScript.Fade(); // 페이드인 실행
+
+        yield return new WaitForSeconds(1f); // 페이드인 완료 대기
         // 현재 스테이지 레벨이 5일 경우, 다음 스테이지로 이동
         if (stageManager.nowStageLv == 5)
         {
@@ -83,13 +90,58 @@ public class Teleport : MonoBehaviour
             stageManager.nowStageLv++;
         }
 
-        targetObj.transform.position = toObj.transform.position;
-        yield return new WaitForSeconds(1f); // 포탈 사용 후 일정 시간 대기
+        if (stageManager.nowStageLv == 5)
+        {
+            GameObject bossScnenShow;
+            if (stageManager.nowStage == 1)
+            {
+                soundManager.BGMPlay(soundManager.boss_stage1);
+                bossScnenShow = Instantiate(bossScene[0]);
+                Debug.Log("1스테이지 보스 bgm실행");
+            }
+            else if (stageManager.nowStage == 2)
+            {
+                soundManager.BGMPlay(soundManager.boss_stage2);
+                bossScnenShow = Instantiate(bossScene[1]);
+                Debug.Log("2스테이지 보스 bgm실행");
+            }
+            else
+            {
+                soundManager.BGMPlay(soundManager.boss_stage3);
+                bossScnenShow = Instantiate(bossScene[2]);
+                Debug.Log("3스테이지 보스 bgm실행");
+            }
+            StartCoroutine(BossSceneShowDestroy(bossScnenShow));
+        }
+        
+
 
         // 현재 스테이지와 레벨 출력
         stageUi.PrintStage(stageManager.nowStage, stageManager.nowStageLv);
         // 플레이어 위치 이동
         targetObj.transform.position = toObj.transform.position;
+        dm.playerData.nowPosition = toObj.transform.position;
+        yield return new WaitForSeconds(1f); // 포탈 사용 후 일정 시간 대기
         isTelepo = false;
+        dm.SaveData();
+        fadeScript.gameObject.SetActive(false);
     }
+    IEnumerator BossSceneShowDestroy(GameObject destroyObject)
+    {
+        yield return new WaitForSeconds(2f);
+        Destroy(destroyObject);
+    }
+    void DestroyShopUi()        // 상점 UI가 있다면 삭제하는 함수
+    {
+        if (stageManager.nowStageLv == 4)
+        {
+            ShopUI shopUi = ShopUI.instance;
+            if (shopUi != null)
+            {
+                Destroy(shopUi.gameObject);
+            }
+        }
+
+    }
+
 }

@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class ChangePassive : MonoBehaviour
 {
+    public static ChangePassive instance;
+    DataManager dm;
+    SkillManager sm;
     public Image changeCoolTime;
 
     public Image passive_1;  // 패시브 오브젝트
@@ -13,13 +16,23 @@ public class ChangePassive : MonoBehaviour
     public Transform nowPassive;     // 사용 중인 패시브
     public Transform readyPassive;   // 대기 중인 패시브
 
+    public SkillControler nowPassiveSkilltroler;
+    public SkillControler readyPassiveSkilltroler;
+
     public bool change;     // 패시브 변경 했는지 확인하는 변수
     private void Awake()
     {
-        changeCoolTime = transform.GetChild(0).GetChild(1).GetComponent<Image>();
-        change = false;   
+        instance = this;
+        changeCoolTime = transform.GetChild(0).GetChild(0).GetComponent<Image>();
+        nowPassive = transform.GetChild(0).GetComponent<Transform>();     // 현재 사용중인 패시브 Transform 설정
+        readyPassive = transform.GetChild(1).GetComponent<Transform>();   // 대기중인 패시브 Transform 설정
+        change = false;
     }
-
+    private void Start()
+    {
+        dm = DataManager.instance;
+        sm = SkillManager.instance;
+    }
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.LeftControl) && !change)
@@ -59,5 +72,15 @@ public class ChangePassive : MonoBehaviour
 
         passive_2.transform.SetParent(nowPassive.transform, false);     // 사용중인 패시브 대기중 슬롯으로 이동
         passive_2.transform.SetAsFirstSibling();                          // 부모 오브젝트의 첫번째 자식으로 설정
+
+        GetPassiveComponent();
     }   
+    public void GetPassiveComponent()
+    {
+        readyPassiveSkilltroler = passive_1.GetComponentInChildren<SkillControler>();
+        nowPassiveSkilltroler = passive_2.GetComponentInChildren<SkillControler>();
+        dm.skillData.nowPassive = nowPassiveSkilltroler.num;
+        dm.skillData.readySkill = readyPassiveSkilltroler.num;
+
+    }
 }

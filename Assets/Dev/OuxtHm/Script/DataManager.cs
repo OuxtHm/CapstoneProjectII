@@ -9,6 +9,8 @@ public class PlayerData
     public float maxHpValue;        // 최대 체력
     public float curHpValue;        // 현재 체력
     public float atk;               // 공격력
+    public float moveSpeed;         // 이동속도
+    public float dashCoolTime;      // 대쉬 쿨타임
     public int money;               // 돈
     public Vector2 nowPosition;     // 현재 위치
     public int nowStage;            // 현재 스테이지
@@ -38,6 +40,7 @@ public class DataManager : MonoBehaviour
     public GameManager gm;
     public SoundManager sm;
     public SkillManager skillM;
+    ChangePassive changePassvie;
     SkillUI skillUi;
     public Player player;
 
@@ -46,8 +49,12 @@ public class DataManager : MonoBehaviour
         maxHpValue = 100,
         curHpValue = 100,
         atk = 10,
+        moveSpeed = 5f,
+        dashCoolTime = 3f,
         money = 0,
-        nowPosition = new Vector2(0, 1)
+        nowPosition = new Vector2(0, 1),
+        nowStage = 1,
+        nowStageLV = 1,
     };
 
     public OptionData optionData = new OptionData()
@@ -118,6 +125,7 @@ public class DataManager : MonoBehaviour
             player = Player.instance;
             skillM = SkillManager.instance;
             skillUi = SkillUI.instance;
+            changePassvie = ChangePassive.instance;
         }
     }
     private void OnDestroy()
@@ -178,6 +186,9 @@ public class DataManager : MonoBehaviour
             skillM.commonSkillNum[1] = skillData.nowSkill;
             skillM.ultSkillNum = skillData.ultSkill;
 
+            // 패시브 정보 불러오기
+            skillM.passiveNum[0] = skillData.readyPassive;
+            skillM.passiveNum[1] = skillData.nowPassive;
             yield return null;
             //-----------------------------------------------
             // 스킬 데이터 -1 값이 없어서 현재 오류 발생 중
@@ -188,11 +199,14 @@ public class DataManager : MonoBehaviour
             skillM.CreateSkill(skillM.commonSkillNum[1], skillUi.change.nowskill);
             skillM.CreateSkill(skillM.ultSkillNum, skillUi.ult);
 
+            // 패시브 아이콘 생성
+            skillM.CreateSkill(skillM.passiveNum[0], changePassvie.readyPassive);
+            skillM.CreateSkill(skillM.passiveNum[1], changePassvie.nowPassive);
+
             // 스킬 아이콘 컴포넌트 받기
             skillUi.GetSkillComponent();
             skillUi.GetUltComponent();
             skillUi.change.ImageGetComponent();
-
         }
         else
         {
@@ -221,8 +235,7 @@ public class DataManager : MonoBehaviour
     public void NewGame()       // 새 게임 버튼 클릭시 실행하는 함수
     {
         Debug.Log("데이터 파일 삭제");
-        File.Delete(playerDataPath);
-        File.Delete(skillDataPath);
+        DeleteFile();
         Debug.Log(playerDataPath);
         string pData = JsonUtility.ToJson(playerData, true);     // 플레이어 데이터 세이브
         string sData = JsonUtility.ToJson(skillData, true);     // 스킬 데이터 세이브
@@ -232,5 +245,12 @@ public class DataManager : MonoBehaviour
         File.WriteAllText(skillDataPath, sData);
         Debug.Log("새 게임");
     }
-
+    public void DeleteFile()    // 데이터 파일 삭제하는 함수
+    {
+        if(playerDataPath != null)
+        {
+            File.Delete(playerDataPath);
+            File.Delete(skillDataPath);
+        }
+    }
 }

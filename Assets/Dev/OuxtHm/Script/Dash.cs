@@ -1,15 +1,14 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Dash : MonoBehaviour
 {
     public static Dash instance;
+    DataManager dm;
     public Image firstEnergy;
     public Image secondEnergy;
-
+    public float duration;                     // 게이지 회복되는 속도
     public bool isFillingFirst = false;        // 우측 게이지 
     public bool isFillingSecond = false;       // 좌측 게이지 
 
@@ -19,33 +18,36 @@ public class Dash : MonoBehaviour
         firstEnergy = transform.GetChild(0).GetChild(0).GetComponent<Image>();
         secondEnergy = transform.GetChild(1).GetChild(0).GetComponent<Image>();
     }
-
+    private void Start()
+    {
+        dm = DataManager.instance;
+        duration = dm.playerData.dashCoolTime;
+    }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             if (!isFillingSecond)
             {
-                StartCoroutine(SecondFill());
+                StartCoroutine(SecondFill(duration));
                 
             }
             else if((!isFillingFirst))
             {
-                StartCoroutine(FirstFill());
+                StartCoroutine(FirstFill(duration));
             }
         }
     }
 
-    public IEnumerator FirstFill()  // 첫번째 에너지 복구
+    public IEnumerator FirstFill(float durationTime)  // 첫번째 에너지 복구
     {
         isFillingSecond = false;
         isFillingFirst = true;
-        float duration = 3f;
         float elapsedTime = 0f;
         float startValue = secondEnergy.fillAmount;
         firstEnergy.fillAmount = startValue;
         secondEnergy.fillAmount = 0;
-        float t = duration - (duration * firstEnergy.fillAmount);
+        float t = durationTime - (durationTime * firstEnergy.fillAmount);
 
         while (elapsedTime < t)
         {
@@ -56,20 +58,19 @@ public class Dash : MonoBehaviour
         }
         firstEnergy.fillAmount = 1f;
         isFillingFirst = false;
-        StartCoroutine(SecondFill());
+        StartCoroutine(SecondFill(duration));
     }
 
-    public IEnumerator SecondFill() // 두번째 에너지 복구
+    public IEnumerator SecondFill(float durationTime) // 두번째 에너지 복구
     {
         isFillingSecond = true;
 
-        float duration = 3f;
         float elapsedTime = 0f;
         secondEnergy.fillAmount = 0;
-        while (elapsedTime < duration)
+        while (elapsedTime < durationTime)
         {
             elapsedTime += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsedTime / duration);
+            float t = Mathf.Clamp01(elapsedTime / durationTime);
             secondEnergy.fillAmount = Mathf.Lerp(0f, 1f, t);
             if (isFillingFirst)
             {

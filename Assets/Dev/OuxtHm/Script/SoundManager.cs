@@ -56,7 +56,11 @@ public class SoundManager : MonoBehaviour
         bgmPlayer.loop = true;
         bgmPlayer.Play();
     }
-
+    public void BGMStop(AudioClip clip)
+    {
+        bgmPlayer.clip = clip;
+        bgmPlayer.Stop();
+    }
     public void SFXPlay(AudioClip clip)     // 효과음 재생
     {
         sfxPlayer.clip = clip;
@@ -67,5 +71,34 @@ public class SoundManager : MonoBehaviour
     {
         sfxPlayer.clip = clip;
         sfxPlayer.Stop();
+    }
+
+    public IEnumerator FadeOutCoroutine()   // 배경음악 볼륨 페이드 아웃
+    {
+        float elapsedTime = 0f;
+        float fadeDuration = 0.7f;
+        while (elapsedTime < fadeDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / fadeDuration;
+            bgmPlayer.volume = Mathf.Lerp(1f, 0f, t);
+            yield return null;
+        }
+
+        bgmPlayer.volume = 0f;
+    }
+    public IEnumerator FadeInCoroutine() // 배경음악 볼륨 페이드인
+    {
+        float elapsedTime = 0f;
+        float fadeDuration = 0.7f;
+        while (elapsedTime < fadeDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / fadeDuration;
+            bgmPlayer.volume = Mathf.Lerp(0, 1f, t);
+            yield return null;
+        }
+
+        bgmPlayer.volume = 1f;
     }
 }

@@ -12,5 +12,6 @@ public class PurpleFrog : Enemy
         enemy_Power = 2;
         enemy_Speed = 2;
         enemy_AttackSensor = 6f;
+        enemyMoney = Random.Range(50, 71);
     }
 }

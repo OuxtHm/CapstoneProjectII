@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class StageManager : MonoBehaviour
 {
+    DataManager dm;
     public int nowStage;
     public int nowStageLv;
     public static StageManager instance;
@@ -20,12 +19,13 @@ public class StageManager : MonoBehaviour
 
     private void Start()
     {
-        nowStage = 1;
-        nowStageLv = 1;
+        dm = DataManager.instance;
+        nowStage = dm.playerData.nowStage;
+        nowStageLv = dm.playerData.nowStageLV;
+        LoadMapData();
         portal1.SetActive(false); // 초기에는 포탈을 비활성화
         portal2.SetActive(false);
         portal3.SetActive(false);
-
     }
 
     private void Update()
@@ -33,6 +33,18 @@ public class StageManager : MonoBehaviour
         CheckAndActivateBoss();
     }
 
+    void LoadMapData()      // 맵 데이터 불러오기
+    {
+        stage[dm.playerData.nowStage - 1].SetActive(true);
+
+        for (int i = 0; i < stage.Length; i++)
+        {
+            if (i != dm.playerData.nowStage - 1)
+            {
+                stage[i].SetActive(false);
+            }
+        }
+    }
     public void ChangeStage(int num)
     {
         stage[nowStage - 1].SetActive(false); // 현재 스테이지를 비활성화
