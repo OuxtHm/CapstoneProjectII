@@ -6,7 +6,7 @@ public class Teleport : MonoBehaviour
     StageManager stageManager;
     SoundManager soundManager;
     MainCam maincam;
-    public static Teleport Instance;  
+    public static Teleport instance;  
     DataManager dm;
     public GameObject targetObj;
     public pade fadeScript; // 'pade'가 올바른 클래스 이름인지 확인하세요. 일반적으로 클래스 이름은 대문자로 시작합니다.
@@ -17,25 +17,37 @@ public class Teleport : MonoBehaviour
     public bool isActive = false; // 포탈이 활성화 상태인지 저장하는 필드
     public bool isTelepo = false;
     GameObject[] bossScene = new GameObject[3];
+    GameObject[] Boss = new GameObject[3];
     public GameObject keyX;
     bool isbgm = false; //bgm이 실행하고 있는지 확인
+    bool oneTime = false;   //처음 bgm 실행 조건
 
     private void Awake()
     {
-        Instance = this;
+        instance = this;
         keyX = this.transform.GetChild(0).gameObject;
 
         bossScene[0] = Resources.Load<GameObject>("Prefabs/LeafBossShow_canvas");
         bossScene[1] = Resources.Load<GameObject>("Prefabs/ShadowBossShow_canvas");
         bossScene[1] = Resources.Load<GameObject>("Prefabs/DevilBossShow_canvas");
+        Boss[0] = Resources.Load<GameObject>("Prefabs/Ranger_Boss");
+        Boss[1] = Resources.Load<GameObject>("Prefabs/Rogue Knight");
+        Boss[2] = Resources.Load<GameObject>("Prefabs/Red");
     }
     private void Start()
     {
         stageUi = StageUI.instance;
         stageManager = StageManager.instance;
         soundManager = SoundManager.instance;
+        dm = DataManager.instance;
         animator = GetComponent<Animator>();
-        stageBGM();
+
+        if (!oneTime)
+        {
+            soundManager.BGMPlay(soundManager.nomal_stage1);
+            oneTime = true;
+        }
+            
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -96,12 +108,6 @@ public class Teleport : MonoBehaviour
             // 현재 스테이지 레벨이 5가 아닐 경우, 레벨을 1 증가
             stageManager.nowStageLv++;
             isbgm = true;
-            if (stageManager.nowStageLv == 5)        
-            {
-                Debug.Log("상점 UI 지우기");
-                ShopUI shopUi = ShopUI.instance;
-                Destroy(shopUi.gameObject);
-            }
         }
         dm.playerData.nowStage = stageManager.nowStage;
         dm.playerData.nowStageLV = stageManager.nowStageLv;
@@ -136,7 +142,7 @@ public class Teleport : MonoBehaviour
 
     }
 
-    void stageBGM() //스테이지 변경시 bgm 변경
+    public void stageBGM() //스테이지 변경시 bgm 변경
     {
         if (stageManager.nowStageLv == 5)   //보스 스테이지일 때 실행되는 bgm
         {
@@ -145,18 +151,21 @@ public class Teleport : MonoBehaviour
             {
                 soundManager.BGMPlay(soundManager.boss_stage1);
                 bossScnenShow = Instantiate(bossScene[0]);
+                Boss[0].gameObject.SetActive(true);
                 Debug.Log("1스테이지 보스 bgm실행");
             }
             else if (stageManager.nowStage == 2)
             {
                 soundManager.BGMPlay(soundManager.boss_stage2);
                 bossScnenShow = Instantiate(bossScene[1]);
+                Boss[1].gameObject.SetActive(true);
                 Debug.Log("2스테이지 보스 bgm실행");
             }
             else
             {
                 soundManager.BGMPlay(soundManager.boss_stage3);
                 bossScnenShow = Instantiate(bossScene[2]);
+                Boss[2].gameObject.SetActive(true);
                 Debug.Log("3스테이지 보스 bgm실행");
             }
             StartCoroutine(BossSceneShowDestroy(bossScnenShow));

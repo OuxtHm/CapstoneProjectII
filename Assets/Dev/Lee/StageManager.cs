@@ -3,6 +3,7 @@ using System.Collections;
 public class StageManager : MonoBehaviour
 {
     DataManager dm;
+    Teleport teleport;
     public int nowStage;
     public int nowStageLv;
     public static StageManager instance;
@@ -25,7 +26,6 @@ public class StageManager : MonoBehaviour
         LoadMapData();
         portal1.SetActive(false); // 초기에는 포탈을 비활성화
         portal2.SetActive(false);
-        portal3.SetActive(false);
     }
 
     private void Update()
