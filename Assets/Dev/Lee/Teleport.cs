@@ -7,7 +7,7 @@ public class Teleport : MonoBehaviour
     SoundManager soundManager;
     MainCam maincam;
     public static Teleport Instance;  
-    DataManager dm;
+    public DataManager dm;
     public GameObject targetObj;
     public pade fadeScript; // 'pade'가 올바른 클래스 이름인지 확인하세요. 일반적으로 클래스 이름은 대문자로 시작합니다.
     public GameObject toObj;
@@ -31,6 +31,7 @@ public class Teleport : MonoBehaviour
     }
     private void Start()
     {
+        dm = DataManager.instance;
         stageUi = StageUI.instance;
         stageManager = StageManager.instance;
         soundManager = SoundManager.instance;
@@ -60,8 +61,6 @@ public class Teleport : MonoBehaviour
             StartCoroutine(TelepotyRoutine());
         }
     }
-
-
 
     IEnumerator TelepotyRoutine()
     {
@@ -96,12 +95,6 @@ public class Teleport : MonoBehaviour
             // 현재 스테이지 레벨이 5가 아닐 경우, 레벨을 1 증가
             stageManager.nowStageLv++;
             isbgm = true;
-            if (stageManager.nowStageLv == 5)        
-            {
-                Debug.Log("상점 UI 지우기");
-                ShopUI shopUi = ShopUI.instance;
-                Destroy(shopUi.gameObject);
-            }
         }
         dm.playerData.nowStage = stageManager.nowStage;
         dm.playerData.nowStageLV = stageManager.nowStageLv;
@@ -138,7 +131,8 @@ public class Teleport : MonoBehaviour
 
     void stageBGM() //스테이지 변경시 bgm 변경
     {
-        if (stageManager.nowStageLv == 5)   //보스 스테이지일 때 실행되는 bgm
+        Debug.Log("stageBgm() 실행");
+        if (stageManager.nowStageLv == 5)
         {
             GameObject bossScnenShow;
             if (stageManager.nowStage == 1)

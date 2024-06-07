@@ -14,6 +14,7 @@ public abstract class Boss : MonoBehaviour
     Transform PbSpawn;  //프리펩 생성 위치 오브젝트
     Transform AttackBox;    // 근접 공격 범위 오브젝트
     BoxCollider2D BoxCollider2DSize;    //Attackbox 오브젝트의 boxcollider2D
+    GameObject bossHpBarUI;        // 보스 체력바 UI
 
     bool ishurt = false;
     public bool bossMoving = false;
@@ -83,16 +84,15 @@ public abstract class Boss : MonoBehaviour
         LaserPb = Resources.Load<GameObject>("Prefabs/Laser");
         WarningPb = Resources.Load<GameObject>("Prefabs/Warning");
 
-
-
-
+        bossHpBarUI = Resources.Load<GameObject>("Prefabs/BossHpbar_canvas");
     }
 
 
     private void Start()
     {
         player = Player.instance.GetComponent<Player>();
-        bossHpBar = BossHpBar.instance;     // 2024-04-10 유재현 추가
+        Instantiate(bossHpBarUI); // 2024-06-07 유재현 추가
+        bossHpBar = BossHpBar.instance;     
         spriteRenderer = this.GetComponent<SpriteRenderer>();
         anim = this.GetComponent<Animator>();
         AttackBox = this.gameObject.transform.GetChild(0).GetComponent<Transform>();
@@ -100,8 +100,6 @@ public abstract class Boss : MonoBehaviour
         rigid = this.GetComponent<Rigidbody2D>();
         randomAtk();
         OneTime();
-
-
     }
 
     void OneTime()
@@ -542,16 +540,16 @@ public abstract class Boss : MonoBehaviour
         {
             ishurt = true;
             boss_CurHP = boss_CurHP - Damage;
-            //StartCoroutine(bossHpBar.FrontHpUpdate());      // 2024-04-10 유재현 추가
-            //bossHpBar.anim.SetTrigger("Damage");
+            StartCoroutine(bossHpBar.FrontHpUpdate());      // 2024-04-10 유재현 추가
+            bossHpBar.anim.SetTrigger("Damage");
             StartCoroutine(Blink());
 
             if (boss_CurHP <= 0)
             {
                 isdie = true;
                 StopAllCoroutines();
-                //StartCoroutine(bossHpBar.FrontHpUpdate());      // 2024-04-10 유재현 추가
-                //bossHpBar.anim.SetTrigger("Remove");
+                StartCoroutine(bossHpBar.FrontHpUpdate());      // 2024-04-10 유재현 추가
+                bossHpBar.anim.SetTrigger("Remove");
                 StartCoroutine(Die());
             }
         }
@@ -591,8 +589,6 @@ public abstract class Boss : MonoBehaviour
             SpawnItems(skillItemPrefab, 1); // 1개의 스킬 아이템 생성
             Destroy(gameObject);
         }
-            
-        
     }
 
     void SpawnItems(GameObject itemPrefab, int itemCount)

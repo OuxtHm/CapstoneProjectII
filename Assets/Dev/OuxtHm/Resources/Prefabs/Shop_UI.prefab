@@ -4130,7 +4130,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   money_txt: {fileID: 0}
-  grandObject: {fileID: 0}
   skillTabBtn: {fileID: 0}
   enhanceTabBtn: {fileID: 0}
   skillTabPage: {fileID: 0}

@@ -375,6 +375,7 @@ public abstract class Enemy : MonoBehaviour
         this.gameObject.layer = LayerMask.NameToLayer("DieEnemy");
         player.money += enemyMoney;
         dm.playerData.money += enemyMoney;
+        dm.playerData.killCount++;
         yield return new WaitForSeconds(1f);
         Destroy(gameObject);
     }

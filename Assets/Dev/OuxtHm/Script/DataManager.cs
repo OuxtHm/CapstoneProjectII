@@ -15,6 +15,8 @@ public class PlayerData
     public Vector2 nowPosition;     // 현재 위치
     public int nowStage;            // 현재 스테이지
     public int nowStageLV;          // 현재 스테이지 레벨
+    public int killCount;           // 몬스터 처치 횟수
+    public float totalPlayTime;     // 플레이 타임
 }
 
 public class OptionData
@@ -55,6 +57,8 @@ public class DataManager : MonoBehaviour
         nowPosition = new Vector2(0, 1),
         nowStage = 1,
         nowStageLV = 1,
+        killCount = 0,
+        totalPlayTime = 0,
     };
 
     public OptionData optionData = new OptionData()
@@ -66,11 +70,11 @@ public class DataManager : MonoBehaviour
 
     public SkillData skillData = new SkillData()
     {
-        readySkill = -1,
-        nowSkill = -1,
-        ultSkill = -1,
-        nowPassive = -1,
-        readyPassive = -1
+        readySkill = 7,
+        nowSkill = 5,
+        ultSkill = 8,
+        nowPassive = 9,
+        readyPassive = 11
     };
 
     string dataFolderPath;      // 데이터 저장 폴더 경로
@@ -135,30 +139,30 @@ public class DataManager : MonoBehaviour
     }
     public void SaveData()      // 플레이어 및 스킬 데이터 저장 함수
     {
-        Debug.Log("데이터 저장 시작");
+        //Debug.Log("데이터 저장 시작");
         string pData = JsonUtility.ToJson(playerData, true);     // 플레이어 데이터 세이브
         string sData = JsonUtility.ToJson(skillData, true);     // 스킬 데이터 세이브
 
         // Json 파일 쓰기
         File.WriteAllText(playerDataPath, pData);
         File.WriteAllText(skillDataPath, sData);
-        Debug.Log("저장 완료");
+        //Debug.Log("저장 완료");
     }
 
     public void SaveOptionData()    // 옵션 데이터 저장 함수
     {
-        Debug.Log("옵션 데이터 저장 시작");
+        //Debug.Log("옵션 데이터 저장 시작");
         string oData = JsonUtility.ToJson(optionData, true);        // 옵션 데이터 세이브
 
         File.WriteAllText(optionDataPath, oData);
-        Debug.Log("옵션 데이터 저장 완료");
+        //Debug.Log("옵션 데이터 저장 완료");
     }
     
     public void PlayerLoad(Scene scene, LoadSceneMode mode)    // 인게임씬에서 플레이어 데이터 로드하는 함수
     {
         if (scene.name != "MainScene" && File.Exists(playerDataPath))
         {
-            Debug.Log("플레이어 데이터 및 스킬 데이터 로드 중....");
+            //Debug.Log("플레이어 데이터 및 스킬 데이터 로드 중....");
             string playData = File.ReadAllText(playerDataPath);
             string skData = File.ReadAllText(skillDataPath);
 
@@ -171,9 +175,9 @@ public class DataManager : MonoBehaviour
 
     public IEnumerator LoadData()
     {
-        Debug.Log(" 데이터 불러오기");
         if (SceneManager.GetActiveScene().name != "MainScene")
         {
+            Debug.Log(" 데이터 불러오기");
             // 플레이어 정보 불러오기
             player.maxHp = playerData.maxHpValue;
             player.curHp = playerData.curHpValue;
@@ -190,23 +194,8 @@ public class DataManager : MonoBehaviour
             skillM.passiveNum[0] = skillData.readyPassive;
             skillM.passiveNum[1] = skillData.nowPassive;
             yield return null;
-            //-----------------------------------------------
-            // 스킬 데이터 -1 값이 없어서 현재 오류 발생 중
-            //-----------------------------------------------
-            
-            // 스킬 아이콘 생성
-            skillM.CreateSkill(skillM.commonSkillNum[0], skillUi.change.readyskill);
-            skillM.CreateSkill(skillM.commonSkillNum[1], skillUi.change.nowskill);
-            skillM.CreateSkill(skillM.ultSkillNum, skillUi.ult);
 
-            // 패시브 아이콘 생성
-            skillM.CreateSkill(skillM.passiveNum[0], changePassvie.readyPassive);
-            skillM.CreateSkill(skillM.passiveNum[1], changePassvie.nowPassive);
-
-            // 스킬 아이콘 컴포넌트 받기
-            skillUi.GetSkillComponent();
-            skillUi.GetUltComponent();
-            skillUi.change.ImageGetComponent();
+            CreateSkillIcon();
         }
         else
         {
@@ -217,7 +206,7 @@ public class DataManager : MonoBehaviour
 
     public void OptionLoad()    // 타이틀씬에서 옵션 데이터 로드하는 함수
     {
-        Debug.Log("옵션 데이터 로드 중....");
+        //Debug.Log("옵션 데이터 로드 중....");
         string optData = File.ReadAllText(optionDataPath);
         optionData = JsonUtility.FromJson<OptionData>(optData);
         if (SceneManager.GetActiveScene().name == "MainScene")
@@ -231,26 +220,66 @@ public class DataManager : MonoBehaviour
         sm.BGMVolume(optionData.bgmValue);
         sm.SFXVolume(optionData.sfxValue);
     }
+    public void CreateSkillIcon()       // 스킬 아이콘 생성함수
+    {
+        // 스킬 아이콘 생성
+        skillM.CreateSkill(skillM.commonSkillNum[0], skillUi.change.readyskill);
+        skillM.CreateSkill(skillM.commonSkillNum[1], skillUi.change.nowskill);
+        skillM.CreateSkill(skillM.ultSkillNum, skillUi.ult);
 
+        // 패시브 아이콘 생성
+        skillM.CreateSkill(skillM.passiveNum[0], changePassvie.readyPassive);
+        skillM.CreateSkill(skillM.passiveNum[1], changePassvie.nowPassive);
+
+        // 스킬 아이콘 컴포넌트 받기
+        skillUi.GetSkillComponent();
+        skillUi.GetUltComponent();
+        skillUi.change.ImageGetComponent();
+    }
     public void NewGame()       // 새 게임 버튼 클릭시 실행하는 함수
     {
         Debug.Log("데이터 파일 삭제");
         DeleteFile();
         Debug.Log(playerDataPath);
-        string pData = JsonUtility.ToJson(playerData, true);     // 플레이어 데이터 세이브
+        /*string pData = JsonUtility.ToJson(playerData, true);     // 플레이어 데이터 세이브
         string sData = JsonUtility.ToJson(skillData, true);     // 스킬 데이터 세이브
 
         // Json 파일 쓰기
         File.WriteAllText(playerDataPath, pData);
-        File.WriteAllText(skillDataPath, sData);
-        Debug.Log("새 게임");
+        File.WriteAllText(skillDataPath, sData);*/
+        
+        NewPlayerFile();
+        NewSkillFile();
+        SaveData();
     }
     public void DeleteFile()    // 데이터 파일 삭제하는 함수
     {
-        if(playerDataPath != null)
-        {
-            File.Delete(playerDataPath);
-            File.Delete(skillDataPath);
-        }
+        Debug.Log("파일 삭제 함수 실행");
+        File.Delete(playerDataPath);
+        File.Delete(skillDataPath);
+    }
+
+    public void NewPlayerFile()
+    {
+        playerData.maxHpValue = 100;
+        playerData.curHpValue = 100;
+        playerData.atk = 10;
+        playerData.moveSpeed = 5f;
+        playerData.dashCoolTime = 3f;
+        playerData.money = 0;
+        playerData.nowPosition = new Vector2(0, 1);
+        playerData.nowStage = 1;
+        playerData.nowStageLV = 1;
+        playerData.killCount = 0;
+        playerData.totalPlayTime = 0;
+    }
+    public void NewSkillFile()
+    {
+        skillData.readySkill = 7;
+        skillData.nowSkill = 5;
+        skillData.ultSkill = 8;
+        skillData.nowPassive = 9;
+        skillData.readyPassive = 11;
+        //CreateSkillIcon();
     }
 }

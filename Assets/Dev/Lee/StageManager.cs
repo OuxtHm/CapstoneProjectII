@@ -11,7 +11,6 @@ public class StageManager : MonoBehaviour
     [SerializeField] public GameObject[] boss = new GameObject[3];
     [SerializeField] private GameObject portal1; // 1스테이지
     [SerializeField] private GameObject portal2; // 2스테이지
-    [SerializeField] private GameObject portal3; // 3스테이지
     private void Awake()
     {
         instance = this;
@@ -25,7 +24,6 @@ public class StageManager : MonoBehaviour
         LoadMapData();
         portal1.SetActive(false); // 초기에는 포탈을 비활성화
         portal2.SetActive(false);
-        portal3.SetActive(false);
     }
 
     private void Update()
