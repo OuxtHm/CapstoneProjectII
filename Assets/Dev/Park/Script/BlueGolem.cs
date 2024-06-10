@@ -12,6 +12,7 @@ public class BlueGolem : Enemy
         enemy_Power = 5;
         enemy_Speed = 1;
         enemy_AttackSensor = 2.8f;
+        enemy_frontSensor = 1.5f;
         enemyMoney = Random.Range(50, 71);
     }
 }

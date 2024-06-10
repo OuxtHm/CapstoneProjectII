@@ -12,7 +12,7 @@ public class Skeleton3s : Enemy
         enemy_Power = 2;
         enemy_Speed = 1;
         enemy_AttackSensor = 1.7f;
-        enemy_frontSensor = 1f;
+        enemy_frontSensor = 1.2f;
         enemyMoney = Random.Range(80, 101);
     }
 }

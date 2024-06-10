@@ -252,6 +252,7 @@ public class Player : MonoBehaviour
     }
     public void Movement()
     {
+        rb = GetComponent<Rigidbody2D>();
         if (currentJumpCount > 0)
         {
             if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow))
