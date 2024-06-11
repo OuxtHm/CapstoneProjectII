@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
 
 public class ShopUI : MonoBehaviour
 {
@@ -80,7 +79,7 @@ public class ShopUI : MonoBehaviour
                     return; // 여기서 함수를 종료하여 더 이상 진행하지 않음
                 }
 
-                if (player.money <= 0)
+                if (player.money <= randSkill.skillCon[index].price)
                 {
                     Instantiate(warning);
                 }

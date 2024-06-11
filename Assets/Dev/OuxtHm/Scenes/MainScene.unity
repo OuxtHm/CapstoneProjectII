@@ -1151,7 +1151,7 @@ GameObject:
   - component: {fileID: 362293624}
   - component: {fileID: 362293623}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: Option_Ui
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5178,6 +5178,9 @@ MonoBehaviour:
   boss_stage1: {fileID: 0}
   boss_stage2: {fileID: 0}
   boss_stage3: {fileID: 0}
+  nomal_stage1: {fileID: 0}
+  nomal_stage2: {fileID: 0}
+  nomal_stage3: {fileID: 0}
 --- !u!4 &2138103749
 Transform:
   m_ObjectHideFlags: 0

@@ -36,6 +36,7 @@ public class GameManager : MonoBehaviour
         
         deadUiPrefab = Resources.Load<GameObject>("Prefabs/PlayerDead_canvas");
         fadeInPrefab = Resources.Load<GameObject>("Prefabs/FadeIn_canvas");
+        optionUI = GameObject.Find("Option_ui");
     }
 
     private void Start()
@@ -43,7 +44,7 @@ public class GameManager : MonoBehaviour
         sm = SoundManager.instance;
         SceneManager.sceneLoaded += FindOptionUiObject;  // 씬을 불러 올 때마다 실행이 되도록 함수 추가
         SceneManager.sceneLoaded += MainBgmPlay;
-
+        optionUI.SetActive(false);
         MainBgmPlay(SceneManager.GetActiveScene(), LoadSceneMode.Single);
     }
     void Update()
@@ -85,12 +86,8 @@ public class GameManager : MonoBehaviour
     public void FindOptionUiObject(Scene scene, LoadSceneMode mode)
     {
         StartCoroutine(CreateFadeIn());
-        if (scene.name != "MainScene")
-        {
-            
-            optionUI = GameObject.Find("Option_ui");
-            RetrieveOptionUIComponents();
-        }
+        
+        RetrieveOptionUIComponents(scene);
     }
     public void MainBgmPlay(Scene scene, LoadSceneMode mode)
     {
@@ -100,19 +97,32 @@ public class GameManager : MonoBehaviour
             sm.BGMPlay(mainBgm);
         }
     }
-    private void RetrieveOptionUIComponents()  // 인게임씬에서 옵션 UI에 속한 컴포넌트 얻는 함수
+    private void RetrieveOptionUIComponents(Scene scene)  // 인게임씬에서 옵션 UI에 속한 컴포넌트 얻는 함수
     {
-        btnArray = optionUI.transform.GetChild(0).GetChild(1).gameObject;
-        soundOption = optionUI.transform.GetChild(0).GetChild(2).gameObject;
+        optionUI = GameObject.Find("Option_ui");
+        if (scene.name != "MainScene")
+        {
+            btnArray = optionUI.transform.GetChild(0).GetChild(1).gameObject;
+            soundOption = optionUI.transform.GetChild(0).GetChild(2).gameObject;
+        }
+        else
+        {
+            soundOption = optionUI.transform.GetChild(1).gameObject;
+        }
         for(int i = 0; i < slider.Length; i++)
         {
             slider[i] = soundOption.transform.GetChild(1).GetChild(i).GetComponent<Slider>();
         }
         slider[0].onValueChanged.AddListener(delegate { sm.MasterVolume(slider[0].value); });
-        slider[1].onValueChanged.AddListener(delegate { sm.MasterVolume(slider[1].value); });
-        slider[2].onValueChanged.AddListener(delegate { sm.MasterVolume(slider[2].value); });
-        soundOption.SetActive(false);
+        slider[1].onValueChanged.AddListener(delegate { sm.BGMVolume(slider[1].value); });
+        slider[2].onValueChanged.AddListener(delegate { sm.SFXVolume(slider[2].value); });
+        if(scene.name != "MainScene")
+        {
+            soundOption.SetActive(false);
+            
+        }
         optionUI.SetActive(false);
+
     }
 
     IEnumerator CreateFadeIn()

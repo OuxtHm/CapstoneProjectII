@@ -241,13 +241,6 @@ public class DataManager : MonoBehaviour
         Debug.Log("데이터 파일 삭제");
         DeleteFile();
         Debug.Log(playerDataPath);
-        /*string pData = JsonUtility.ToJson(playerData, true);     // 플레이어 데이터 세이브
-        string sData = JsonUtility.ToJson(skillData, true);     // 스킬 데이터 세이브
-
-        // Json 파일 쓰기
-        File.WriteAllText(playerDataPath, pData);
-        File.WriteAllText(skillDataPath, sData);*/
-        
         NewPlayerFile();
         NewSkillFile();
         SaveData();
