@@ -66,11 +66,11 @@ public class DataManager : MonoBehaviour
 
     public SkillData skillData = new SkillData()
     {
-        readySkill = -1,
-        nowSkill = -1,
-        ultSkill = -1,
-        nowPassive = -1,
-        readyPassive = -1
+        readySkill = 7,
+        nowSkill = 5,
+        ultSkill = 8,
+        nowPassive = 9,
+        readyPassive = 11
     };
 
     string dataFolderPath;      // 데이터 저장 폴더 경로

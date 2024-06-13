@@ -5,8 +5,6 @@ public class Player : MonoBehaviour
 {
     //private bool canChangeDirDuringDash = true;
     [SerializeField] float jumpforce = 500f;
-    //public float knockbackForce = 5f; // 넉백 힘
-    //public float knockbackDuration = 0.2f;
     //private float healingDuration = 5.0f;
     //private float increasedMoveSpeed;
     public float damageAbsorptionBuffStartTime = 0f;
@@ -16,7 +14,7 @@ public class Player : MonoBehaviour
     private bool isDamageAbsorptionBuffOnCooldown = false;
     public float knockbackForce = 7f;
     public float enemyDetectionRadius = 1.0f;
-    public LayerMask enemyLayer; 
+    public LayerMask enemyLayer;
     public LayerMask playerLayer;
     public float invincibilityDuration = 1f;
     public float damageAbsorptionRate = 0.5f; // 데미지 흡수 비율
@@ -27,6 +25,8 @@ public class Player : MonoBehaviour
     public static Player instance;
     GameManager gm;
     DataManager dm;
+    SkillUI skillUi;
+    ChangePassive cp;
     //Enemy enemy;
     //Boss boss;
     Dash dashSc;
@@ -59,7 +59,6 @@ public class Player : MonoBehaviour
     public float groundCheckRadius = 0.2f;//점프
     private int currentJumpCount;//점프
     public LayerMask whatIsGround;//점프
-    //public float knockbackStrength = 500f;//피격
     GameObject holyArrowPrefab;         //  HolyArrow Skill Prefabs
     GameObject holyPillarPrefab;        //  HolyPillar Skill Prefabs 
     GameObject thunderPrefab;           //  Thunder Skill Prefabs
@@ -84,9 +83,10 @@ public class Player : MonoBehaviour
     {
         gm = GameManager.instance;
         dm = DataManager.instance;
+        skillUi = SkillUI.instance;
         dashSc = Dash.instance;
         hpBar = HpBar.instance;
-        moveSpeed = dm.playerData.moveSpeed;        // 데이터매니저에서 값 받기
+        moveSpeed = dm.playerData.moveSpeed;// 데이터매니저에서 값 받기
         rb = GetComponent<Rigidbody2D>();
         originalSpeed = moveSpeed;
         currentJumpCount = JumpCount;
@@ -111,10 +111,11 @@ public class Player : MonoBehaviour
 
     public void Update()
     {
+        UsingSkill();
+        UsingUlt();
         isGround = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
         Movement();
         float horizontalInput = Input.GetAxis("Horizontal");
-        TestSkill();
 
         if (horizontalInput != 0)
         {
@@ -166,44 +167,6 @@ public class Player : MonoBehaviour
             transform.Translate(movement);
         }
 
-        if (Input.GetKey(KeyCode.E) && !isAttacking)//스킬1
-        {
-            StartCoroutine(ShowEffect1ForDuration(1.0f));
-        }
-
-
-
-        if (Input.GetKey(KeyCode.D) && !isAttacking)//스킬2
-        {
-            StartCoroutine(ShowEffect2ForDuration(1.0f));
-        }
-
-
-
-        if (Input.GetKey(KeyCode.Alpha6) && !isAttacking)//스킬3
-        {
-            StartCoroutine(BoostSpeedForDurationskill(boostDuration, lastHorizontalInput));
-            animator.SetTrigger("isSkill3");
-            gameObject.layer = LayerMask.NameToLayer("Enemy");
-        }
-
-        if (Input.GetKey(KeyCode.Alpha8) && !isAttacking)//스킬4
-        {
-            StartCoroutine(ShowEffect4ForDuration(1.0f));
-        }
-
-        if (Input.GetKey(KeyCode.Alpha9) && !isAttacking)//스킬5
-        {
-            RecoverHealth();
-        }
-
-
-        if (Input.GetKeyDown(KeyCode.Alpha7))//스킬6
-        {
-            isHealingActive = true;
-            StartCoroutine(StopHealing());
-        }
-
         IEnumerator StopHealing()
         {
             yield return new WaitForSeconds(5f);
@@ -215,7 +178,7 @@ public class Player : MonoBehaviour
             StartCoroutine(BoostSpeedForDuration(boostDuration, lastHorizontalInput));
             animator.SetTrigger("isDash");
             gameObject.layer = LayerMask.NameToLayer("Dash");
-        }       
+        }
     }
 
     IEnumerator ShowHitboxForDuration(float duration)//평타
@@ -264,7 +227,7 @@ public class Player : MonoBehaviour
 
         rb.velocity = new Vector2(moveX, rb.velocity.y);
     }
- 
+
     public void Playerhurt(int damage, Transform target)//피격
     {
         animator.SetTrigger("isHit");
@@ -277,13 +240,10 @@ public class Player : MonoBehaviour
             gameObject.layer = LayerMask.NameToLayer("Invincible");
             StartCoroutine(gm.ShowDeadUI());
         }
-        else 
+        else
         {
-            StartCoroutine(Knockback(target));
             StartCoroutine(Invincibility());
         }
-        
-        
 
         // 데미지 흡수 패시브 효과 적용
         if (isDamageAbsorptionBuffActive)
@@ -302,24 +262,7 @@ public class Player : MonoBehaviour
             }
         }
     }
-
-    IEnumerator Knockback(Transform target)
-    {
-        Vector2 knockbackDirection = (transform.position - target.position).normalized;  // 피격된 위치를 저장하고 방향을 정규화
-        knockbackDirection = new Vector2(knockbackDirection.x, 0).normalized;  // y축 값을 0으로 설정하여 수평 방향으로만 넉백 적용
-        float knockbackForce = 50.0f;  // 넉백 거리를 나타내는 변수
-
-        float startTime = Time.time;  // 넉백 시작 시간을 기록
-
-        while (Time.time - startTime < 0.5f)  // 넉백 시간을 1초로 설정
-        {
-            rb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);  // 피격된 위치 * 넉백 거리만큼의 힘을 넉백에 사용
-            yield return new WaitForFixedUpdate();  // Fixed Update마다 체크하여 일정 시간 동안 이동하도록 함
-        }
-
-        rb.velocity = Vector2.zero;  // 넉백이 완료되면 속도를 0으로 설정하여 객체를 멈춤
-    }
-    IEnumerator BoostSpeedForDuration(float duration, float direction)//대쉬
+    public IEnumerator BoostSpeedForDuration(float duration, float direction)//대쉬
     {
         if (!isBoosted)
         {
@@ -340,7 +283,6 @@ public class Player : MonoBehaviour
                 {
                     // 벽이나 바닥에 부딪히면 대쉬 중지
                     transform.position = wallHit.collider != null ? wallHit.point : groundHit.point;
-                    Debug.Log("대쉬 중지");
                     break;
                 }
 
@@ -349,7 +291,6 @@ public class Player : MonoBehaviour
                 yield return null;
             }
 
-            Debug.Log("대쉬 실행");
             gameObject.layer = LayerMask.NameToLayer("Player");
             isBoosted = false;
         }
@@ -419,7 +360,6 @@ public class Player : MonoBehaviour
             isBoosted = true;
             moveSpeed = boostedSpeed;
 
-            // 대쉬 기능 추가
             float dashDistance = 5f; // 대쉬할 거리
             Vector2 dashDirection = new Vector2(direction, 0f).normalized; // 대쉬 방향
             Vector3 startPosition = transform.position; // 시작 위치
@@ -505,7 +445,7 @@ public class Player : MonoBehaviour
         StartCoroutine(ShowHealEffectForDuration(0.5f));
     }
 
-    public IEnumerator ShowHealEffectForDuration(float duration)
+    public IEnumerator ShowHealEffectForDuration(float duration)//힐스킬
     {
         Vector3 playerPosition = transform.position;
         effect5.transform.position = playerPosition;
@@ -523,7 +463,7 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(duration);
         effect5.SetActive(false);
     }
-    IEnumerator RegenerateHealth()
+    IEnumerator RegenerateHealth()//힐 패시브
     {
         while (true)
         {
@@ -541,12 +481,14 @@ public class Player : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(20f);
+            yield return new WaitForSeconds(10f);
             moveSpeed += 2f;
+            yield return new WaitForSeconds(5f);
+            moveSpeed -= 2f;
         }
     }
 
-    private IEnumerator DamageAbsorptionBuff()//데미지 흡수
+    private IEnumerator DamageAbsorptionBuff()//데미지 흡수 패시브
     {
         isDamageAbsorptionBuffActive = true;
         isDamageAbsorptionBuffOnCooldown = true;
@@ -558,30 +500,6 @@ public class Player : MonoBehaviour
 
         yield return new WaitForSeconds(damageAbsorptionBuffCooldown);
         isDamageAbsorptionBuffOnCooldown = false;
-    }
-
-    void TestSkill()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            StartCoroutine(HolyArrowSkill());
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            StartCoroutine(HolyPillarSkill());
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            StartCoroutine(ThunderSkill());
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            StartCoroutine(AtkBuffSkill());
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            StartCoroutine(SlashSkill());
-        }
     }
     public IEnumerator HolyArrowSkill() // HolyArrow 스킬 생성 함수 
     {
@@ -692,4 +610,50 @@ public class Player : MonoBehaviour
             Destroy(collision.gameObject); // 스킬 아이템 오브젝트 제거
         }
     }// 5.22 이경규추가
+
+    public void UsingSkill()
+    {
+        if (Input.GetKeyDown(KeyCode.E) && !isAttacking)
+        {
+            switch (skillUi.nowSkill.num)
+            {
+                case 0: StartCoroutine(AtkBuffSkill()); break;
+                case 1: StartCoroutine(ShowEffect1ForDuration(1.0f)); break;
+                case 2: StartCoroutine(HolyArrowSkill()); break;
+                case 3: StartCoroutine(SlashSkill()); break;
+                case 4: StartCoroutine(ShowEffect2ForDuration(1.0f)); break;
+                case 5: StartCoroutine(ShowEffect4ForDuration(1.0f)); break;
+                case 6:
+                    StartCoroutine(BoostSpeedForDurationskill(boostDuration, lastHorizontalInput));
+                    animator.SetTrigger("isSkill3");
+                    gameObject.layer = LayerMask.NameToLayer("Enemy");
+                    break;
+                case 7: RecoverHealth(); break;
+            }
+        }
+    }
+    public void UsingUlt()
+    {
+        if (Input.GetKeyDown(KeyCode.D) && !isAttacking)
+        {
+            switch(skillUi.nowUlt.num)
+            {
+                case 8: StartCoroutine(HolyPillarSkill());break;
+                case 9: StartCoroutine(ThunderSkill());break;
+            }
+        }
+    }
+
+   public void UsingPas()
+    {   
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            switch (cp.nowPassiveSkilltroler.num)
+            {
+                case 10: StartCoroutine(RegenerateHealth());break;
+                case 11: StartCoroutine(IncreaseMovementSpeed());break;
+            }
+        }
+            
+    }
 }
