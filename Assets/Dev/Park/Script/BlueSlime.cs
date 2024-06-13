@@ -11,6 +11,7 @@ public class BlueSlime : Enemy
         enemy_CurHP = 10;
         enemy_Power = 1;
         enemy_Speed = 2;
+        enemy_frontSensor = 0.7f;
         enemyMoney = Random.Range(50, 71);
     }
 }

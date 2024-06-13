@@ -57,7 +57,7 @@ public abstract class Enemy : MonoBehaviour
     {
         player = Player.instance.GetComponent<Player>();
         dm = DataManager.instance;
-        teleport = Teleport.Instance.GetComponent<Teleport>();
+        teleport = Teleport.instance.GetComponent<Teleport>();
         spriteRenderer = this.GetComponent<SpriteRenderer>();
         anim = this.GetComponent<Animator>();
         rigid = this.GetComponent<Rigidbody2D>();
@@ -113,8 +113,6 @@ public abstract class Enemy : MonoBehaviour
                     if (Mathf.Abs(target.position.y - transform.position.y) <= 4f)   //타겟과 어느정도의 높이 차이가 있을경우 추적 멈춤
                     {
                         anim.SetBool("Move", true);
-                        Debug.Log("추적중 이동 실행");
-                        Debug.Log(direction);
                         transform.Translate(direction * Time.deltaTime * enemy_Speed);
                     }
                     else

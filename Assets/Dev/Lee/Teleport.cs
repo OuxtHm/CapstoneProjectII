@@ -17,17 +17,22 @@ public class Teleport : MonoBehaviour
     public bool isActive = false; // 포탈이 활성화 상태인지 저장하는 필드
     public bool isTelepo = false;
     GameObject[] bossScene = new GameObject[3];
+    GameObject[] Boss = new GameObject[3];
     public GameObject keyX;
     bool isbgm = false; //bgm이 실행하고 있는지 확인
+    bool oneTime = false;   //처음 bgm 실행 조건
 
     private void Awake()
     {
-        Instance = this;
+        instance = this;
         keyX = this.transform.GetChild(0).gameObject;
 
         bossScene[0] = Resources.Load<GameObject>("Prefabs/LeafBossShow_canvas");
         bossScene[1] = Resources.Load<GameObject>("Prefabs/ShadowBossShow_canvas");
         bossScene[2] = Resources.Load<GameObject>("Prefabs/DevilBossShow_canvas"); // 수정
+        Boss[0] = Resources.Load<GameObject>("Prefabs/Ranger_Boss");
+        Boss[1] = Resources.Load<GameObject>("Prefabs/Rogue Knight");
+        Boss[2] = Resources.Load<GameObject>("Prefabs/Red");
     }
 
     private void Start()
@@ -36,8 +41,15 @@ public class Teleport : MonoBehaviour
         stageUi = StageUI.instance;
         stageManager = StageManager.instance;
         soundManager = SoundManager.instance;
+        dm = DataManager.instance;
         animator = GetComponent<Animator>();
-        stageBGM();
+
+        if (!oneTime)
+        {
+            soundManager.BGMPlay(soundManager.nomal_stage1);
+            oneTime = true;
+        }
+            
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -130,7 +142,7 @@ public class Teleport : MonoBehaviour
         }
     }
 
-    void stageBGM() //스테이지 변경시 bgm 변경
+    public void stageBGM() //스테이지 변경시 bgm 변경
     {
         Debug.Log("stageBgm() 실행");
         if (stageManager.nowStageLv == 5)
@@ -140,18 +152,21 @@ public class Teleport : MonoBehaviour
             {
                 soundManager.BGMPlay(soundManager.boss_stage1);
                 bossScnenShow = Instantiate(bossScene[0]);
+                Boss[0].gameObject.SetActive(true);
                 Debug.Log("1스테이지 보스 bgm실행");
             }
             else if (stageManager.nowStage == 2)
             {
                 soundManager.BGMPlay(soundManager.boss_stage2);
                 bossScnenShow = Instantiate(bossScene[1]);
+                Boss[1].gameObject.SetActive(true);
                 Debug.Log("2스테이지 보스 bgm실행");
             }
             else
             {
                 soundManager.BGMPlay(soundManager.boss_stage3);
                 bossScnenShow = Instantiate(bossScene[2]);
+                Boss[2].gameObject.SetActive(true);
                 Debug.Log("3스테이지 보스 bgm실행");
             }
             StartCoroutine(BossSceneShowDestroy(bossScnenShow));

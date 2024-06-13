@@ -3,6 +3,7 @@ using System.Collections;
 public class StageManager : MonoBehaviour
 {
     DataManager dm;
+    Teleport teleport;
     public int nowStage;
     public int nowStageLv;
     public static StageManager instance;

@@ -13,10 +13,6 @@ TagManager:
   - Potion
   - SkillItem
   - Portal
-  - CameraDown
-  - CameraUp
-  - YDown
-  - YUp
   layers:
   - Default
   - TransparentFX

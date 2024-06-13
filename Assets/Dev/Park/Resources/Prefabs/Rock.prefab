@@ -77,7 +77,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 4
+  m_SortingOrder: 10
   m_Sprite: {fileID: -279845820, guid: f166e72ab214ae3479b885a5be95f14e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -148,6 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06fff4ab054dcde4a96472674089c8ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerpos: {fileID: 0}
   DelTime: 0.7
   Power: 10
   dir: 1
@@ -201,7 +202,10 @@ MonoBehaviour:
   plant_Shot: {fileID: 8300000, guid: b1995656243f2e24caab85d9788fab44, type: 3}
   plant_Slash: {fileID: 0}
   demon_Attack: {fileID: 0}
+  demon_FireBarrier: {fileID: 0}
+  demon_FireBolt: {fileID: 0}
   demon_Die: {fileID: 8300000, guid: 3cafdebf4927a7e4bae9b7ebf1c64940, type: 3}
+  demon_Summoning: {fileID: 0}
 --- !u!82 &229843360541229881
 AudioSource:
   m_ObjectHideFlags: 0

@@ -134,7 +134,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 7
+  m_Constraints: 4
 --- !u!61 &8545458682144471796
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -287,12 +287,9 @@ MonoBehaviour:
   RockPb: {fileID: 0}
   SeedPb: {fileID: 0}
   istracking: 0
+  isattack: 0
   enemy_MaxHP: 0
   enemy_CurHP: 0
-  enemy_Power: 0
-  enemy_Speed: 0
-  enemy_AttackSensor: 0
-  enemy_frontSensor: 0
   enemyMoney: 0
 --- !u!114 &-40741451376934329
 MonoBehaviour:
@@ -345,6 +342,7 @@ MonoBehaviour:
   demon_FireBarrier: {fileID: 8300000, guid: 8953f28378f0d4e45a71ba8c88b1afed, type: 3}
   demon_FireBolt: {fileID: 8300000, guid: fef51e1efe694d241bec2b1d1ae24140, type: 3}
   demon_Die: {fileID: 8300000, guid: 3cafdebf4927a7e4bae9b7ebf1c64940, type: 3}
+  demon_Summoning: {fileID: 0}
 --- !u!1 &8545458682889595754
 GameObject:
   m_ObjectHideFlags: 0

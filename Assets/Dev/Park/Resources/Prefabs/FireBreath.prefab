@@ -76,7 +76,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 8
+  m_SortingOrder: 10
   m_Sprite: {fileID: 230990218, guid: cfb9268d8e7759f4a88d24b2b68fa8a7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -200,9 +200,8 @@ MonoBehaviour:
   mushroom_Die: {fileID: 8300000, guid: 39cd010874a0a164ebea0ca2af25765c, type: 3}
   plant_Shot: {fileID: 8300000, guid: b1995656243f2e24caab85d9788fab44, type: 3}
   plant_Slash: {fileID: 8300000, guid: 1f93e0b5ec74c5542b363ba424173cae, type: 3}
-  demon_Move1: {fileID: 8300000, guid: 4545886b239857e48815a342874c293d, type: 3}
-  demon_Move2: {fileID: 8300000, guid: 44ff46428d7c99344b1c8e8e340d25ab, type: 3}
   demon_Attack: {fileID: 8300000, guid: 86552007e074e6e40abef4c8f7293665, type: 3}
   demon_FireBarrier: {fileID: 8300000, guid: 8953f28378f0d4e45a71ba8c88b1afed, type: 3}
   demon_FireBolt: {fileID: 8300000, guid: fef51e1efe694d241bec2b1d1ae24140, type: 3}
   demon_Die: {fileID: 8300000, guid: 3cafdebf4927a7e4bae9b7ebf1c64940, type: 3}
+  demon_Summoning: {fileID: 0}
