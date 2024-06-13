@@ -42,6 +42,7 @@ public class MainScene : MonoBehaviour
 
     IEnumerator ClickNewGameBtn()
     {
+        Debug.Log("새 게임 시작하기");
         sm.SFXPlay(clickSounds);
         StartCoroutine(sm.FadeOutCoroutine());
         dm.NewGame();

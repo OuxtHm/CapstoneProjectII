@@ -138,7 +138,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_TargetDisplay: 0
 --- !u!114 &4916170308160673870
 MonoBehaviour:
@@ -193,7 +193,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boss: {fileID: 0}
-  backImg: {fileID: 0}
+  rect: {fileID: 0}
+  anim: {fileID: 0}
   hpRatio: 0
   beforeHpRatio: 0
   runningCoroutine: 0

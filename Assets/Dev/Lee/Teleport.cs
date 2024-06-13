@@ -6,8 +6,8 @@ public class Teleport : MonoBehaviour
     StageManager stageManager;
     SoundManager soundManager;
     MainCam maincam;
-    public static Teleport Instance;
-    DataManager dm;
+    public static Teleport Instance;  
+    public DataManager dm;
     public GameObject targetObj;
     public pade fadeScript; // 클래스 이름 수정
     public GameObject toObj;
@@ -32,6 +32,7 @@ public class Teleport : MonoBehaviour
 
     private void Start()
     {
+        dm = DataManager.instance;
         stageUi = StageUI.instance;
         stageManager = StageManager.instance;
         soundManager = SoundManager.instance;
@@ -96,8 +97,8 @@ public class Teleport : MonoBehaviour
             stageManager.nowStageLv++;
             isbgm = true;
         }
-        //dm.playerData.nowStage = stageManager.nowStage;
-        //dm.playerData.nowStageLV = stageManager.nowStageLv;
+        dm.playerData.nowStage = stageManager.nowStage;
+        dm.playerData.nowStageLV = stageManager.nowStageLv;
         maincam.CameraPosition();   //박지우 추가 05.29 - 카메라 위치 이동
         stageBGM(); //박지우 추가 6.4 - bgm실행
 
@@ -131,7 +132,8 @@ public class Teleport : MonoBehaviour
 
     void stageBGM() //스테이지 변경시 bgm 변경
     {
-        if (stageManager.nowStageLv == 5)   //보스 스테이지일 때 실행되는 bgm
+        Debug.Log("stageBgm() 실행");
+        if (stageManager.nowStageLv == 5)
         {
             GameObject bossScnenShow;
             if (stageManager.nowStage == 1)
