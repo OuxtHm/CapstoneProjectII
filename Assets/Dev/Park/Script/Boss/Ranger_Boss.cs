@@ -20,10 +20,15 @@ public class Ranger_Boss : Boss
     }
     void Update()
     {
+
         // boss_CurHP가 0 이하이고, 아직 죽는 중이 아니라면 Die 코루틴을 시작합니다.
         if (boss_CurHP <= 0 && !isDying)
         {
             StartCoroutine(pt1());
+        }
+        else
+        {
+            StageManager.instance.ExitPortal1();
         }
     }//5/31 이경규 추가
 

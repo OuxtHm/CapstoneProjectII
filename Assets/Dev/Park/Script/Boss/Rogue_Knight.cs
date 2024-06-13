@@ -25,6 +25,10 @@ public class Rogue_Knight : Boss
         {
             StartCoroutine(pt2());
         }
+        else
+        {
+            StageManager.instance.ExitPortal2();
+        }
     }//5/31 이경규 추가
 
     IEnumerator pt2()

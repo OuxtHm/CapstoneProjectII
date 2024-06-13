@@ -12,4 +12,8 @@ public class RedSlime : Boss
         boss_Speed = 2;
         boss_BumpPower = 15;    //충돌 대미지
     }
+    private void Update()
+    {
+        StageManager.instance.ExitPortal3();
+    }
 }

@@ -12,6 +12,9 @@ public class StageManager : MonoBehaviour
     [SerializeField] private GameObject portal1; // 1스테이지
     [SerializeField] private GameObject portal2; // 2스테이지
     [SerializeField] private GameObject portal3; // 3스테이지
+    [SerializeField] private GameObject xportal1; // 1스테이지
+    [SerializeField] private GameObject xportal2; // 2스테이지
+    [SerializeField] private GameObject xportal3; // 3스테이지
     private void Awake()
     {
         instance = this;
@@ -80,6 +83,8 @@ public class StageManager : MonoBehaviour
             if (nowStage - 1 < boss.Length)
             {
                 StartCoroutine(ActivateBossWithDelay(boss[nowStage - 1]));
+               
+
             }
             else
             {
@@ -97,15 +102,34 @@ public class StageManager : MonoBehaviour
     public void ActivatePortal1()
     {
         portal1.SetActive(true); // 1스테이지 포탈을 활성화
+       
     }
 
     public void ActivatePortal2()
     {
-        portal1.SetActive(true); // 2스테이지 포탈을 활성화
+        portal2.SetActive(true); // 2스테이지 포탈을 활성화
+       
     }
 
     public void ActivatePortal3()
     {
-        portal1.SetActive(true); // 3스테이지 포탈을 활성화
+        portal3.SetActive(true); // 3스테이지 포탈을 활성화
+        
+    }
+
+    public void ExitPortal1()
+    {
+        
+        xportal1.SetActive(false);
+    }
+    public void ExitPortal2()
+    {
+
+        xportal2.SetActive(false);
+    }
+    public void ExitPortal3()
+    {
+
+        xportal3.SetActive(false);
     }
 }

@@ -6,10 +6,10 @@ public class Teleport : MonoBehaviour
     StageManager stageManager;
     SoundManager soundManager;
     MainCam maincam;
-    public static Teleport Instance;  
+    public static Teleport Instance;
     DataManager dm;
     public GameObject targetObj;
-    public pade fadeScript; // 'pade'가 올바른 클래스 이름인지 확인하세요. 일반적으로 클래스 이름은 대문자로 시작합니다.
+    public pade fadeScript; // 클래스 이름 수정
     public GameObject toObj;
     StageUI stageUi;
     Animator animator;
@@ -27,8 +27,9 @@ public class Teleport : MonoBehaviour
 
         bossScene[0] = Resources.Load<GameObject>("Prefabs/LeafBossShow_canvas");
         bossScene[1] = Resources.Load<GameObject>("Prefabs/ShadowBossShow_canvas");
-        bossScene[1] = Resources.Load<GameObject>("Prefabs/DevilBossShow_canvas");
+        bossScene[2] = Resources.Load<GameObject>("Prefabs/DevilBossShow_canvas"); // 수정
     }
+
     private void Start()
     {
         stageUi = StageUI.instance;
@@ -61,8 +62,6 @@ public class Teleport : MonoBehaviour
         }
     }
 
-
-
     IEnumerator TelepotyRoutine()
     {
         DestroyShopUi();
@@ -72,7 +71,7 @@ public class Teleport : MonoBehaviour
         fadeScript.Fade(); // 페이드인 실행
 
         yield return new WaitForSeconds(1f); // 페이드인 완료 대기
-        // 현재 스테이지 레벨이 5일 경우, 다음 스테이지로 이동
+                                             // 현재 스테이지 레벨이 5일 경우, 다음 스테이지로 이동
         if (stageManager.nowStageLv == 5)
         {
             // 다음 스테이지 번호 계산
@@ -96,15 +95,9 @@ public class Teleport : MonoBehaviour
             // 현재 스테이지 레벨이 5가 아닐 경우, 레벨을 1 증가
             stageManager.nowStageLv++;
             isbgm = true;
-            if (stageManager.nowStageLv == 5)        
-            {
-                Debug.Log("상점 UI 지우기");
-                ShopUI shopUi = ShopUI.instance;
-                Destroy(shopUi.gameObject);
-            }
         }
-        dm.playerData.nowStage = stageManager.nowStage;
-        dm.playerData.nowStageLV = stageManager.nowStageLv;
+        //dm.playerData.nowStage = stageManager.nowStage;
+        //dm.playerData.nowStageLV = stageManager.nowStageLv;
         maincam.CameraPosition();   //박지우 추가 05.29 - 카메라 위치 이동
         stageBGM(); //박지우 추가 6.4 - bgm실행
 
@@ -123,7 +116,8 @@ public class Teleport : MonoBehaviour
         yield return new WaitForSeconds(2f);
         Destroy(destroyObject);
     }
-    void DestroyShopUi()        // 상점 UI가 있다면 삭제하는 함수
+
+    void DestroyShopUi() // 상점 UI가 있다면 삭제하는 함수
     {
         if (stageManager.nowStageLv == 4)
         {
@@ -133,7 +127,6 @@ public class Teleport : MonoBehaviour
                 Destroy(shopUi.gameObject);
             }
         }
-
     }
 
     void stageBGM() //스테이지 변경시 bgm 변경
@@ -184,3 +177,4 @@ public class Teleport : MonoBehaviour
         }
     }
 }
+ 
