@@ -41,6 +41,7 @@ public class Dash : MonoBehaviour
 
     public IEnumerator FirstFill(float durationTime)  // 첫번째 에너지 복구
     {
+        yield return null;
         isFillingSecond = false;
         isFillingFirst = true;
         float elapsedTime = 0f;
