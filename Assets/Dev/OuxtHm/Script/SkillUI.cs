@@ -41,10 +41,12 @@ public class SkillUI : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.D) && !useUlt)
         {
+            useUlt = true;
             StartCoroutine(SkillUse(nowUlt.coolTime, ultSkillCoolTime, useUlt));
         }
         if (Input.GetKeyDown(KeyCode.E) && !useBasic)
         {
+            useBasic = true;
             StartCoroutine(SkillUse(nowSkill.coolTime, basicSkillCoolTime, useBasic));
         }
     }

@@ -57,7 +57,7 @@ public abstract class Enemy : MonoBehaviour
     {
         player = Player.instance.GetComponent<Player>();
         dm = DataManager.instance;
-        teleport = Teleport.instance.GetComponent<Teleport>();
+        teleport = Teleport.Instance.GetComponent<Teleport>();
         spriteRenderer = this.GetComponent<SpriteRenderer>();
         anim = this.GetComponent<Animator>();
         rigid = this.GetComponent<Rigidbody2D>();
@@ -180,7 +180,7 @@ public abstract class Enemy : MonoBehaviour
         if (collision != null && collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             player = collision.gameObject.GetComponent<Player>();
-            if (player != null)
+            if (player != null && this.gameObject.layer != LayerMask.NameToLayer("DieEnemy"))
             {
                 player.Playerhurt(enemy_Power, this.transform);
             }
@@ -189,7 +189,7 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
-    
+
     private void OnCollisionStay2D(Collision2D collision)   //벽에 닿았을 시 반대로 돌아감
     {
         if (collision.gameObject.CompareTag("wall") && enemy_Type != 2)
@@ -290,8 +290,11 @@ public abstract class Enemy : MonoBehaviour
         {
             if (collider.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
-                player = collider.GetComponent<Player>();
-                player.Playerhurt(enemy_Power, this.transform);
+                if (this.gameObject.layer == LayerMask.NameToLayer("DieEnemy"))
+                {
+                    player = collider.GetComponent<Player>();
+                    player.Playerhurt(enemy_Power, this.transform);
+                }
             }
         }
         yield return new WaitForSeconds(1.5f);
@@ -342,7 +345,7 @@ public abstract class Enemy : MonoBehaviour
             yield return new WaitForSeconds(0);
             ishurt = true;
             enemy_CurHP = enemy_CurHP - damage;
-            StartCoroutine(enemyHpbar.HpUpdate());      // 2024-03-30 유재현 추가
+            StartCoroutine(enemyHpbar.HpUpdate());   
             anim.SetBool("Move", false);
             anim.SetTrigger("Hurt");
 
@@ -357,7 +360,7 @@ public abstract class Enemy : MonoBehaviour
             {
                 isdie = true;
                 StopAllCoroutines();
-                StartCoroutine(enemyHpbar.HpUpdate());      // 2024-03-30 유재현 추가
+                StartCoroutine(enemyHpbar.HpUpdate());     
                 StartCoroutine(Die());
             }
         }

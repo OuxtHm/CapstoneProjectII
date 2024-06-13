@@ -18,9 +18,12 @@ public class StageUI : MonoBehaviour
     public void Start()
     {
         stageManager = StageManager.instance;
+        Invoke("TrrigerNowStageShow", 0.3f);
+    }
+    void TrrigerNowStageShow()
+    {
         PrintStage(stageManager.nowStage, stageManager.nowStageLv);
     }
-
     public void PrintStage(int _nowStage, int _nowStageLv)
     {
         // _nowStage가 1, 2, 3 중 하나이고, _nowStageLv에 따라 다르게 표시

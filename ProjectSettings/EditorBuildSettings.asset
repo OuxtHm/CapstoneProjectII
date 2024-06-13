@@ -8,16 +8,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Dev/OuxtHm/Scenes/MainScene.unity
     guid: c63dcc7cfee44454b89b5e7207228a29
-  - enabled: 1
-    path: Assets/Dev/Seo/scene/Merge_9.unity
-    guid: 7f17be100bc055741b973d948aab545f
   - enabled: 0
-    path: Assets/Dev/Park/Scenes/Merge_9.unity
-    guid: 3d6afdf95639f8341a69d596027bc90f
+    path: Assets/Dev/Seo/scene/Merge_10.unity
+    guid: e71f31ab4b811514695ec6bd9bda1944
   - enabled: 0
-    path: Assets/Dev/OuxtHm/Scenes/Merge_9.unity
-    guid: 7bd1782149b50ee49b298f6a533bc4bb
+    path: Assets/Dev/Park/Scenes/Merge_10.unity
+    guid: 50d79d03feff5d246a8e28e6c85db80e
   - enabled: 1
-    path: Assets/Dev/Lee/Merge_9.unity
-    guid: 010e66c3922ca66468c5b8a14db232a4
+    path: Assets/Dev/OuxtHm/Scenes/Merge_10.unity
+    guid: 395edcf670c2d0c4fbcf6289132a1175
+  - enabled: 0
+    path: Assets/Dev/Lee/Merge_10.unity
+    guid: 5f90d77d7b9c4294c840d75d0d6c8afd
   m_configObjects: {}

@@ -111,12 +111,6 @@ public class StageManager : MonoBehaviour
        
     }
 
-    public void ActivatePortal3()
-    {
-        portal3.SetActive(true); // 3스테이지 포탈을 활성화
-        
-    }
-
     public void ExitPortal1()
     {
         

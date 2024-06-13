@@ -24,7 +24,7 @@ public class Teleport : MonoBehaviour
 
     private void Awake()
     {
-        instance = this;
+        Instance = this;
         keyX = this.transform.GetChild(0).gameObject;
 
         bossScene[0] = Resources.Load<GameObject>("Prefabs/LeafBossShow_canvas");

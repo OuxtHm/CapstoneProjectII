@@ -614,7 +614,7 @@ public class Player : MonoBehaviour
 
     public void UsingSkill()
     {
-        if (Input.GetKeyDown(KeyCode.E) && !isAttacking)
+        if (Input.GetKeyDown(KeyCode.E) && !isAttacking && !skillUi.useBasic)
         {
             switch (skillUi.nowSkill.num)
             {
@@ -635,7 +635,7 @@ public class Player : MonoBehaviour
     }
     public void UsingUlt()
     {
-        if (Input.GetKeyDown(KeyCode.D) && !isAttacking)
+        if (Input.GetKeyDown(KeyCode.D) && !isAttacking && !skillUi.useUlt)
         {
             switch(skillUi.nowUlt.num)
             {

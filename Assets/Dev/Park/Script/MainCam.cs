@@ -16,7 +16,6 @@ public class MainCam : MonoBehaviour
 
     public void CameraPosition()
     {
-        Debug.Log("현재 스테이지:" + stageManager.nowStage);
         if (stageManager.nowStage == 2)
         {
             Camera.main.orthographicSize = 8f;
